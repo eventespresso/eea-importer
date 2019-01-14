@@ -5,6 +5,7 @@
   Description: The Event Espresso Attendee Importer imports attendees from a CSV file into Event Espresso.
   Version: 1.0.0.dev.000
   Author: Event Espresso
+  Requires PHP: 5.6
   Author URI: http://www.eventespresso.com
   Copyright 2014 Event Espresso (email : support@eventespresso.com)
 
@@ -62,7 +63,9 @@ add_action( 'activated_plugin', 'espresso_attendee_importer_plugin_activation_er
  *    registers addon with EE core
  */
 function load_espresso_attendee_importer() {
-  if ( class_exists( 'EE_Addon' )) {
+  if ( defined('PHP_VERSION_ID')
+        && PHP_VERSION_ID > 50600
+        && class_exists( 'EE_Addon' )) {
       // attendee_importer version
       require_once ( plugin_dir_path( __FILE__ ) . 'EE_Attendee_Importer.class.php' );
       EE_Attendee_Importer::register_addon();
@@ -98,7 +101,7 @@ function espresso_attendee_importer_activation_error() {
   deactivate_plugins( plugin_basename( EE_ATTENDEE_IMPORTER_PLUGIN_FILE ) );
   ?>
   <div class="error">
-    <p><?php printf( __( 'Event Espresso Attendee Importer could not be activated. Please ensure that Event Espresso version %1$s or higher is running', 'event_espresso' ), EE_ATTENDEE_IMPORTER_CORE_VERSION_REQUIRED ); ?></p>
+    <p><?php printf( __( 'Event Espresso Attendee Importer could not be activated. Please ensure that Event Espresso version %1$s and PHP version %2$s or higher is running', 'event_espresso' ), EE_ATTENDEE_IMPORTER_CORE_VERSION_REQUIRED, '5.6' ); ?></p>
   </div>
 <?php
 }
