@@ -2,12 +2,16 @@
 
 namespace EventEspresso\AttendeeImporter\form;
 use DomainException;
+use EE_Error;
 use EE_Form_Section_Proper;
 use EE_Registry;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
+use EventEspresso\core\exceptions\InvalidFormSubmissionException;
+use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\libraries\form_sections\form_handlers\FormHandler;
 use EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepForm;
 use InvalidArgumentException;
+use LogicException;
 
 /**
  * Class UploadCsv
@@ -54,9 +58,35 @@ class UploadCsv extends SequentialStepForm
     {
         return new EE_Form_Section_Proper(
             [
-                'name' => 'upload'
+                'name' => 'upload',
+                'subsections' => array(
+                    'data_source' => new \EE_Text_Input(),
+                )
             ]
         );
+    }
+
+    /**
+     * handles processing the form submission
+     * returns true or false depending on whether the form was processed successfully or not
+     *
+     * @param array $form_data
+     * @return bool
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws EE_Error
+     * @throws InvalidFormSubmissionException
+     * @throws InvalidInterfaceException
+     * @throws LogicException
+     */
+    public function process($form_data = array())
+    {
+        $valid_data = (array) parent::process($form_data);
+        if (empty($valid_data)) {
+            return false;
+        }
+        $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);
+        return true;
     }
 }
 // End of file UploadCsv.php

@@ -69,27 +69,13 @@ class Complete extends SequentialStepForm
             new EE_Form_Section_Proper(
                 array(
                     'name'        => $this->slug(),
-                    'subsections' => array(),
+                    'subsections' => [
+                        'input1' => new \EE_Text_Input()
+                    ]
                 )
             )
         );
         return $this->form();
-    }
-
-
-    /**
-     * normally displays the form, but we are going to skip right to processing our changes
-     *
-     * @return string
-     * @throws EE_Error
-     * @throws LogicException
-     * @throws InvalidArgumentException
-     * @throws InvalidFormSubmissionException
-     * @throws EntityNotFoundException
-     */
-    public function display()
-    {
-        return '';
     }
 
 
@@ -113,41 +99,10 @@ class Complete extends SequentialStepForm
      */
     public function process($form_data = array())
     {
-        // in case an exception is thrown, we need to go back to the previous step,
-        // because this step has no displayable content
-        $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_PREV_STEP);
-        $old_registration = $this->getRegistration($this->REG_ID);
-        $new_ticket = $this->getTicket($this->TKT_ID);
-        /** @var \EventEspresso\AttendeeImporter\services\commands\MoveAttendeeCommand $MoveAttendeeCommand */
-        $new_registration = $this->registry->BUS->execute(
-            $this->registry->create(
-                'EventEspresso\AttendeeImporter\services\commands\MoveAttendeeCommand',
-                array($old_registration, $new_ticket, $this->notify())
-            )
-        );
-        if (! $new_registration instanceof EE_Registration) {
-            throw new InvalidEntityException(get_class($new_registration), 'EE_Registration');
-        }
         // setup redirect to new registration details admin page
         $this->setRedirectUrl(REG_ADMIN_URL);
-        $this->addRedirectArgs(
-            array(
-                'action'  => 'view_registration',
-                '_REG_ID' => $new_registration->ID(),
-            )
-        );
         // and update the redirectTo constant as well
         $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_OTHER);
-        EE_Error::add_success(
-            sprintf(
-                esc_html__(
-                    'Registration ID:%1$s has been successfully cancelled, and Registration ID:%2$s has been created to replace it.',
-                    'event_espresso'
-                ),
-                $old_registration->ID(),
-                $new_registration->ID()
-            )
-        );
         return true;
     }
 }
