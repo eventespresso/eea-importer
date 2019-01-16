@@ -72,10 +72,6 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
 
         $this->_page_config = array(
             'default' => array(
-                'nav' => array(
-                    'label' => __('Import', 'event_espresso'),
-                    'order' => 10
-                ),
                 'require_nonce' => false
             ),
             'usage' => array(
@@ -86,6 +82,10 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
                 'require_nonce' => false
             ),
             'show_import_step' => array(
+                'nav' => array(
+                    'label' => __('Import', 'event_espresso'),
+                    'order' => 10
+                ),
                 'require_nonce' => false
             )
         );
@@ -150,12 +150,13 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     {
         try {
             $form_steps_manager = $this->getFormStepManager(false);
-            echo $form_steps_manager->displayProgressSteps();
-            // echo \EEH_HTML::h1( $form_steps_manager->getCurrentStep()->formName() );
-            echo $form_steps_manager->displayCurrentStepForm();
+            $this->_template_args['admin_page_content'] = $form_steps_manager->displayProgressSteps()
+                . $form_steps_manager->displayCurrentStepForm();
         } catch (Exception $e) {
             new ExceptionStackTraceDisplay($e);
         }
+
+        $this->display_admin_page_with_sidebar();
     }
 
     /**
