@@ -135,13 +135,6 @@ Class  EE_Attendee_Importer extends EE_Addon {
             'EventEspresso\AttendeeImporter\form\Complete'                                => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
             ),
-//            'EventEspresso\AttendeeImporter\services\commands\MoveAttendeeCommandHandler' => array(
-//                'EventEspresso\core\domain\services\ticket\CreateTicketLineItemService'     => EE_Dependency_Map::load_from_cache,
-//                'EventEspresso\core\domain\services\registration\CreateRegistrationService' => EE_Dependency_Map::load_from_cache,
-//                'EventEspresso\core\domain\services\registration\CopyRegistrationService'   => EE_Dependency_Map::load_from_cache,
-//                'EventEspresso\core\domain\services\registration\CancelRegistrationService' => EE_Dependency_Map::load_from_cache,
-//                'EventEspresso\core\domain\services\registration\UpdateRegistrationService' => EE_Dependency_Map::load_from_cache,
-//            ),
         );
         foreach ($attendee_mover_dependencies as $class => $dependencies) {
             if (! EE_Dependency_Map::register_dependencies($class, $dependencies)) {

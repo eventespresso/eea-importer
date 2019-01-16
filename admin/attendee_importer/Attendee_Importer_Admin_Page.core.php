@@ -45,9 +45,7 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     protected function _define_page_props()
     {
         $this->_admin_page_title = ATTENDEE_IMPORTER_LABEL;
-        $this->_labels = array(
-            'publishbox' => __('Update Settings', 'event_espresso')
-        );
+        $this->_labels = array();
     }
 
 
