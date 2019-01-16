@@ -106,16 +106,56 @@ Class  EE_Attendee_Importer extends EE_Addon {
 
 
     /**
-     * uncomment this method and use it as
-     * a safe space to add additional logic like setting hooks
-     * that will run immediately after addon registration
-     * making this a great place for code that needs to be "omnipresent"
-     *
-     * @since 4.9.26
+     * @return void;
      */
     public function after_registration()
     {
-        // your logic here
+        EE_Psr4AutoloaderInit::psr4_loader()->addNamespace('EventEspresso\AttendeeImporter', __DIR__);
+        $attendee_mover_dependencies = array(
+            'EventEspresso\AttendeeImporter\form\StepsManager'                            => array(
+                null,
+                null,
+                null,
+                null,
+                null,
+                'EE_Request' => EE_Dependency_Map::load_from_cache,
+            ),
+            'EventEspresso\AttendeeImporter\form\UploadCsv'                             => array(
+                'EE_Registry' => EE_Dependency_Map::load_from_cache,
+            ),
+            'EventEspresso\AttendeeImporter\form\MapCsvColumns'                            => array(
+                'EE_Registry' => EE_Dependency_Map::load_from_cache,
+            ),
+            'EventEspresso\AttendeeImporter\form\ChooseEvent'                           => array(
+                'EE_Registry' => EE_Dependency_Map::load_from_cache,
+            ),
+            'EventEspresso\AttendeeImporter\form\Import'                                => array(
+                'EE_Registry' => EE_Dependency_Map::load_from_cache,
+            ),
+            'EventEspresso\AttendeeImporter\form\Complete'                                => array(
+                'EE_Registry' => EE_Dependency_Map::load_from_cache,
+            ),
+//            'EventEspresso\AttendeeImporter\services\commands\MoveAttendeeCommandHandler' => array(
+//                'EventEspresso\core\domain\services\ticket\CreateTicketLineItemService'     => EE_Dependency_Map::load_from_cache,
+//                'EventEspresso\core\domain\services\registration\CreateRegistrationService' => EE_Dependency_Map::load_from_cache,
+//                'EventEspresso\core\domain\services\registration\CopyRegistrationService'   => EE_Dependency_Map::load_from_cache,
+//                'EventEspresso\core\domain\services\registration\CancelRegistrationService' => EE_Dependency_Map::load_from_cache,
+//                'EventEspresso\core\domain\services\registration\UpdateRegistrationService' => EE_Dependency_Map::load_from_cache,
+//            ),
+        );
+        foreach ($attendee_mover_dependencies as $class => $dependencies) {
+            if (! EE_Dependency_Map::register_dependencies($class, $dependencies)) {
+                EE_Error::add_error(
+                    sprintf(
+                        esc_html__('Could not register dependencies for "%1$s"', 'event_espresso'),
+                        $class
+                    ),
+                    __FILE__,
+                    __FUNCTION__,
+                    __LINE__
+                );
+            }
+        }
     }
 
 
