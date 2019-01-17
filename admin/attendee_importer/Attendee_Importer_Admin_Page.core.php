@@ -1,4 +1,4 @@
-<?php use EventEspresso\AttendeeImporter\form\StepsManager;
+<?php use EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\StepsManager;
 use EventEspresso\core\exceptions\ExceptionStackTraceDisplay;
 use EventEspresso\core\libraries\form_sections\form_handlers\InvalidFormHandlerException;
 use EventEspresso\core\services\loaders\LoaderFactory;
@@ -170,7 +170,7 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
             /** @var EventEspresso\core\services\loaders\Loader $loader */
             $loader = LoaderFactory::getLoader();
             $this->form_steps_manager = $loader->getShared(
-                'EventEspresso\AttendeeImporter\form\StepsManager',
+                'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\StepsManager',
                 array(
                     // base redirect URL
                     EE_ATTENDEE_IMPORTER_ADMIN_URL,

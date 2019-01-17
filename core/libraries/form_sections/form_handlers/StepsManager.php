@@ -1,5 +1,5 @@
 <?php
-namespace EventEspresso\AttendeeImporter\form;
+namespace EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers;
 
 use EventEspresso\core\exceptions\InvalidClassException;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
@@ -74,14 +74,14 @@ class StepsManager extends SequentialStepFormManager
                     // FQCNs for classes to add
                     apply_filters(
                         // @codingStandardsIgnoreStart
-                        'FHEE__EventEspresso\AttendeeImporter\form\StepsManager__getFormStepsCollection__form_step_classes',
+                        'FHEE__EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\StepsManager__getFormStepsCollection__form_step_classes',
                         // @codingStandardsIgnoreEnd
                         array(
-                            'EventEspresso\AttendeeImporter\form\UploadCsv',
-                            'EventEspresso\AttendeeImporter\form\MapCsvColumns',
-                            'EventEspresso\AttendeeImporter\form\ChooseEvent',
-                            'EventEspresso\AttendeeImporter\form\Import',
-                            'EventEspresso\AttendeeImporter\form\Complete',
+                            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\UploadCsv',
+                            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\MapCsvColumns',
+                            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\ChooseEvent',
+                            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\Import',
+                            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\Complete',
                         )
                     ),
                     // filepaths to classes to add
@@ -101,4 +101,4 @@ class StepsManager extends SequentialStepFormManager
 
 }
 // End of file StesManager.php
-// Location: EventEspresso\AttendeeImporter\form/StesManager.php
+// Location: EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers/StesManager.php

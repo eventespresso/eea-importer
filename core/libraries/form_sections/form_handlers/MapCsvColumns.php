@@ -1,6 +1,6 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\form;
+namespace EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers;
 use DomainException;
 use EE_Error;
 use EE_Form_Section_Proper;
@@ -87,4 +87,4 @@ class MapCsvColumns extends SequentialStepForm
     }
 }
 // End of file MapCsvColumns.php
-// Location: EventEspresso\AttendeeImporter\form/MapCsvColumns.php
+// Location: EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers/MapCsvColumns.php

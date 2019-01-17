@@ -112,7 +112,7 @@ Class  EE_Attendee_Importer extends EE_Addon {
     {
         EE_Psr4AutoloaderInit::psr4_loader()->addNamespace('EventEspresso\AttendeeImporter', __DIR__);
         $attendee_mover_dependencies = array(
-            'EventEspresso\AttendeeImporter\form\StepsManager'                            => array(
+            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\StepsManager'                            => array(
                 null,
                 null,
                 null,
@@ -120,19 +120,19 @@ Class  EE_Attendee_Importer extends EE_Addon {
                 null,
                 'EE_Request' => EE_Dependency_Map::load_from_cache,
             ),
-            'EventEspresso\AttendeeImporter\form\UploadCsv'                             => array(
+            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\UploadCsv'                             => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
             ),
-            'EventEspresso\AttendeeImporter\form\MapCsvColumns'                            => array(
+            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\MapCsvColumns'                            => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
             ),
-            'EventEspresso\AttendeeImporter\form\ChooseEvent'                           => array(
+            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\ChooseEvent'                           => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
             ),
-            'EventEspresso\AttendeeImporter\form\Import'                                => array(
+            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\Import'                                => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
             ),
-            'EventEspresso\AttendeeImporter\form\Complete'                                => array(
+            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\Complete'                                => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
             ),
         );

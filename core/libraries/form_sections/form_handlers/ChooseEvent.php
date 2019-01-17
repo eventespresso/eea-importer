@@ -1,6 +1,6 @@
 <?php
-namespace EventEspresso\AttendeeImporter\form;
 
+namespace EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers;
 use DomainException;
 use EE_Error;
 use EE_Form_Section_Proper;
@@ -14,7 +14,7 @@ use InvalidArgumentException;
 use LogicException;
 
 /**
- * Class Import
+ * Class ChooseEvent
  *
  * Step for uploading the CSV file to import.
  *
@@ -23,25 +23,25 @@ use LogicException;
  * @since         $VID:$
  *
  */
-class Import extends SequentialStepForm
+class ChooseEvent extends SequentialStepForm
 {
 
     /**
-     * SelectTicket constructor
+     * ChooseEvent constructor
      *
      * @param EE_Registry $registry
-     * @throws InvalidDataTypeException
      * @throws InvalidArgumentException
      * @throws DomainException
+     * @throws InvalidDataTypeException
      */
     public function __construct(EE_Registry $registry)
     {
         $this->setDisplayable(true);
         parent::__construct(
-            4,
-            esc_html__('Import', 'event_espresso'),
-            esc_html__('"Import" Attendee Importer Step', 'event_espresso'),
-            'import',
+            3,
+            esc_html__('Choose Event', 'event_espresso'),
+            esc_html__('"Choose Event" Attendee Importer Step', 'event_espresso'),
+            'choose-event',
             '',
             FormHandler::ADD_FORM_TAGS_AND_SUBMIT,
             $registry
@@ -58,7 +58,7 @@ class Import extends SequentialStepForm
     {
         return new EE_Form_Section_Proper(
             [
-                'name' => 'import',
+                'name' => 'event',
                 'subsections' => [
                     'input1' => new \EE_Text_Input()
                 ]
@@ -72,9 +72,9 @@ class Import extends SequentialStepForm
      *
      * @param array $form_data
      * @return bool
-     * @throws EE_Error
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
+     * @throws EE_Error
      * @throws InvalidFormSubmissionException
      * @throws InvalidInterfaceException
      * @throws LogicException
@@ -86,5 +86,5 @@ class Import extends SequentialStepForm
         return true;
     }
 }
-// End of file Import.php
-// Location: EventEspresso\AttendeeImporter\form/Import.php
+// End of file ChooseEvent.php
+// Location: EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers/ChooseEvent.php

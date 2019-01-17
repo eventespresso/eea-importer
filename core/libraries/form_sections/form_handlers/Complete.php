@@ -1,6 +1,6 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\form;
+namespace EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers;
 
 use DomainException;
 use EE_Error;
