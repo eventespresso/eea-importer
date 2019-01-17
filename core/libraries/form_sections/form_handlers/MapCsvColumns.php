@@ -83,8 +83,8 @@ class MapCsvColumns extends SequentialStepForm
     public function process($form_data = array())
     {
         try {
-            $valid_data = (array)parent::process($form_data);
-        }catch(InvalidFormSubmissionException  $e){
+            $valid_data = (array) parent::process($form_data);
+        } catch (InvalidFormSubmissionException  $e) {
             return false;
         }
         // Remove the submit button, that didn't count.
