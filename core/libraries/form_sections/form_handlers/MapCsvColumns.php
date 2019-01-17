@@ -5,11 +5,14 @@ use DomainException;
 use EE_Error;
 use EE_Form_Section_Proper;
 use EE_Registry;
+use EED_Attendee_Importer;
+use EventEspresso\AttendeeImporter\core\libraries\form_sections\forms\MapCsvColumnsForm;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFormSubmissionException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\libraries\form_sections\form_handlers\FormHandler;
 use EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepForm;
+use EventEspresso\core\services\loaders\LoaderFactory;
 use InvalidArgumentException;
 use LogicException;
 
@@ -53,16 +56,14 @@ class MapCsvColumns extends SequentialStepForm
      * creates and returns the actual form
      *
      * @return EE_Form_Section_Proper
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidInterfaceException
      */
     public function generate()
     {
-        return new EE_Form_Section_Proper(
-            [
-                'name' => 'map',
-                'subsections' => [
-                    'input1' => new \EE_Text_Input()
-                ]
-            ]
+        return LoaderFactory::getLoader()->getShared(
+            'EventEspresso\AttendeeImporter\core\libraries\form_sections\forms\MapCsvColumnsForm'
         );
     }
 
@@ -81,7 +82,16 @@ class MapCsvColumns extends SequentialStepForm
      */
     public function process($form_data = array())
     {
-        $valid_data = (array) parent::process($form_data);
+        try {
+            $valid_data = (array)parent::process($form_data);
+        }catch(InvalidFormSubmissionException  $e){
+            return false;
+        }
+        // Remove the submit button, that didn't count.
+        unset($valid_data['map-submit-btn ']);
+        $config = EED_Attendee_Importer::instance()->getConfig();
+        $config->column_mapping = $valid_data;
+        EED_Attendee_Importer::instance()->updateConfig();
         $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);
         return true;
     }

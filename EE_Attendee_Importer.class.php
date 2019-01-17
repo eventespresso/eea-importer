@@ -135,6 +135,16 @@ Class  EE_Attendee_Importer extends EE_Addon {
             'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\Complete'                                => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
             ),
+            'EventEspresso\AttendeeImporter\core\libraries\form_sections\forms\MapCsvColumnsForm'                              => [
+                array(),
+                'EE_Attendee_Importer_Config' => EE_Dependency_Map::load_from_cache,
+            ],
+        );
+        EE_Dependency_Map::register_class_loader(
+            'EE_Attendee_Importer_Config',
+            function () {
+                return EED_Attendee_Importer::instance()->getConfig();
+            }
         );
         foreach ($attendee_mover_dependencies as $class => $dependencies) {
             if (! EE_Dependency_Map::register_dependencies($class, $dependencies)) {

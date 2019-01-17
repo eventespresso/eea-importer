@@ -9,6 +9,7 @@ use EE_Error;
 use EE_Form_Section_Proper;
 use EE_Registry;
 use EED_Attendee_Importer;
+use EventEspresso\AttendeeImporter\core\libraries\form_sections\forms\UploadCSVForm;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFormSubmissionException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
@@ -16,6 +17,9 @@ use EventEspresso\core\libraries\form_sections\form_handlers\FormHandler;
 use EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepForm;
 use InvalidArgumentException;
 use LogicException;
+use RuntimeException;
+use SplFileObject;
+use WP_Query;
 
 /**
  * Class UploadCsv
@@ -57,29 +61,11 @@ class UploadCsv extends SequentialStepForm
      * creates and returns the actual form
      *
      * @return EE_Form_Section_Proper
+     * @throws EE_Error
      */
     public function generate()
     {
-        return new EE_Form_Section_Proper(
-            [
-                'name' => 'upload',
-                'subsections' => array(
-                    'header' => new \EE_Form_Section_HTML(
-                        \EEH_HTML::h2(esc_html__('Upload CSV  File', 'event_espresso'))
-                    ),
-                    'instructions' => new \EE_Form_Section_HTML(
-                        \EEH_HTML::p(
-                            esc_html__('Upload a CSV (comma-separated-value) file.', 'event_espresso')
-                        )
-                    ),
-                    'file' => new EE_Admin_File_Uploader_Input(
-                        [
-                            'required' => true
-                        ]
-                    )
-                )
-            ]
-        );
+        return new UploadCSVForm();
     }
 
     /**
@@ -105,7 +91,10 @@ class UploadCsv extends SequentialStepForm
         if (empty($valid_data)) {
             return false;
         }
+
+
         $config = EED_Attendee_Importer::instance()->getConfig();
+
         $config->file = $valid_data['file'];
         EED_Attendee_Importer::instance()->updateConfig();
         $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);

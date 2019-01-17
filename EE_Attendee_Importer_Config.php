@@ -42,7 +42,7 @@
 class EE_Attendee_Importer_Config extends EE_Config_Base {
 
     /**
-     * @var string location of file (currently the public URI, although we may prefer to store it as a filepath instead)
+     * @var string filepath to file currently being imported
      */
     public $file;
 
