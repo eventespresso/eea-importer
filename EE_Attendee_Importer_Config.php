@@ -4,6 +4,19 @@
  *
  * Event Registration and Ticketing Management Plugin for WordPress
  *
+ * HOw to save config, in case we want to go that way again.
+ * $config = EE_Config::instance()->get_config(
+        'addons',
+        'Attendee_Importer',
+        'EE_Attendee_Importer_Config'
+    );
+    if( ! $config instanceof EE_Attendee_Importer_Config) {
+        $config = new EE_Attendee_Importer_Config();
+    }
+    $config->file = $valid_data['file'];
+    EE_Config::instance()->set_config('addons', 'Attendee_Importer', 'EE_Attendee_Importer_Config', $config);
+    EE_Config::instance()->update_config('addons', 'Attendee_Importer', $config);
+ *
  * @ package			Event Espresso
  * @ author			    Event Espresso
  * @ copyright		(c) 2008-2014 Event Espresso  All Rights Reserved.
@@ -28,7 +41,25 @@
 
 class EE_Attendee_Importer_Config extends EE_Config_Base {
 
+    /**
+     * @var string location of file (currently the public URI, although we may prefer to store it as a filepath instead)
+     */
+    public $file;
 
+    /**
+     * @var array
+     */
+    public $column_mapping;
+
+
+    /**
+     * @return EE_Mailchimp_Config
+     */
+    public function __construct()
+    {
+        $this->file = '';
+        $this->column_mapping = [];
+    }
 
 }
 

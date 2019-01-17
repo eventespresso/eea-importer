@@ -3,9 +3,12 @@
 namespace EventEspresso\AttendeeImporter\form;
 use DomainException;
 use EE_Admin_File_Uploader_Input;
+use EE_Attendee_Importer_Config;
+use EE_Config;
 use EE_Error;
 use EE_Form_Section_Proper;
 use EE_Registry;
+use EED_Attendee_Importer;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFormSubmissionException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
@@ -98,6 +101,9 @@ class UploadCsv extends SequentialStepForm
         if (empty($valid_data)) {
             return false;
         }
+        $config = EED_Attendee_Importer::instance()->getConfig();
+        $config->file = $valid_data['file'];
+        EED_Attendee_Importer::instance()->updateConfig();
         $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);
         return true;
     }
