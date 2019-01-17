@@ -97,7 +97,11 @@ class UploadCsv extends SequentialStepForm
      */
     public function process($form_data = array())
     {
-        $valid_data = (array) parent::process($form_data);
+        try {
+            $valid_data = (array) parent::process($form_data);
+        } catch (InvalidFormSubmissionException $e) {
+            return false;
+        }
         if (empty($valid_data)) {
             return false;
         }
