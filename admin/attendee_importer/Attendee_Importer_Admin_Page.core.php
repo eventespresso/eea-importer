@@ -1,4 +1,12 @@
-<?php if ( ! defined( 'EVENT_ESPRESSO_VERSION' )) { exit('NO direct script access allowed'); }
+<?php use EventEspresso\AttendeeImporter\form\StepsManager;
+use EventEspresso\core\exceptions\ExceptionStackTraceDisplay;
+use EventEspresso\core\libraries\form_sections\form_handlers\InvalidFormHandlerException;
+use EventEspresso\core\services\loaders\LoaderFactory;
+
+if (!defined('EVENT_ESPRESSO_VERSION')) {
+    exit('NO direct script access allowed');
+}
+
 /**
  *
  * Attendee_Importer_Admin_Page
@@ -6,211 +14,174 @@
  * This contains the logic for setting up the Attendee_Importer Addon Admin related pages.  Any methods without PHP doc comments have inline docs with parent class.
  *
  *
- * @package			Attendee_Importer_Admin_Page (attendee_importer addon)
- * @subpackage 	admin/Attendee_Importer_Admin_Page.core.php
- * @author				Darren Ethier, Brent Christensen
+ * @package            Attendee_Importer_Admin_Page (attendee_importer addon)
+ * @subpackage    admin/Attendee_Importer_Admin_Page.core.php
+ * @author                Darren Ethier, Brent Christensen
  *
  * ------------------------------------------------------------------------
  */
-class Attendee_Importer_Admin_Page extends EE_Admin_Page {
+class Attendee_Importer_Admin_Page extends EE_Admin_Page
+{
+
+    /**
+     * @var StepsManager
+     */
+    protected $form_steps_manager;
+
+    protected function _init_page_props()
+    {
+        $this->page_slug = ATTENDEE_IMPORTER_PG_SLUG;
+        $this->page_label = ATTENDEE_IMPORTER_LABEL;
+        $this->_admin_base_url = EE_ATTENDEE_IMPORTER_ADMIN_URL;
+        $this->_admin_base_path = EE_ATTENDEE_IMPORTER_ADMIN;
+    }
 
 
-	protected function _init_page_props() {
-		$this->page_slug = ATTENDEE_IMPORTER_PG_SLUG;
-		$this->page_label = ATTENDEE_IMPORTER_LABEL;
-		$this->_admin_base_url = EE_ATTENDEE_IMPORTER_ADMIN_URL;
-		$this->_admin_base_path = EE_ATTENDEE_IMPORTER_ADMIN;
-	}
+    protected function _ajax_hooks()
+    {
+    }
 
 
+    protected function _define_page_props()
+    {
+        $this->_admin_page_title = ATTENDEE_IMPORTER_LABEL;
+        $this->_labels = array();
+    }
 
 
-	protected function _ajax_hooks() {}
+    protected function _set_page_routes()
+    {
+        $this->_page_routes = array(
+            'default' => array(
+                'func' => 'import',
+                'noheader' => true,
+                'headers_sent_route' => 'show_import_step'
+            ),
+            'usage' => 'usage',
+            'show_import_step' => array(
+                'func' => 'show_import_step'
+            )
+        );
+    }
 
 
+    protected function _set_page_config()
+    {
+
+        $this->_page_config = array(
+            'default' => array(
+                'require_nonce' => false
+            ),
+            'usage' => array(
+                'nav' => array(
+                    'label' => __('Attendee Importer Usage', 'event_espresso'),
+                    'order' => 30
+                ),
+                'require_nonce' => false
+            ),
+            'show_import_step' => array(
+                'nav' => array(
+                    'label' => __('Import', 'event_espresso'),
+                    'order' => 10
+                ),
+                'require_nonce' => false
+            )
+        );
+    }
 
 
+    protected function _add_screen_options()
+    {
+    }
 
-	protected function _define_page_props() {
-		$this->_admin_page_title = ATTENDEE_IMPORTER_LABEL;
-		$this->_labels = array(
-			'publishbox' => __('Update Settings', 'event_espresso')
-		);
-	}
+    protected function _add_screen_options_default()
+    {
+    }
 
+    protected function _add_feature_pointers()
+    {
+    }
 
+    public function load_scripts_styles()
+    {
+        wp_register_script('espresso_attendee_importer_admin', EE_ATTENDEE_IMPORTER_ADMIN_ASSETS_URL . 'espresso_attendee_importer_admin.js', array('espresso_core'), EE_ATTENDEE_IMPORTER_VERSION, TRUE);
+        wp_enqueue_script('espresso_attendee_importer_admin');
+    }
 
+    public function admin_init()
+    {
+    }
 
-	protected function _set_page_routes() {
-		$this->_page_routes = array(
-			'default' => '_basic_settings',
-			'update_settings' => array(
-				'func' => '_update_settings',
-				'noheader' => TRUE
-			),
-			'usage' => '_usage'
-		);
-	}
+    public function admin_notices()
+    {
+    }
 
-
-
-
-
-	protected function _set_page_config() {
-
-		$this->_page_config = array(
-			'default' => array(
-				'nav' => array(
-					'label' => __('Settings', 'event_espresso'),
-					'order' => 10
-					),
-				'metaboxes' => array_merge( $this->_default_espresso_metaboxes, array( '_publish_post_box') ),
-				'require_nonce' => FALSE
-			),
-			'usage' => array(
-				'nav' => array(
-					'label' => __('Attendee Importer Usage', 'event_espresso'),
-					'order' => 30
-					),
-				'require_nonce' => FALSE
-			)
-		);
-	}
+    public function admin_footer_scripts()
+    {
+    }
 
 
-	protected function _add_screen_options() {}
-	protected function _add_screen_options_default() {}
-	protected function _add_feature_pointers() {}
+    protected function usage()
+    {
+        $this->_template_args['admin_page_content'] = EEH_Template::display_template(EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_PATH . 'attendee_importer_usage_info.template.php', array(), TRUE);
+        $this->display_admin_page_with_no_sidebar();
+    }
 
-	public function load_scripts_styles() {
-		wp_register_script( 'espresso_attendee_importer_admin', EE_ATTENDEE_IMPORTER_ADMIN_ASSETS_URL . 'espresso_attendee_importer_admin.js', array( 'espresso_core' ), EE_ATTENDEE_IMPORTER_VERSION, TRUE );
-		wp_enqueue_script( 'espresso_attendee_importer_admin');
-	}
+    /**
+     * @since $VID:$
+     * @throws InvalidArgumentException
+     * @throws InvalidFormHandlerException
+     */
+    protected function import()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            try {
+                $form_steps_manager = $this->getFormStepManager(true);
+                $form_steps_manager->processForm($_POST);
+            } catch (Exception $e) {
+                new ExceptionStackTraceDisplay($e);
+            }
+        }
+    }
 
-	public function admin_init() {
-		EE_Registry::$i18n_js_strings[ 'confirm_reset' ] = __( 'Are you sure you want to reset ALL your Event Espresso Attendee Importer Information? This cannot be undone.', 'event_espresso' );
-	}
+    protected function show_import_step()
+    {
+        try {
+            $form_steps_manager = $this->getFormStepManager(false);
+            $this->_template_args['admin_page_content'] = $form_steps_manager->displayProgressSteps()
+                . $form_steps_manager->displayCurrentStepForm();
+        } catch (Exception $e) {
+            new ExceptionStackTraceDisplay($e);
+        }
 
-	public function admin_notices() {}
-	public function admin_footer_scripts() {}
+        $this->display_admin_page_with_sidebar();
+    }
 
-
-
-
-
-
-	protected function _basic_settings() {
-		$this->_settings_page( 'attendee_importer_basic_settings.template.php' );
-	}
-
-
-
-
-	/**
-	 * _settings_page
-	 * @param $template
-	 */
-	protected function _settings_page( $template ) {
-		$this->_template_args['attendee_importer_config'] = EE_Config::instance()->get_config( 'addons', 'EED_Attendee_Importer', 'EE_Attendee_Importer_Config' );
-		add_filter( 'FHEE__EEH_Form_Fields__label_html', '__return_empty_string' );
-		$this->_template_args['yes_no_values'] = array(
-			EE_Question_Option::new_instance( array( 'QSO_value' => 0, 'QSO_desc' => __('No', 'event_espresso'))),
-			EE_Question_Option::new_instance( array( 'QSO_value' => 1, 'QSO_desc' => __('Yes', 'event_espresso')))
-		);
-
-		$this->_template_args['return_action'] = $this->_req_action;
-		$this->_template_args['reset_url'] = EE_Admin_Page::add_query_args_and_nonce( array('action'=> 'reset_settings','return_action'=>$this->_req_action), EE_ATTENDEE_IMPORTER_ADMIN_URL );
-		$this->_set_add_edit_form_tags( 'update_settings' );
-		$this->_set_publish_post_box_vars( NULL, FALSE, FALSE, NULL, FALSE);
-		$this->_template_args['admin_page_content'] = EEH_Template::display_template( EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_PATH . $template, $this->_template_args, TRUE );
-		$this->display_admin_page_with_sidebar();
-	}
-
-
-	protected function _usage() {
-		$this->_template_args['admin_page_content'] = EEH_Template::display_template( EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_PATH . 'attendee_importer_usage_info.template.php', array(), TRUE );
-		$this->display_admin_page_with_no_sidebar();
-	}
-
-	protected function _update_settings(){
-		if(isset($_POST['reset_attendee_importer']) && $_POST['reset_attendee_importer'] == '1'){
-			$config = new EE_Attendee_Importer_Config();
-			$count = 1;
-		}else{
-			$config = EE_Config::instance()->get_config( 'addons', 'EED_Attendee_Importer', 'EE_Attendee_Importer_Config' );
-			$count=0;
-			//otherwise we assume you want to allow full html
-			foreach($this->_req_data['attendee_importer'] as $top_level_key => $top_level_value){
-				if(is_array($top_level_value)){
-					foreach($top_level_value as $second_level_key => $second_level_value){
-						if ( EEH_Class_Tools::has_property( $config, $top_level_key ) && EEH_Class_Tools::has_property( $config->{$top_level_key}, $second_level_key ) && $second_level_value != $config->{$top_level_key}->{$second_level_key} ) {
-							$config->{$top_level_key}->{$second_level_key} = $this->_sanitize_config_input( $top_level_key, $second_level_key, $second_level_value );
-							$count++;
-						}
-					}
-				}else{
-					if ( EEH_Class_Tools::has_property($config, $top_level_key) && $top_level_value != $config->{$top_level_key}){
-						$config->{$top_level_key} = $this->_sanitize_config_input($top_level_key, NULL, $top_level_value);
-						$count++;
-					}
-				}
-			}
-		}
-		EE_Config::instance()->update_config( 'addons', 'EED_Attendee_Importer', $config );
-		$this->_redirect_after_action( $count, 'Settings', 'updated', array('action' => $this->_req_data['return_action']));
-	}
-
-	/**
-	 * resets the attendee_importer data and redirects to where they came from
-	 */
-//	protected function _reset_settings(){
-//		EE_Config::instance()->addons['attendee_importer'] = new EE_Attendee_Importer_Config();
-//		EE_Config::instance()->update_espresso_config();
-//		$this->_redirect_after_action(1, 'Settings', 'reset', array('action' => $this->_req_data['return_action']));
-//	}
-	private function _sanitize_config_input( $top_level_key, $second_level_key, $value ){
-		$sanitization_methods = array(
-			'display'=>array(
-				'enable_attendee_importer'=>'bool',
-//				'attendee_importer_height'=>'int',
-//				'enable_attendee_importer_filters'=>'bool',
-//				'enable_category_legend'=>'bool',
-//				'use_pickers'=>'bool',
-//				'event_background'=>'plaintext',
-//				'event_text_color'=>'plaintext',
-//				'enable_cat_classes'=>'bool',
-//				'disable_categories'=>'bool',
-//				'show_attendee_limit'=>'bool',
-			)
-		);
-		$sanitization_method = NULL;
-		if(isset($sanitization_methods[$top_level_key]) &&
-				$second_level_key === NULL &&
-				! is_array($sanitization_methods[$top_level_key]) ){
-			$sanitization_method = $sanitization_methods[$top_level_key];
-		}elseif(is_array($sanitization_methods[$top_level_key]) && isset($sanitization_methods[$top_level_key][$second_level_key])){
-			$sanitization_method = $sanitization_methods[$top_level_key][$second_level_key];
-		}
-//		echo "$top_level_key [$second_level_key] with value $value will be sanitized as a $sanitization_method<br>";
-		switch($sanitization_method){
-			case 'bool':
-				return (boolean)intval($value);
-			case 'plaintext':
-				return wp_strip_all_tags($value);
-			case 'int':
-				return intval($value);
-			case 'html':
-				return $value;
-			default:
-				$input_name = $second_level_key == NULL ? $top_level_key : $top_level_key."[".$second_level_key."]";
-				EE_Error::add_error(sprintf(__("Could not sanitize input '%s' because it has no entry in our sanitization methods array", "event_espresso"),$input_name), __FILE__, __FUNCTION__, __LINE__ );
-				return NULL;
-
-		}
-	}
-
-
-
+    /**
+     * @param bool $process
+     * @return StepsManager
+     * @throws InvalidDataTypeException
+     * @throws InvalidArgumentException
+     * @throws InvalidInterfaceException
+     */
+    public function getFormStepManager($process = true)
+    {
+        if (!$this->form_steps_manager instanceof StepsManager) {
+            /** @var EventEspresso\core\services\loaders\Loader $loader */
+            $loader = LoaderFactory::getLoader();
+            $this->form_steps_manager = $loader->getShared(
+                'EventEspresso\AttendeeImporter\form\StepsManager',
+                array(
+                    // base redirect URL
+                    EE_ATTENDEE_IMPORTER_ADMIN_URL,
+                    // default step slug
+                    'upload',
+                )
+            );
+            $this->form_steps_manager->buildForm();
+        }
+        return $this->form_steps_manager;
+    }
 
 
 }
