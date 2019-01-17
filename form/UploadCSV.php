@@ -2,6 +2,7 @@
 
 namespace EventEspresso\AttendeeImporter\form;
 use DomainException;
+use EE_Admin_File_Uploader_Input;
 use EE_Error;
 use EE_Form_Section_Proper;
 use EE_Registry;
@@ -60,7 +61,19 @@ class UploadCsv extends SequentialStepForm
             [
                 'name' => 'upload',
                 'subsections' => array(
-                    'data_source' => new \EE_Text_Input(),
+                    'header' => new \EE_Form_Section_HTML(
+                        \EEH_HTML::h2(esc_html__('Upload CSV  File', 'event_espresso'))
+                    ),
+                    'instructions' => new \EE_Form_Section_HTML(
+                        \EEH_HTML::p(
+                            esc_html__('Upload a CSV (comma-separated-value) file.', 'event_espresso')
+                        )
+                    ),
+                    'file' => new EE_Admin_File_Uploader_Input(
+                        [
+                            'required' => true
+                        ]
+                    )
                 )
             ]
         );
