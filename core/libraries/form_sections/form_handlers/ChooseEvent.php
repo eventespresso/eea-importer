@@ -5,6 +5,8 @@ use DomainException;
 use EE_Error;
 use EE_Form_Section_Proper;
 use EE_Registry;
+use EE_Select_Ajax_Model_Rest_Input;
+use EED_Attendee_Importer;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFormSubmissionException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
@@ -60,7 +62,13 @@ class ChooseEvent extends SequentialStepForm
             [
                 'name' => 'event',
                 'subsections' => [
-                    'input1' => new \EE_Text_Input()
+                    'event' => new EE_Select_Ajax_Model_Rest_Input(
+                        [
+                            'model_name' => 'Event',
+                            'required' => true,
+                            'help_text' => esc_html__('The Event data should be imported to.', 'event_espresso')
+                        ]
+                    )
                 ]
             ]
         );
@@ -81,7 +89,15 @@ class ChooseEvent extends SequentialStepForm
      */
     public function process($form_data = array())
     {
-        $valid_data = (array) parent::process($form_data);
+        try{
+            $valid_data = (array) parent::process($form_data);
+        }catch(InvalidFormSubmissionException $e){
+            // Don't die. Admin code knows how to handle invalid forms...
+            return;
+        }
+        $config = EED_Attendee_Importer::instance()->getConfig();
+        $config->default_event = $valid_data['event'];
+        EED_Attendee_Importer::instance()->updateConfig();
         $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);
         return true;
     }

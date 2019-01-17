@@ -51,6 +51,16 @@ class EE_Attendee_Importer_Config extends EE_Config_Base {
      */
     public $column_mapping;
 
+    /**
+     * @var int
+     */
+    public $default_event;
+
+    /**
+     * @var int
+     */
+    public $default_ticket;
+
 
     /**
      * @return EE_Mailchimp_Config
@@ -59,6 +69,8 @@ class EE_Attendee_Importer_Config extends EE_Config_Base {
     {
         $this->file = '';
         $this->column_mapping = [];
+        $this->default_event = 0;
+        $this->default_ticket = 0;
     }
 
 }
