@@ -80,7 +80,7 @@ class StepsManager extends SequentialStepFormManager
                             'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\UploadCsv',
                             'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\MapCsvColumns',
                             'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\ChooseEvent',
-                            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\Import',
+                            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\ChooseTicket',
                             'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\Complete',
                         )
                     ),

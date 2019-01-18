@@ -1,12 +1,16 @@
 <?php
 
 namespace EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers;
+
 use DomainException;
+use EE_Attendee_Importer_Config;
 use EE_Error;
+use EE_Form_Section_HTML;
 use EE_Form_Section_Proper;
 use EE_Registry;
 use EE_Select_Ajax_Model_Rest_Input;
 use EED_Attendee_Importer;
+use EEH_HTML;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFormSubmissionException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
@@ -16,34 +20,41 @@ use InvalidArgumentException;
 use LogicException;
 
 /**
- * Class ChooseEvent
+ * Class ChooseTicket
  *
- * Step for uploading the CSV file to import.
+ * Step for selecting which ticket will be imported to.
  *
  * @package     Event Espresso
  * @author         Mike Nelson
  * @since         $VID:$
  *
  */
-class ChooseEvent extends SequentialStepForm
+class ChooseTicket extends SequentialStepForm
 {
 
     /**
-     * ChooseEvent constructor
+     * @var EE_Attendee_Importer_Config
+     */
+    protected $config;
+
+    /**
+     * ChooseTicket constructor
      *
      * @param EE_Registry $registry
+     * @param EE_Attendee_Importer_Config $config
      * @throws InvalidArgumentException
      * @throws DomainException
      * @throws InvalidDataTypeException
      */
-    public function __construct(EE_Registry $registry)
+    public function __construct(EE_Registry $registry, EE_Attendee_Importer_Config $config)
     {
+        $this->config = $config;
         $this->setDisplayable(true);
         parent::__construct(
-            3,
-            esc_html__('Choose Event', 'event_espresso'),
-            esc_html__('"Choose Event" Attendee Importer Step', 'event_espresso'),
-            'choose-event',
+            4,
+            esc_html__('Choose Ticket', 'event_espresso'),
+            esc_html__('"Choose Ticket" Attendee Importer Step', 'event_espresso'),
+            'choose-ticket',
             '',
             FormHandler::ADD_FORM_TAGS_AND_SUBMIT,
             $registry
@@ -55,19 +66,31 @@ class ChooseEvent extends SequentialStepForm
      * creates and returns the actual form
      *
      * @return EE_Form_Section_Proper
+     * @throws EE_Error
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidInterfaceException
      */
     public function generate()
     {
         return new EE_Form_Section_Proper(
             [
-                'name' => 'event',
+                'name' => 'ticket',
                 'subsections' => [
-                    'event' => new EE_Select_Ajax_Model_Rest_Input(
+                    'ticket' => new EE_Select_Ajax_Model_Rest_Input(
                         [
-                            'model_name' => 'Event',
+                            'model_name' => 'Ticket',
                             'required' => true,
-                            'help_text' => esc_html__('The Event data should be imported to.', 'event_espresso')
+                            'help_text' => esc_html__('The Ticket data should be imported to.', 'event_espresso'),
+                            'query_params' => [
+                                [
+                                    'Datetime.Event.EVT_ID' => $this->config->default_event
+                                ]
+                            ]
                         ]
+                    ),
+                    'notice' => new EE_Form_Section_HTML(
+                        EEH_HTML::p(esc_html__('The import will start after this step. Please wait for it to complete before closing this window, turning off your computer, or navigating away.', 'event_espresso'))
                     )
                 ]
             ]
@@ -96,7 +119,7 @@ class ChooseEvent extends SequentialStepForm
             return;
         }
         $config = EED_Attendee_Importer::instance()->getConfig();
-        $config->default_event = $valid_data['event'];
+        $config->default_ticket = $valid_data['ticket'];
         EED_Attendee_Importer::instance()->updateConfig();
         // If there is only one ticket for this event, we can set the default ticket now and skip that step.
         
@@ -104,5 +127,5 @@ class ChooseEvent extends SequentialStepForm
         return true;
     }
 }
-// End of file ChooseEvent.php
-// Location: EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers/ChooseEvent.php
+// End of file ChooseTicket.php
+// Location: EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers/ChooseTicket.php

@@ -129,8 +129,9 @@ Class  EE_Attendee_Importer extends EE_Addon {
             'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\ChooseEvent'                           => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
             ),
-            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\Import'                                => array(
+            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\ChooseTicket'                          => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
+                'EE_Attendee_Importer_Config' => EE_Dependency_Map::load_from_cache,
             ),
             'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\Complete'                                => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
