@@ -1,6 +1,7 @@
 <?php
 
 namespace EventEspresso\AttendeeImporter\core\libraries\form_sections\forms;
+
 use EE_Admin_File_Uploader_Input;
 use EE_Error;
 use EE_Form_Section_HTML;
