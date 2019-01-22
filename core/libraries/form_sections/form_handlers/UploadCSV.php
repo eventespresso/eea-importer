@@ -95,7 +95,7 @@ class UploadCsv extends SequentialStepForm
 
         $config = EED_Attendee_Importer::instance()->getConfig();
 
-        $config->file = $valid_data['file'];
+        $config->file = $valid_data['file_path'];
         EED_Attendee_Importer::instance()->updateConfig();
         $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);
         return true;

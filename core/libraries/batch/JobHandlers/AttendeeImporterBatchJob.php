@@ -6,6 +6,7 @@ use EventEspressoBatchRequest\Helpers\BatchRequestException;
 use EventEspressoBatchRequest\Helpers\JobParameters;
 use EventEspressoBatchRequest\Helpers\JobStepResponse;
 use EventEspressoBatchRequest\JobHandlerBaseClasses\JobHandler;
+use EventEspressoBatchRequest\JobHandlerBaseClasses\JobHandlerInterface;
 use LogicException;
 use RuntimeException;
 use SplFileObject;
@@ -13,7 +14,8 @@ use SplFileObject;
 /**
  * Class AttendeeImporterBatchJob
  *
- * Description
+ * Takes care of breaking up the often big job of importing a CSV file into the DB into smaller steps.
+ * Offloads the actual work though to command objects.
  *
  * @package     Event Espresso
  * @author         Mike Nelson
@@ -29,7 +31,7 @@ class AttendeeImporterBatchJob extends JobHandler
      * place to setup the $job_arguments which will be used for subsequent HTTP requests
      * when continue_job will be called
      * @param JobParameters $job_parameters
-     * @return void
+     * @return JobStepResponse
      * @throws LogicException
      * @throws RuntimeException
      */
@@ -40,6 +42,10 @@ class AttendeeImporterBatchJob extends JobHandler
         $file = new SplFileObject($config->file, 'r');
         $file->seek(PHP_INT_MAX);
         $job_parameters->set_job_size($file->key() + 1);
+        return new JobStepResponse(
+            $job_parameters,
+            esc_html__('Beginning import...', 'event_espresso')
+        );
     }
 
     /**
@@ -61,6 +67,17 @@ class AttendeeImporterBatchJob extends JobHandler
         // Create answers
         // Create a registration-answer row
         // Create line items
+        $job_parameters->mark_processed($batch_size);
+        if($job_parameters->units_processed() >= $job_parameters->job_size()) {
+            $job_parameters->set_status(JobParameters::status_complete);
+        }
+        return new JobStepResponse(
+            $job_parameters,
+            sprintf(
+                esc_html__('%1$s rows imported.', 'event_espresso'),
+                $batch_size
+            )
+        );
     }
 
     /**
