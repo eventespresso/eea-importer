@@ -3,13 +3,12 @@
 namespace EventEspresso\AttendeeImporter\core\libraries\batch\JobHandlers;
 
 use EED_Attendee_Importer;
-use EventEspresso\core\services\commands\attendee\ImportCsvRowCommand;
+use EventEspresso\AttendeeImporter\core\domain\services\commands\ImportCsvRowCommand;
 use EventEspresso\core\services\loaders\LoaderFactory;
 use EventEspressoBatchRequest\Helpers\BatchRequestException;
 use EventEspressoBatchRequest\Helpers\JobParameters;
 use EventEspressoBatchRequest\Helpers\JobStepResponse;
 use EventEspressoBatchRequest\JobHandlerBaseClasses\JobHandler;
-use EventEspressoBatchRequest\JobHandlerBaseClasses\JobHandlerInterface;
 use LogicException;
 use RuntimeException;
 use SplFileObject;
@@ -72,7 +71,7 @@ class AttendeeImporterBatchJob extends JobHandler
         $file = new SplFileObject($config->file, 'r');
         $file->seek($job_parameters->units_processed());
         $processed_this_batch = 0;
-        do {
+        while (!$file->eof() && $processed_this_batch++ < $batch_size) {
             $csv_row = $file->fgetcsv();
             $command_bus->execute(
                 new ImportCsvRowCommand(
@@ -80,7 +79,7 @@ class AttendeeImporterBatchJob extends JobHandler
                     $config
                 )
             );
-        } while (!$file->eof() && $processed_this_batch++ <= $batch_size);
+        } ;
 
         return new JobStepResponse(
             $job_parameters,
@@ -103,6 +102,10 @@ class AttendeeImporterBatchJob extends JobHandler
         // But there could be a lot, so just do it for the ones actually affected.
 //        EEM_Ticket::instance()->update_tickets_sold();
 //        EEM_Datetime::instance()->update_sold();
+        return new JobStepResponse(
+            $job_parameters,
+            esc_html__('Summarizing import...', 'event_espresso')
+        );
     }
 }
 // End of file AttendeeImporterBatchJob.php
