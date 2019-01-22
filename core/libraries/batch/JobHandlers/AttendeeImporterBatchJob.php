@@ -1,7 +1,10 @@
 <?php
+
 namespace EventEspresso\AttendeeImporter\core\libraries\batch\JobHandlers;
 
 use EED_Attendee_Importer;
+use EventEspresso\core\services\commands\attendee\ImportCsvRowCommand;
+use EventEspresso\core\services\loaders\LoaderFactory;
 use EventEspressoBatchRequest\Helpers\BatchRequestException;
 use EventEspressoBatchRequest\Helpers\JobParameters;
 use EventEspressoBatchRequest\Helpers\JobStepResponse;
@@ -58,19 +61,27 @@ class AttendeeImporterBatchJob extends JobHandler
     public function continue_job(JobParameters $job_parameters, $batch_size = 50)
     {
 
-        // TODO: Use commands to...
-        // Create an attendee
-        // Create a transaction
-        // Get a ticket
-        // Get an event
-        // Create a registration
-        // Create answers
-        // Create a registration-answer row
-        // Create line items
+
         $job_parameters->mark_processed($batch_size);
-        if($job_parameters->units_processed() >= $job_parameters->job_size()) {
+        if ($job_parameters->units_processed() >= $job_parameters->job_size()) {
             $job_parameters->set_status(JobParameters::status_complete);
         }
+        $command_bus = LoaderFactory::getLoader()->getShared('EventEspresso\core\services\commands\CommandBus');
+        // grab the line from the file
+        $config = EED_Attendee_Importer::instance()->getConfig();
+        $file = new SplFileObject($config->file, 'r');
+        $file->seek($job_parameters->units_processed());
+        $processed_this_batch = 0;
+        do {
+            $csv_row = $file->fgetcsv();
+            $command_bus->execute(
+                new ImportCsvRowCommand(
+                    $csv_row,
+                    $config
+                )
+            );
+        } while (!$file->eof() && $processed_this_batch++ <= $batch_size);
+
         return new JobStepResponse(
             $job_parameters,
             sprintf(
