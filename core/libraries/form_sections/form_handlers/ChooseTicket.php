@@ -3,6 +3,7 @@
 namespace EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers;
 
 use DomainException;
+use EE_Admin_Page;
 use EE_Attendee_Importer_Config;
 use EE_Error;
 use EE_Form_Section_HTML;
@@ -11,6 +12,7 @@ use EE_Registry;
 use EE_Select_Ajax_Model_Rest_Input;
 use EED_Attendee_Importer;
 use EEH_HTML;
+use EEH_URL;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFormSubmissionException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
@@ -123,8 +125,38 @@ class ChooseTicket extends SequentialStepForm
         EED_Attendee_Importer::instance()->updateConfig();
         // If there is only one ticket for this event, we can set the default ticket now and skip that step.
         
-        $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);
+//        $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);
+        $this->redirectToBatchJob();
         return true;
+    }
+
+    protected function redirectToBatchJob()
+    {
+        wp_redirect(
+            EE_Admin_Page::add_query_args_and_nonce(
+                array(
+                    'page'        => 'espresso_batch',
+                    'batch'       => 'job',
+                    'label'       => esc_html__('Applying Offset', 'event_espresso'),
+                    'job_handler' => urlencode('EventEspresso\AttendeeImporter\core\libraries\batch\JobHandlers\AttendeeImporterBatchJob'),
+                    'return_url'  => urlencode(
+                        add_query_arg(
+                            array(
+                                'ee-form-step' => 'complete',
+                            ),
+                            EEH_URL::current_url_without_query_paramaters(
+                                array(
+                                    'ee-form-step',
+                                    'return',
+                                )
+                            )
+                        )
+                    ),
+                ),
+                admin_url()
+            )
+        );
+        exit;
     }
 }
 // End of file ChooseTicket.php

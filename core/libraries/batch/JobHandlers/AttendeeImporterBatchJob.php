@@ -1,10 +1,14 @@
 <?php
 namespace EventEspresso\AttendeeImporter\core\libraries\batch\JobHandlers;
-use EEM_Ticket;
+
+use EED_Attendee_Importer;
 use EventEspressoBatchRequest\Helpers\BatchRequestException;
 use EventEspressoBatchRequest\Helpers\JobParameters;
 use EventEspressoBatchRequest\Helpers\JobStepResponse;
 use EventEspressoBatchRequest\JobHandlerBaseClasses\JobHandler;
+use LogicException;
+use RuntimeException;
+use SplFileObject;
 
 /**
  * Class AttendeeImporterBatchJob
@@ -25,12 +29,17 @@ class AttendeeImporterBatchJob extends JobHandler
      * place to setup the $job_arguments which will be used for subsequent HTTP requests
      * when continue_job will be called
      * @param JobParameters $job_parameters
-     * @throws BatchRequestException
-     * @return JobStepResponse
+     * @return void
+     * @throws LogicException
+     * @throws RuntimeException
      */
     public function create_job(JobParameters $job_parameters)
     {
-        // The CSV file was already uploaded, so we can just keep using it.
+        // The CSV file was already uploaded, so just count its lines.
+        $config = EED_Attendee_Importer::instance()->getConfig();
+        $file = new SplFileObject($config->file, 'r');
+        $file->seek(PHP_INT_MAX);
+        $job_parameters->set_job_size($file->key() + 1);
     }
 
     /**
@@ -42,6 +51,7 @@ class AttendeeImporterBatchJob extends JobHandler
      */
     public function continue_job(JobParameters $job_parameters, $batch_size = 50)
     {
+
         // TODO: Use commands to...
         // Create an attendee
         // Create a transaction
