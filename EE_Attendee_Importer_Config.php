@@ -73,6 +73,24 @@ class EE_Attendee_Importer_Config extends EE_Config_Base {
         $this->default_ticket = 0;
     }
 
+    /**
+     * Gets all the CSV columns that correspond to this model. The array keys are the field names (or object IDs)
+     * @since $VID:$
+     * @param EEM_Base $model
+     * @return array keys are the model's field names or object IDs; values are the CSV columns that correspond to them.
+     */
+    public function getCsvColumnsForModel(EEM_Base $model)
+    {
+        $fields_to_columns = [];
+        $model_name_start = $model->get_this_model_name() . '.';
+        foreach ($this->column_mapping as $column => $model_period_field) {
+            if (strpos($model_period_field, $model_name_start) === 0) {
+                $fields_to_columns[str_replace($model_name_start,'',$model_period_field)] = $column;
+            }
+        }
+        return $fields_to_columns;
+    }
+
 }
 
 

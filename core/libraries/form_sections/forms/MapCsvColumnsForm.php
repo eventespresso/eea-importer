@@ -80,7 +80,12 @@ class MapCsvColumnsForm extends EE_Form_Section_Proper
         // And add questions (group by question group).
         foreach(\EEM_Question_Group::instance()->get_all() as $question_group){
             foreach($question_group->questions() as $question) {
-                $options[$question_group->name()][$question->ID()] = $question->admin_label();
+                if( $question->is_system_question()) {
+                    $option_value = 'Attendee.' . $question->system_ID();
+                } else {
+                    $option_value = 'Question.' . $question->ID();
+                }
+                $options[$question_group->name()][$option_value] = $question->admin_label();
             }
         }
         $options = array_merge(

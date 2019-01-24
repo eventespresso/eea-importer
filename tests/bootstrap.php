@@ -2,6 +2,7 @@
 /**
  * Bootstrap for EE4 Addon Skeleton Unit Tests
  */
+
 use EETests\bootstrap\AddonLoader;
 
 $core_tests_dir = dirname(dirname(dirname(__FILE__))) . '/event-espresso-core/tests/';
