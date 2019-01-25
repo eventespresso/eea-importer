@@ -1,6 +1,6 @@
 <?php
 
-use EventEspresso\AttendeeImporter\core\domain\services\commands\AttendeeFromCsvRowCommand;
+use EventEspresso\AttendeeImporter\core\domain\services\commands\AttendeeFromCsvRowBaseCommand;
 use EventEspresso\AttendeeImporter\core\domain\services\commands\AttendeeFromCsvRowCommandHandler;
 
 /**
@@ -43,7 +43,7 @@ class AttendeeFromCsvRowCommandHandlerTest extends EE_UnitTestCase
         );
 
         $handler->handle(
-            new AttendeeFromCsvRowCommand(
+            new AttendeeFromCsvRowBaseCommand(
                 [
                     'fname column' => 'val1',
                     'lname column' => 'val2',
@@ -76,15 +76,81 @@ class AttendeeFromCsvRowCommandHandlerTest extends EE_UnitTestCase
 //    }
 
     public function testHandleCreate() {
-
+        $handler = $this->getCommandHandler();
+        $original_attendee_count = EEM_Attendee::instance()->count();
+        $attendee = $handler->handle(
+            new AttendeeFromCsvRowBaseCommand(
+                [
+                    'fname column' => 'val1',
+                    'lname column' => 'val2',
+                    'email column' => 'va@l3.com'
+                ]
+            )
+        );
+        $this->assertInstanceOf('EE_Attendee', $attendee);
+        $this->assertEquals($original_attendee_count + 1, EEM_Attendee::instance()->count());
+        $this->assertEquals('val1', $attendee->fname());
+        $this->assertEquals('val2', $attendee->lname());
+        $this->assertEquals('va@l3.com', $attendee->email());
     }
 
     public function testHandleAlreadyExists() {
-
+        $handler = $this->getCommandHandler();
+        $original_attendee = $this->new_model_obj_with_dependencies(
+            'Attendee',
+            [
+                'ATT_fname' => 'val1',
+                'ATT_lname' => 'val2',
+                'ATT_email' => 'va@l3.com'
+            ]
+        );
+        $original_attendee_count = EEM_Attendee::instance()->count();
+        $attendee = $handler->handle(
+            new AttendeeFromCsvRowBaseCommand(
+                [
+                    'fname column' => 'val1',
+                    'lname column' => 'val2',
+                    'email column' => 'va@l3.com'
+                ]
+            )
+        );
+        $this->assertInstanceOf('EE_Attendee', $attendee);
+        $this->assertEEModelObjectsEquals($original_attendee, $attendee);
+        $this->assertEquals($original_attendee_count, EEM_Attendee::instance()->count());
     }
 
     public function testHandleUpdate() {
-
+        $config = new EE_Attendee_Importer_Config();
+        $config->column_mapping = [
+            'fname column' => 'Attendee.ATT_fname',
+            'lname column' => 'Attendee.ATT_lname',
+            'email column' => 'Attendee.ATT_email',
+            'address column' => 'Attendee.ATT_address'
+        ];
+        $handler = new AttendeeFromCsvRowCommandHandler($config);
+        $original_attendee = $this->new_model_obj_with_dependencies(
+            'Attendee',
+            [
+                'ATT_fname' => 'val1',
+                'ATT_lname' => 'val2',
+                'ATT_email' => 'va@l3.com'
+            ]
+        );
+        $original_attendee_count = EEM_Attendee::instance()->count();
+        $attendee = $handler->handle(
+            new AttendeeFromCsvRowBaseCommand(
+                [
+                    'fname column' => 'val1',
+                    'lname column' => 'val2',
+                    'email column' => 'va@l3.com',
+                    'address column' => 'val4'
+                ]
+            )
+        );
+        $this->assertInstanceOf('EE_Attendee', $attendee);
+        $this->assertEEModelObjectsEquals($original_attendee, $attendee);
+        $this->assertEquals($original_attendee_count, EEM_Attendee::instance()->count());
+        $this->assertEquals('val4', $attendee->address());
     }
 }
 // End of file AttendeeFromCsvRowCommandHandlerTest.php

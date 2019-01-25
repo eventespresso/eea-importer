@@ -81,7 +81,7 @@ class MapCsvColumnsForm extends EE_Form_Section_Proper
         foreach(\EEM_Question_Group::instance()->get_all() as $question_group){
             foreach($question_group->questions() as $question) {
                 if( $question->is_system_question()) {
-                    $option_value = 'Attendee.' . $question->system_ID();
+                    $option_value = 'Attendee.ATT_' . $question->system_ID();
                 } else {
                     $option_value = 'Question.' . $question->ID();
                 }

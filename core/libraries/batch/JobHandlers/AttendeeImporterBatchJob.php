@@ -39,11 +39,26 @@ class AttendeeImporterBatchJob extends JobHandler
      */
     public function create_job(JobParameters $job_parameters)
     {
-        // The CSV file was already uploaded, so just count its lines.
         $config = EED_Attendee_Importer::instance()->getConfig();
         $file = new SplFileObject($config->file, 'r');
+        // Get the header row
+        if ($file->eof()) {
+            // The file's totally empty. That's whack.
+            $job_parameters->set_status(JobParameters::status_error);
+            return new JobStepResponse(
+                $job_parameters,
+                esc_html__('No comma-separated data was retrieved from the CSV file provided.', 'event_espresso')
+            );
+        }
+        $csv_row = $file->fgetcsv();
+        $job_parameters->set_extra_data(
+            [
+                'headers' => $csv_row
+            ]
+        );
+        // Now count the lines
         $file->seek(PHP_INT_MAX);
-        $job_parameters->set_job_size($file->key() + 1);
+        $job_parameters->set_job_size($file->key() - 1);
         return new JobStepResponse(
             $job_parameters,
             esc_html__('Beginning import...', 'event_espresso')
@@ -61,25 +76,33 @@ class AttendeeImporterBatchJob extends JobHandler
     {
 
 
-        $job_parameters->mark_processed($batch_size);
-        if ($job_parameters->units_processed() >= $job_parameters->job_size()) {
-            $job_parameters->set_status(JobParameters::status_complete);
-        }
+
         $command_bus = LoaderFactory::getLoader()->getShared('EventEspresso\core\services\commands\CommandBus');
         // grab the line from the file
         $config = EED_Attendee_Importer::instance()->getConfig();
         $file = new SplFileObject($config->file, 'r');
-        $file->seek($job_parameters->units_processed());
+        // Jump to the line we were at, plus one because we didn't count the header row
+        $file->seek($job_parameters->units_processed() + 1);
         $processed_this_batch = 0;
-        while (!$file->eof() && $processed_this_batch++ < $batch_size) {
-            $csv_row = $file->fgetcsv();
-            $command_bus->execute(
-                new ImportCsvRowCommand(
-                    $csv_row,
-                    $config
-                )
-            );
+        $column_headers = $job_parameters->extra_datum('headers');
+        while (!$file->eof() && $processed_this_batch < $batch_size) {
+            $numeric_csv_row = $file->fgetcsv();
+            if(is_array($numeric_csv_row) && count($numeric_csv_row) === count($column_headers)) {
+                $command_bus->execute(
+                    new ImportCsvRowCommand(
+                        array_combine(
+                            $column_headers,
+                            $numeric_csv_row
+                        )
+                    )
+                );
+            }
+            $processed_this_batch++;
         } ;
+        $job_parameters->mark_processed($processed_this_batch);
+        if ($job_parameters->units_processed() >= $job_parameters->job_size()) {
+            $job_parameters->set_status(JobParameters::status_complete);
+        }
 
         return new JobStepResponse(
             $job_parameters,

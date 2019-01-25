@@ -140,6 +140,15 @@ Class  EE_Attendee_Importer extends EE_Addon {
                 array(),
                 'EE_Attendee_Importer_Config' => EE_Dependency_Map::load_from_cache,
             ],
+            // commands handlers
+            'EventEspresso\AttendeeImporter\core\domain\services\commands\ImportCsvRowCommandHandler' => [
+                'EventEspresso\core\services\commands\CommandBusInterface' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\commands\CommandFactoryInterface' => EE_Dependency_Map::load_from_cache
+            ],
+            'EventEspresso\AttendeeImporter\core\domain\services\commands\AttendeeFromCsvRowCommandHandler' => [
+                'EE_Attendee_Importer_Config' => EE_Dependency_Map::load_from_cache
+            ]
+
         );
         EE_Dependency_Map::register_class_loader(
             'EE_Attendee_Importer_Config',

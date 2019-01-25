@@ -5,7 +5,6 @@ namespace EventEspresso\AttendeeImporter\core\domain\services\commands;
 use EE_Attendee;
 use EE_Error;
 use EE_Registration;
-use EEM_Attendee;
 use EventEspresso\core\exceptions\InvalidEntityException;
 use EventEspresso\core\services\commands\CommandInterface;
 use EventEspresso\core\services\commands\CompositeCommandHandler;
@@ -22,13 +21,6 @@ class ImportCsvRowCommandHandler extends CompositeCommandHandler
 
 
     /**
-     */
-    public function __construct()
-    {
-    }
-
-
-    /**
      * @param CommandInterface $command
      * @return EE_Attendee
      * @throws EE_Error
@@ -38,15 +30,17 @@ class ImportCsvRowCommandHandler extends CompositeCommandHandler
     {
         /** @var ImportCsvRowCommand $command */
         if (! $command instanceof ImportCsvRowCommand) {
-            throw new InvalidEntityException(get_class($command), 'CreateAttendeeCommand');
+            throw new InvalidEntityException(get_class($command), 'EventEspresso\AttendeeImporter\core\domain\services\commands\ImportCsvRowCommand');
         }
-//        $this->commandBus()->execute(
-//            $this->commandFactory()->getNew(
-//                'EventEspresso\core\services\commands\transaction\CreateTransactionCommand'
-//            )
-//        );
         // TODO: Use commands to...
         // Create an attendee
+        $attendee = $this->commandBus()->execute(
+            $this->commandFactory()->getNew(
+                'EventEspresso\AttendeeImporter\core\domain\services\commands\AttendeeFromCsvRowCommand',
+                $command->csvRow()
+            )
+        );
+
         // Create a transaction
         // Get a ticket
         // Get an event
