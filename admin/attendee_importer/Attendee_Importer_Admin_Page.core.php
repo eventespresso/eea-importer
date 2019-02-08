@@ -53,6 +53,9 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     {
         $this->_page_routes = array(
             'default' => array(
+                'func' => 'main',
+            ),
+            'import' => array(
                 'func' => 'import',
                 'noheader' => true,
                 'headers_sent_route' => 'show_import_step'
@@ -125,6 +128,31 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     {
         $this->_template_args['admin_page_content'] = EEH_Template::display_template(EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_PATH . 'attendee_importer_usage_info.template.php', array(), TRUE);
         $this->display_admin_page_with_no_sidebar();
+    }
+
+    /**
+     * Shows the list of importers available.
+     * @since $VID:$
+     */
+    protected function main()
+    {
+        $import_manager = LoaderFactory::getLoader()->load('EventEspresso\AttendeeImporter\core\services\import\ImportManager');
+        /* @var $import_manager EventEspresso\core\services\import\ImportManager */
+        $import_type_ui_managaers = $import_manager->loadImportTypeUiManagers();
+        $html = '';
+        foreach($import_type_ui_managaers as $ui_manager) {
+            $import_type = $ui_manager->getImportType();
+            $html .= EEH_Template::display_template(
+                EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_PATH . 'attendee_importer_manager_type.template.php',
+                [
+                    'slug' => $import_type->getSlug(),
+                    'name' => $import_type->getName(),
+                    'description' => $import_type->getDescription(),
+                    'image_url' => $ui_manager->getImage()
+                ]
+            );
+        }
+        $this->_template_args['admin_page_content'] = $html;
     }
 
     /**
