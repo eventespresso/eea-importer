@@ -6,8 +6,14 @@
  * Time: 1:18 PM
  */
 ?>
-<div id="<?php esc_attr_e($slug);?>-div" class="ee-import-type-div">
-    <h2><?php echo $name;?></h2>
-    <img src="<?php esc_attr_e($image_url)?>">
-    <p><?php echo $description;?></p>
+<a href="">
+<div id="<?php esc_attr_e($slug);?>-div" class="ee-import-type-div" style="display:flex">
+    <div class="ee-import-type-image-div">
+        <img src="<?php esc_attr_e($image_url)?>">
+    </div>
+    <div class="ee-import-type-text-div">
+        <h2><?php echo $name;?></h2>
+        <p><?php echo $description;?></p>
+    </div>
 </div>
+</a>

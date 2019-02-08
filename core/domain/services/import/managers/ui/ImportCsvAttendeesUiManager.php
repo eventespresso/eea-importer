@@ -59,7 +59,7 @@ class ImportCsvAttendeesUiManager implements ImportTypeUiManagerInterface
      */
     public function getImage()
     {
-        return dirname(__FILE__) . '/assets/images/113px-CsvDelimited001.svg.png';
+        return $this->getImportType()->getUrlToFiles() . '/assets/images/113px-CsvDelimited001.svg.png';
     }
 }
 // End of file ImportCsvAttendeesUiManager.php

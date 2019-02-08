@@ -54,6 +54,18 @@ interface ImportTypeManagerInterface
      * @return mixed
      */
     public function saveConfig();
+
+    /**
+     * @since $VID:$
+     * @return string
+     */
+    public function getPathToFiles();
+
+    /**
+     * @since $VID:$
+     * @return mixed
+     */
+    public function getUrlToFiles();
 }
 // End of file ImportTypeInterface.php
 // Location: EventEspresso\core\services\import/ImportTypeInterface.php

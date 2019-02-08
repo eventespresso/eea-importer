@@ -75,6 +75,16 @@ class ImportCsvAttendeesManager implements ImportTypeManagerInterface
     {
         return 'csv-attendee';
     }
+
+    public function getPathToFiles()
+    {
+        return EE_ATTENDEE_IMPORTER_PATH . 'core/domain/services/import/csv/attendees';
+    }
+
+    public function getUrlToFiles()
+    {
+        return EE_ATTENDEE_IMPORTER_URL . 'core/domain/services/import/csv/attendees';
+    }
 }
 // End of file ImportCsvAttendeesManager.php
 // Location: EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees/ImportCsvAttendeesManager.php
