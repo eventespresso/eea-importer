@@ -1,4 +1,4 @@
-<?php use EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\StepsManager;
+<?php use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\StepsManager;
 use EventEspresso\core\exceptions\ExceptionStackTraceDisplay;
 use EventEspresso\core\libraries\form_sections\form_handlers\InvalidFormHandlerException;
 use EventEspresso\core\services\loaders\LoaderFactory;
@@ -148,7 +148,14 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
                     'slug' => $import_type->getSlug(),
                     'name' => $import_type->getName(),
                     'description' => $import_type->getDescription(),
-                    'image_url' => $ui_manager->getImage()
+                    'image_url' => $ui_manager->getImage(),
+                    'steps_url' => add_query_arg(
+                        [
+                            'action' => 'show_import_step',
+                            'type' => $import_type->getSlug()
+                        ],
+                        EE_ATTENDEE_IMPORTER_ADMIN_URL
+                    )
                 ]
             );
         }
@@ -198,10 +205,13 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
             /** @var EventEspresso\core\services\loaders\Loader $loader */
             $loader = LoaderFactory::getLoader();
             $this->form_steps_manager = $loader->getShared(
-                'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\StepsManager',
+                'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\StepsManager',
                 array(
                     // base redirect URL
-                    EE_ATTENDEE_IMPORTER_ADMIN_URL,
+                    EE_Admin_Page::add_query_args_and_nonce(
+                        ['action' => 'import'],
+                        EE_ATTENDEE_IMPORTER_ADMIN_URL
+                    ),
                     // default step slug
                     'upload',
                 )

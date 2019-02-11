@@ -1,15 +1,13 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers;
+namespace EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers;
+
 use DomainException;
-use EE_Admin_File_Uploader_Input;
-use EE_Attendee_Importer_Config;
-use EE_Config;
 use EE_Error;
 use EE_Form_Section_Proper;
 use EE_Registry;
+use EE_Select_Ajax_Model_Rest_Input;
 use EED_Attendee_Importer;
-use EventEspresso\AttendeeImporter\core\libraries\form_sections\forms\UploadCSVForm;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFormSubmissionException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
@@ -17,12 +15,9 @@ use EventEspresso\core\libraries\form_sections\form_handlers\FormHandler;
 use EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepForm;
 use InvalidArgumentException;
 use LogicException;
-use RuntimeException;
-use SplFileObject;
-use WP_Query;
 
 /**
- * Class UploadCsv
+ * Class ChooseEvent
  *
  * Step for uploading the CSV file to import.
  *
@@ -31,25 +26,25 @@ use WP_Query;
  * @since         $VID:$
  *
  */
-class UploadCsv extends SequentialStepForm
+class ChooseEvent extends SequentialStepForm
 {
 
     /**
-     * UploadCsv constructor
+     * ChooseEvent constructor
      *
      * @param EE_Registry $registry
-     * @throws InvalidDataTypeException
      * @throws InvalidArgumentException
      * @throws DomainException
+     * @throws InvalidDataTypeException
      */
     public function __construct(EE_Registry $registry)
     {
         $this->setDisplayable(true);
         parent::__construct(
-            1,
-            esc_html__('Upload', 'event_espresso'),
-            esc_html__('"Upload" Attendee Importer Step', 'event_espresso'),
-            'upload',
+            3,
+            esc_html__('Choose Event', 'event_espresso'),
+            esc_html__('"Choose Event" Attendee Importer Step', 'event_espresso'),
+            'choose-event',
             '',
             FormHandler::ADD_FORM_TAGS_AND_SUBMIT,
             $registry
@@ -61,11 +56,23 @@ class UploadCsv extends SequentialStepForm
      * creates and returns the actual form
      *
      * @return EE_Form_Section_Proper
-     * @throws EE_Error
      */
     public function generate()
     {
-        return new UploadCSVForm();
+        return new EE_Form_Section_Proper(
+            [
+                'name' => 'event',
+                'subsections' => [
+                    'event' => new EE_Select_Ajax_Model_Rest_Input(
+                        [
+                            'model_name' => 'Event',
+                            'required' => true,
+                            'help_text' => esc_html__('The Event data should be imported to.', 'event_espresso')
+                        ]
+                    )
+                ]
+            ]
+        );
     }
 
     /**
@@ -83,23 +90,20 @@ class UploadCsv extends SequentialStepForm
      */
     public function process($form_data = array())
     {
-        try {
+        try{
             $valid_data = (array) parent::process($form_data);
-        } catch (InvalidFormSubmissionException $e) {
-            return false;
+        }catch(InvalidFormSubmissionException $e){
+            // Don't die. Admin code knows how to handle invalid forms...
+            return;
         }
-        if (empty($valid_data)) {
-            return false;
-        }
-
-
         $config = EED_Attendee_Importer::instance()->getConfig();
-
-        $config->file = $valid_data['file_path'];
+        $config->default_event = $valid_data['event'];
         EED_Attendee_Importer::instance()->updateConfig();
+        // If there is only one ticket for this event, we can set the default ticket now and skip that step.
+        
         $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);
         return true;
     }
 }
-// End of file UploadCsv.php
-// Location: EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers/UploadCsv.php
+// End of file ChooseEvent.php
+// Location: EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers/ChooseEvent.php

@@ -112,7 +112,7 @@ Class  EE_Attendee_Importer extends EE_Addon {
     {
         EE_Psr4AutoloaderInit::psr4_loader()->addNamespace('EventEspresso\AttendeeImporter', __DIR__);
         $attendee_mover_dependencies = array(
-            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\StepsManager'                            => array(
+            'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\StepsManager'                            => array(
                 null,
                 null,
                 null,
@@ -120,23 +120,23 @@ Class  EE_Attendee_Importer extends EE_Addon {
                 null,
                 'EE_Request' => EE_Dependency_Map::load_from_cache,
             ),
-            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\UploadCsv'                             => array(
+            'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\UploadCsv'                             => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
             ),
-            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\MapCsvColumns'                            => array(
+            'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\MapCsvColumns'                            => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
             ),
-            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\ChooseEvent'                           => array(
+            'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\ChooseEvent'                           => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
             ),
-            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\ChooseTicket'                          => array(
+            'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\ChooseTicket'                          => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
                 'EE_Attendee_Importer_Config' => EE_Dependency_Map::load_from_cache,
             ),
-            'EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers\Complete'                                => array(
+            'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\Complete'                                => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
             ),
-            'EventEspresso\AttendeeImporter\core\libraries\form_sections\forms\MapCsvColumnsForm'                              => [
+            'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms\MapCsvColumnsForm'                              => [
                 array(),
                 'EE_Attendee_Importer_Config' => EE_Dependency_Map::load_from_cache,
             ],

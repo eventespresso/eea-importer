@@ -1,12 +1,12 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers;
+namespace EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers;
 use DomainException;
 use EE_Error;
 use EE_Form_Section_Proper;
 use EE_Registry;
 use EED_Attendee_Importer;
-use EventEspresso\AttendeeImporter\core\libraries\form_sections\forms\MapCsvColumnsForm;
+use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms\MapCsvColumnsForm;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFormSubmissionException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
@@ -63,7 +63,7 @@ class MapCsvColumns extends SequentialStepForm
     public function generate()
     {
         return LoaderFactory::getLoader()->getShared(
-            'EventEspresso\AttendeeImporter\core\libraries\form_sections\forms\MapCsvColumnsForm'
+            'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms\MapCsvColumnsForm'
         );
     }
 
@@ -97,4 +97,4 @@ class MapCsvColumns extends SequentialStepForm
     }
 }
 // End of file MapCsvColumns.php
-// Location: EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers/MapCsvColumns.php
+// Location: EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers/MapCsvColumns.php

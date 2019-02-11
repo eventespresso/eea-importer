@@ -1,6 +1,6 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers;
+namespace EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers;
 
 use DomainException;
 use EE_Admin_Page;
@@ -160,4 +160,4 @@ class ChooseTicket extends SequentialStepForm
     }
 }
 // End of file ChooseTicket.php
-// Location: EventEspresso\AttendeeImporter\core\libraries\form_sections\form_handlers/ChooseTicket.php
+// Location: EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers/ChooseTicket.php

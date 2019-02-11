@@ -1,5 +1,5 @@
 <?php
-namespace EventEspresso\AttendeeImporter\core\libraries\form_sections\forms;
+namespace EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms;
 use EE_Attendee_Importer_Config;
 use EE_Error;
 use EE_Form_Section_Proper;

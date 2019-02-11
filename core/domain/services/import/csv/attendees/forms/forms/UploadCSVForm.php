@@ -1,6 +1,6 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\libraries\form_sections\forms;
+namespace EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms;
 
 use EE_Admin_File_Uploader_Input;
 use EE_Error;
@@ -104,4 +104,4 @@ class UploadCSVForm extends EE_Form_Section_Proper
 
 }
 // End of file UploadCSVForm.php
-// Location: EventEspresso\AttendeeImporter\core\libraries\form_sections\forms/UploadCSVForm.php
+// Location: EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms/UploadCSVForm.php
