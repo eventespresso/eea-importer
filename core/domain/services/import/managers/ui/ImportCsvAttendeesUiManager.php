@@ -3,10 +3,11 @@
 namespace EventEspresso\AttendeeImporter\core\domain\services\import\managers\ui;
 
 use EventEspresso\AttendeeImporter\core\domain\services\import\managers\ImportCsvAttendeesManager;
-use EventEspresso\AttendeeImporter\core\services\import\ImportTypeUiManagerInterface;
+use EventEspresso\AttendeeImporter\core\services\import\ImportTypeUiManagerBase;
 use EventEspresso\AttendeeImporter\core\services\import\ImportTypeManagerInterface;
 use EventEspresso\core\services\import\JobHandler;
 use EventEspresso\core\services\import\SequentialStepFormManager;
+use EventEspresso\core\services\loaders\Loader;
 
 /**
  * Class ImportCsvAttendeesUiManager
@@ -18,18 +19,43 @@ use EventEspresso\core\services\import\SequentialStepFormManager;
  * @since         $VID:$
  *
  */
-class ImportCsvAttendeesUiManager implements ImportTypeUiManagerInterface
+class ImportCsvAttendeesUiManager extends ImportTypeUiManagerBase
 {
+    /**
+     * EventEspresso\core\services\loaders\Loader
+     */
+    protected $loader;
+    /**
+     * @var SequentialStepFormManager
+     */
+    protected $form_steps_manager;
 
+    public function __construct(Loader $loader)
+    {
+        $this->loader = $loader;
+    }
 
     /**
      * Gets the steps manager that corresponds to the import type.
      * @since $VID:$
+     * @param string $base_url base URL where these steps will be shown (used for generating links to subsequent steps)
      * @return SequentialStepFormManager
      */
-    public function getStepManager()
+    public function getStepManager($base_url = null)
     {
-        // TODO: Implement getStepManager() method.
+        if (!$this->form_steps_manager instanceof StepsManager) {
+            $this->form_steps_manager = $this->loader->getShared(
+                'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\StepsManager',
+                array(
+                    // base redirect URL
+                    $base_url,
+                    // default step slug
+                    'upload',
+                )
+            );
+            $this->form_steps_manager->buildForm();
+        }
+        return $this->form_steps_manager;
     }
 
     /**

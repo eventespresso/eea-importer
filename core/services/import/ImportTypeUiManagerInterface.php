@@ -2,6 +2,8 @@
 
 namespace EventEspresso\AttendeeImporter\core\services\import;
 
+use EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepFormManager;
+
 /**
  * Class ImportTypeUiInterface
  *
@@ -42,7 +44,6 @@ interface ImportTypeUiManagerInterface
      * @return string
      */
     public function getImage();
-
 }
 // End of file ImportTypeUiInterface.php
 // Location: EventEspresso\core\services\import/ImportTypeUiInterface.php

@@ -23,10 +23,6 @@ if (!defined('EVENT_ESPRESSO_VERSION')) {
 class Attendee_Importer_Admin_Page extends EE_Admin_Page
 {
 
-    /**
-     * @var StepsManager
-     */
-    protected $form_steps_manager;
 
     protected function _init_page_props()
     {
@@ -136,7 +132,7 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
      */
     protected function main()
     {
-        $import_manager = LoaderFactory::getLoader()->load('EventEspresso\AttendeeImporter\core\services\import\ImportManager');
+        $import_manager = $this->getImportManager();
         /* @var $import_manager EventEspresso\core\services\import\ImportManager */
         $import_type_ui_managaers = $import_manager->loadImportTypeUiManagers();
         $html = '';
@@ -164,6 +160,18 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
 
     /**
      * @since $VID:$
+     * @return EventEspresso\AttendeeImporter\core\services\import\ImportManager
+     * @throws InvalidArgumentException
+     * @throws \EventEspresso\core\exceptions\InvalidDataTypeException
+     * @throws \EventEspresso\core\exceptions\InvalidInterfaceException
+     */
+    protected function getImportManager()
+    {
+        return LoaderFactory::getLoader()->load('EventEspresso\AttendeeImporter\core\services\import\ImportManager');
+    }
+
+    /**
+     * @since $VID:$
      * @throws InvalidArgumentException
      * @throws InvalidFormHandlerException
      */
@@ -171,7 +179,7 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
-                $form_steps_manager = $this->getFormStepManager(true);
+                $form_steps_manager = $this->getFormStepManager();
                 $form_steps_manager->processForm($_POST);
             } catch (Exception $e) {
                 new ExceptionStackTraceDisplay($e);
@@ -182,7 +190,7 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     protected function show_import_step()
     {
         try {
-            $form_steps_manager = $this->getFormStepManager(false);
+            $form_steps_manager = $this->getFormStepManager();
             $this->_template_args['admin_page_content'] = $form_steps_manager->displayProgressSteps()
                 . $form_steps_manager->displayCurrentStepForm();
         } catch (Exception $e) {
@@ -194,31 +202,23 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
 
     /**
      * @param bool $process
-     * @return StepsManager
-     * @throws InvalidDataTypeException
+     * @return EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepFormManager
      * @throws InvalidArgumentException
-     * @throws InvalidInterfaceException
+     * @throws \EventEspresso\core\exceptions\InvalidDataTypeException
+     * @throws \EventEspresso\core\exceptions\InvalidInterfaceException
+     * @throws \EventEspresso\core\services\collections\CollectionLoaderException
      */
-    public function getFormStepManager($process = true)
+    public function getFormStepManager()
     {
-        if (!$this->form_steps_manager instanceof StepsManager) {
-            /** @var EventEspresso\core\services\loaders\Loader $loader */
-            $loader = LoaderFactory::getLoader();
-            $this->form_steps_manager = $loader->getShared(
-                'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\StepsManager',
-                array(
-                    // base redirect URL
-                    EE_Admin_Page::add_query_args_and_nonce(
-                        ['action' => 'import'],
-                        EE_ATTENDEE_IMPORTER_ADMIN_URL
-                    ),
-                    // default step slug
-                    'upload',
-                )
-            );
-            $this->form_steps_manager->buildForm();
-        }
-        return $this->form_steps_manager;
+        return $this->getImportManager()
+            ->getUiManager($this->_req_data['type'])
+            ->getStepManager(EE_Admin_Page::add_query_args_and_nonce(
+                ['action' => 'import',
+                    'type' => $this->_req_data['type']
+                ],
+                EE_ATTENDEE_IMPORTER_ADMIN_URL
+            )
+        );
     }
 
 

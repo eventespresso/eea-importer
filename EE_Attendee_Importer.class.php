@@ -150,6 +150,9 @@ Class  EE_Attendee_Importer extends EE_Addon {
             ],
             'EventEspresso\AttendeeImporter\core\services\import\ImportManager' => [
                 'EventEspresso\core\services\loaders\Loader' => EE_Dependency_Map::load_from_cache
+            ],
+            'EventEspresso\AttendeeImporter\core\domain\services\import\managers\ui\ImportCsvAttendeesUiManager' => [
+                'EventEspresso\core\services\loaders\Loader' => EE_Dependency_Map::load_from_cache
             ]
 
         );
