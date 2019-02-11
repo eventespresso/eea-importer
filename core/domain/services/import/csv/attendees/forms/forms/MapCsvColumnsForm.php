@@ -2,6 +2,7 @@
 namespace EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms;
 use EE_Attendee_Importer_Config;
 use EE_Error;
+use EE_Form_Section_HTML_From_Template;
 use EE_Form_Section_Proper;
 use EEM_Attendee;
 use EEM_Base;
@@ -43,7 +44,18 @@ class MapCsvColumnsForm extends EE_Form_Section_Proper
         }
         $options_array = array_replace_recursive(
             [
-                'subsections' => $columns_inputs
+                'subsections' => [
+                    'instructions' => new EE_Form_Section_HTML_From_Template(
+                        wp_normalize_path(dirname(dirname(dirname(__FILE__))) . '/templates/ee_attendee_importer_mapping_instructions.template.php')
+                    ),
+                    'columns' => new EE_Form_Section_Proper(
+                        [
+                            'subsections' => $columns_inputs
+                        ]
+                    ),
+
+                ],
+                'html_style' => 'display:flex'
             ],
             $options_array
         );
