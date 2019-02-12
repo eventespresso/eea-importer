@@ -4,7 +4,6 @@ namespace EventEspresso\AttendeeImporter\core\domain\services\import\csv\attende
 
 use DomainException;
 use EE_Admin_Page;
-use EE_Attendee_Importer_Config;
 use EE_Error;
 use EE_Form_Section_HTML;
 use EE_Form_Section_Proper;
@@ -13,6 +12,7 @@ use EE_Select_Ajax_Model_Rest_Input;
 use EED_Attendee_Importer;
 use EEH_HTML;
 use EEH_URL;
+use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFormSubmissionException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
@@ -48,9 +48,8 @@ class ChooseTicket extends SequentialStepForm
      * @throws DomainException
      * @throws InvalidDataTypeException
      */
-    public function __construct(EE_Registry $registry, EE_Attendee_Importer_Config $config)
+    public function __construct(EE_Registry $registry, ImportCsvAttendeesConfig $config)
     {
-        $this->config = $config;
         $this->setDisplayable(true);
         parent::__construct(
             4,
@@ -59,7 +58,8 @@ class ChooseTicket extends SequentialStepForm
             'choose-ticket',
             '',
             FormHandler::ADD_FORM_TAGS_AND_SUBMIT,
-            $registry
+            $registry,
+            $config
         );
     }
 

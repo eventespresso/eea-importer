@@ -1,14 +1,12 @@
 <?php
 
 namespace EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers;
-use DomainException;
-use EE_Admin_File_Uploader_Input;
-use EE_Attendee_Importer_Config;
-use EE_Config;
+
 use EE_Error;
 use EE_Form_Section_Proper;
 use EE_Registry;
 use EED_Attendee_Importer;
+use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms\UploadCSVForm;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFormSubmissionException;
@@ -17,9 +15,6 @@ use EventEspresso\core\libraries\form_sections\form_handlers\FormHandler;
 use EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepForm;
 use InvalidArgumentException;
 use LogicException;
-use RuntimeException;
-use SplFileObject;
-use WP_Query;
 
 /**
  * Class UploadCsv
@@ -31,18 +26,16 @@ use WP_Query;
  * @since         $VID:$
  *
  */
-class UploadCsv extends SequentialStepForm
+class UploadCsv extends ImportCsvAttendeesStep
 {
 
     /**
      * UploadCsv constructor
      *
      * @param EE_Registry $registry
-     * @throws InvalidDataTypeException
-     * @throws InvalidArgumentException
-     * @throws DomainException
+     * @param ImportCsvAttendeesConfig $config
      */
-    public function __construct(EE_Registry $registry)
+    public function __construct(EE_Registry $registry, ImportCsvAttendeesConfig $config)
     {
         $this->setDisplayable(true);
         parent::__construct(
@@ -52,7 +45,8 @@ class UploadCsv extends SequentialStepForm
             'upload',
             '',
             FormHandler::ADD_FORM_TAGS_AND_SUBMIT,
-            $registry
+            $registry,
+            $config
         );
     }
 
@@ -92,11 +86,7 @@ class UploadCsv extends SequentialStepForm
             return false;
         }
 
-
-        $config = EED_Attendee_Importer::instance()->getConfig();
-
-        $config->file = $valid_data['file_path'];
-        EED_Attendee_Importer::instance()->updateConfig();
+        $this->config->setFile($valid_data['file_path']);
         $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);
         return true;
     }

@@ -1,6 +1,5 @@
 <?php
 namespace EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms;
-use EE_Attendee_Importer_Config;
 use EE_Error;
 use EE_Form_Section_HTML_From_Template;
 use EE_Form_Section_Proper;
@@ -9,11 +8,11 @@ use EEM_Base;
 use EEM_Payment;
 use EEM_Registration;
 use EEM_Transaction;
+use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
 use InvalidArgumentException;
 use ReflectionException;
-use SplFileObject;
 
 /**
  * Class ColumnMappingForm
@@ -28,10 +27,10 @@ use SplFileObject;
 class MapCsvColumnsForm extends EE_Form_Section_Proper
 {
     /**
-     * @var EE_Attendee_Importer_Config
+     * @var ImportCsvAttendeesConfig
      */
     protected $config;
-    public function __construct($options_array = array(), EE_Attendee_Importer_Config $config)
+    public function __construct($options_array = array(), ImportCsvAttendeesConfig $config)
     {
         $this->config = $config;
         $column_headers = $this->getColumnHeadersFromFile();
@@ -68,7 +67,7 @@ class MapCsvColumnsForm extends EE_Form_Section_Proper
      */
     protected function getColumnHeadersFromFile()
     {
-        $file_obj = new SplFileObject($this->config->file, 'r');
+        $file_obj = $this->config->getFileHandle();
         return $file_obj->fgetcsv();
     }
 
@@ -89,50 +88,61 @@ class MapCsvColumnsForm extends EE_Form_Section_Proper
                 '' => ''
             ],
         ];
-        // And add questions (group by question group).
-        foreach(\EEM_Question_Group::instance()->get_all() as $question_group){
-            foreach($question_group->questions() as $question) {
-                if( $question->is_system_question()) {
-                    $option_value = 'Attendee.ATT_' . $question->system_ID();
-                } else {
-                    $option_value = 'Question.' . $question->ID();
+        foreach($this->config->getAllModelConfigs() as $modelConfig){
+            if($modelConfig->getModel() === \EEM_Answer::instance()){
+
+            } else {
+                $item_name = $modelConfig->getModel()->item_name();
+                $options[$item_name] = [];
+                foreach($modelConfig->fieldsMapped() as $mapped_field) {
+                    $options[$item_name][$mapped_field->get_name()] = $mapped_field->get_nicename();
                 }
-                $options[$question_group->name()][$option_value] = $question->admin_label();
             }
         }
-        $options = array_merge(
-            $options,
-            $this->optionsFromModel(
-                EEM_Registration::instance(),
-                [
-                    'STS_ID',
-                    'REG_date',
-                    'REG_final_price',
-                    'REG_paid',
-                    'REG_code',
-                    'REG_count'
-                ]
-            ),
-            $this->optionsFromModel(
-                EEM_Transaction::instance(),
-                [
-                    'STS_ID',
-                    'TXN_total',
-                    'TXN_paid'
-                ]
-            ),
-            $this->optionsFromModel(
-                EEM_Payment::instance(),
-                [
-                    'STS_ID',
-                    'PAY_source',
-                    'PAY_amount',
-                    'PAY_txn_id_chq_nmbr',
-                    'PAY_po_number',
-                    'PAY_extra_accntng'
-                ]
-            )
-        );
+//        // And add questions (group by question group).
+//        foreach(\EEM_Question_Group::instance()->get_all() as $question_group){
+//            foreach($question_group->questions() as $question) {
+//                if( $question->is_system_question()) {
+//                    $option_value = 'Attendee.ATT_' . $question->system_ID();
+//                } else {
+//                    $option_value = 'Question.' . $question->ID();
+//                }
+//                $options[$question_group->name()][$option_value] = $question->admin_label();
+//            }
+//        }
+//        $options = array_merge(
+//            $options,
+//            $this->optionsFromModel(
+//                EEM_Registration::instance(),
+//                [
+//                    'STS_ID',
+//                    'REG_date',
+//                    'REG_final_price',
+//                    'REG_paid',
+//                    'REG_code',
+//                    'REG_count'
+//                ]
+//            ),
+//            $this->optionsFromModel(
+//                EEM_Transaction::instance(),
+//                [
+//                    'STS_ID',
+//                    'TXN_total',
+//                    'TXN_paid'
+//                ]
+//            ),
+//            $this->optionsFromModel(
+//                EEM_Payment::instance(),
+//                [
+//                    'STS_ID',
+//                    'PAY_source',
+//                    'PAY_amount',
+//                    'PAY_txn_id_chq_nmbr',
+//                    'PAY_po_number',
+//                    'PAY_extra_accntng'
+//                ]
+//            )
+//        );
 
         return $options;
     }

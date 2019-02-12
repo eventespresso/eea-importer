@@ -62,36 +62,6 @@ class EED_Attendee_Importer extends EED_Module
     public function run($WP)
     {
     }
-
-    /**
-     * @since $VID:$
-     */
-    public function getConfig()
-    {
-        if (! $this->config instanceof EE_Attendee_Importer_Config) {
-            $this->config = EE_Config::instance()->get_config(
-                'addons',
-                'Attendee_Importer',
-                EE_Attendee_Importer_Config::class
-            );
-            if (!$this->config instanceof EE_Attendee_Importer_Config) {
-                $this->config = new EE_Attendee_Importer_Config();
-            }
-        }
-        return $this->config;
-    }
-
-    public function updateConfig()
-    {
-        EE_Config::instance()->set_config(
-            'addons',
-            'Attendee_Importer',
-            EE_Attendee_Importer_Config::class,
-            $this->config
-        );
-        EE_Config::instance()->update_config('addons', 'Attendee_Importer', $this->config);
-    }
-
 }
 // End of file EED_Attendee_Importer.module.php
 // Location: /wp-content/plugins/eea-attendee-importer/EED_Attendee_Importer.module.php
