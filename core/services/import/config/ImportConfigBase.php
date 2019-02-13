@@ -3,6 +3,7 @@
 namespace EventEspresso\AttendeeImporter\core\services\import\config;
 
 use EventEspresso\AttendeeImporter\core\services\import\config\models\ImportModelConfigInterface;
+use EventEspresso\core\services\collections\CollectionInterface;
 
 /**
  * Class ImportConfigBase
@@ -21,29 +22,35 @@ abstract class ImportConfigBase implements ImportConfigInterface
      */
     protected $model_configs;
 
-    public function __construct()
-    {
-    }
-
-
     /**
-     * @since $VID:$
-     * @param string $model_name
-     * @return ImportModelConfigInterface[]
+     * @var bool
      */
-    public function getModelConfigs($model_name)
-    {
-        return $this->model_configs[$model_name];
-    }
+    protected $model_configs_initialized = false;
 
     /**
      * @since $VID:$
      * @return ImportModelConfigInterface[]
      */
-    public function getAllModelConfigs()
+    public function getModelConfigs()
     {
+        $this->checkModelConfigsInitialized();
         return $this->model_configs;
     }
+
+    protected function checkModelConfigsInitialized()
+    {
+        if (! $this->model_configs_initialized) {
+            $this->model_configs = $this->initializeModelConfigCollection();
+            $this->model_configs_initialized = true;
+        }
+    }
+
+    /**
+     * Gets the collection of model configs for this import configuration.
+     * @since $VID:$
+     * @return CollectionInterface|ImportModelConfigInterface[]
+     */
+    abstract protected function initializeModelConfigCollection();
 }
 // End of file ImportConfigBase.php
 // Location: EventEspresso\core\services\import\config/ImportConfigBase.php

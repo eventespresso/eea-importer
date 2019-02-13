@@ -4,10 +4,11 @@ namespace EventEspresso\AttendeeImporter\core\domain\services\import\csv\attende
 
 use EventEspresso\AttendeeImporter\core\services\import\config\ImportConfigBase;
 use EventEspresso\AttendeeImporter\core\services\import\config\ImportModelConfigInterface;
-use EventEspresso\core\exceptions\InvalidDataTypeException;
-use EventEspresso\core\exceptions\InvalidInterfaceException;
-use EventEspresso\core\services\loaders\LoaderFactory;
-use InvalidArgumentException;
+use EventEspresso\core\services\collections\CollectionDetails;
+use EventEspresso\core\services\collections\CollectionDetailsException;
+use EventEspresso\core\services\collections\CollectionInterface;
+use EventEspresso\core\services\collections\CollectionLoader;
+use EventEspresso\core\services\collections\CollectionLoaderException;
 use LogicException;
 use RuntimeException;
 use SplFileObject;
@@ -73,17 +74,25 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
 
     /**
      * @since $VID:$
-     * @return mixed
+     * @return CollectionInterface|ImportModelConfigInterface[]
+     * @throws CollectionDetailsException
+     * @throws CollectionLoaderException
      */
-    public function getModelNamesImported()
+    protected function initializeModelConfigCollection()
     {
-        return [
-            'Attendee',
-            'Registration',
-            'Transaction',
-            'Payment',
-            'Answer'
-        ];
+        $loader = new CollectionLoader(
+            new CollectionDetails(
+                // collection name
+                'import_csv_attendees_config_model_configs',
+                // collection interface
+                'EventEspresso\AttendeeImporter\core\services\import\config\models\ImportModelConfigBase',
+                // FQCNs for classes to add (all classes within that namespace will be loaded)
+                [
+                    'EventEspresso\AttendeeImporter\core\services\import\config\models\ImportAttendeeConfig'
+                ]
+            )
+        );
+        return $loader->getCollection();
     }
 
     /**

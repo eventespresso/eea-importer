@@ -2,6 +2,8 @@
 
 namespace EventEspresso\AttendeeImporter\core\services\import\config;
 
+use EventEspresso\AttendeeImporter\core\services\import\config\models\ImportModelConfigInterface;
+use EventEspresso\core\services\collections\CollectionInterface;
 use EventEspresso\core\services\options\JsonWpOptionSerializableInterface;
 
 /**
@@ -18,16 +20,9 @@ interface ImportConfigInterface extends JsonWpOptionSerializableInterface
 {
     /**
      * @since $VID:$
-     * @return string[]
+     * @return CollectionInterface|ImportModelConfigInterface[]
      */
-    public function getModelNamesImported();
-
-    /**
-     * @since $VID:$
-     * @param $model_name
-     * @return ImportModelConfigInterface[]
-     */
-    public function getModelConfigs($model_name);
+    public function getModelConfigs();
 }
 // End of file ImportConfig.php
 // Location: EventEspresso\core\services\import/ImportConfig.php

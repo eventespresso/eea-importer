@@ -87,7 +87,7 @@ class MapCsvColumnsForm extends EE_Form_Section_Proper
                 '' => ''
             ],
         ];
-        foreach($this->config->getAllModelConfigs() as $modelConfig){
+        foreach($this->config->getModelConfigs() as $modelConfig){
             if($modelConfig->getModel() === \EEM_Answer::instance()){
 
             } else {
