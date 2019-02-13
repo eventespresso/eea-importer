@@ -4,9 +4,14 @@ namespace EventEspresso\AttendeeImporter\core\domain\services\import\csv\attende
 
 use EventEspresso\AttendeeImporter\core\services\import\config\ImportConfigBase;
 use EventEspresso\AttendeeImporter\core\services\import\config\ImportModelConfigInterface;
+use EventEspresso\core\exceptions\InvalidDataTypeException;
+use EventEspresso\core\exceptions\InvalidInterfaceException;
+use EventEspresso\core\services\loaders\LoaderFactory;
+use InvalidArgumentException;
 use LogicException;
 use RuntimeException;
 use SplFileObject;
+use stdClass;
 
 /**
  * Class ImportCsvAttendeesConfig
@@ -20,9 +25,6 @@ use SplFileObject;
  */
 class ImportCsvAttendeesConfig extends ImportConfigBase
 {
-    
-
-
     /**
      * @var string
      */
@@ -45,7 +47,6 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
      */
     public function setFile($file_path)
     {
-        $this->setDirty();
         $this->file = $file_path;
     }
 
@@ -72,33 +73,6 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
 
     /**
      * @since $VID:$
-     * @return array
-     */
-    public function toArray()
-    {
-        $arr = parent::toArray();
-
-        $arr = array_merge(
-            $arr,
-            [
-                'file' => $this->file
-            ]
-        );
-        return $arr;
-    }
-
-
-    /**
-     * @since $VID:$
-     * @param array $data
-     */
-    public function fromArray(array $data)
-    {
-        $this->file = $data['file'];
-    }
-
-    /**
-     * @since $VID:$
      * @return mixed
      */
     public function getModelNamesImported()
@@ -110,6 +84,35 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
             'Payment',
             'Answer'
         ];
+    }
+
+    /**
+     * Creates a simple PHP array or stdClass from this object's properties, which can be easily serialized using
+     * wp_json_serialize().
+     * @since $VID:$
+     * @return mixed
+     */
+    public function toJsonSerializableData()
+    {
+        $simple_obj = new stdClass();
+        $simple_obj->file = $this->file;
+        return $simple_obj;
+    }
+
+    /**
+     * Initializes this object from data
+     * @since $VID:$
+     * @param mixed $data
+     * @return boolean success
+     */
+    public function fromJsonSerializedData($data)
+    {
+        if($data instanceof stdClass
+        && property_exists($data, 'file')){
+            $this->file = $data->file;
+            return true;
+        }
+        return false;
     }
 }
 // End of file ImportCsvAttendeesConfig.php

@@ -13,6 +13,7 @@ use EventEspresso\core\exceptions\InvalidFormSubmissionException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\libraries\form_sections\form_handlers\FormHandler;
 use EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepForm;
+use EventEspresso\core\services\options\JsonWpOptionManager;
 use InvalidArgumentException;
 use LogicException;
 
@@ -34,8 +35,12 @@ class UploadCsv extends ImportCsvAttendeesStep
      *
      * @param EE_Registry $registry
      * @param ImportCsvAttendeesConfig $config
+     * @param JsonWpOptionManager $option_manager
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws \DomainException
      */
-    public function __construct(EE_Registry $registry, ImportCsvAttendeesConfig $config)
+    public function __construct(EE_Registry $registry, ImportCsvAttendeesConfig $config, JsonWpOptionManager $option_manager)
     {
         $this->setDisplayable(true);
         parent::__construct(
@@ -46,7 +51,8 @@ class UploadCsv extends ImportCsvAttendeesStep
             '',
             FormHandler::ADD_FORM_TAGS_AND_SUBMIT,
             $registry,
-            $config
+            $config,
+            $option_manager
         );
     }
 
@@ -86,7 +92,9 @@ class UploadCsv extends ImportCsvAttendeesStep
             return false;
         }
 
+        $this->option_manager->populateFromDb($this->config);
         $this->config->setFile($valid_data['file_path']);
+        $this->option_manager->saveToDb($this->config);
         $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);
         return true;
     }

@@ -2,6 +2,8 @@
 
 namespace EventEspresso\AttendeeImporter\core\services\import\config;
 
+use EventEspresso\core\services\options\JsonWpOptionSerializableInterface;
+
 /**
  * Class ImportConfig
  *
@@ -12,7 +14,7 @@ namespace EventEspresso\AttendeeImporter\core\services\import\config;
  * @since         $VID:$
  *
  */
-interface ImportConfigInterface
+interface ImportConfigInterface extends JsonWpOptionSerializableInterface
 {
     /**
      * @since $VID:$
@@ -26,38 +28,6 @@ interface ImportConfigInterface
      * @return ImportModelConfigInterface[]
      */
     public function getModelConfigs($model_name);
-
-    /**
-     * Gets the name of the WordPress option where this JSON data will be stored.
-     * @since $VID:$
-     * @return string
-     */
-    public function getWpOptionName();
-
-    /**
-     * @since $VID:$
-     */
-    public function loadFromDb();
-
-    /**
-     * @since $VID:$
-     * @return boolean
-     */
-    public function saveToDb();
-
-    /**
-     * Converts this object into a PHP array
-     * @since $VID:$
-     * @return array
-     */
-    public function toArray();
-
-    /**
-     * Populates this object from a PHP array
-     * @since $VID:$
-     * @param array $data
-     */
-    public function fromArray(array $data);
 }
 // End of file ImportConfig.php
 // Location: EventEspresso\core\services\import/ImportConfig.php

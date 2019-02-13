@@ -79,7 +79,6 @@ class MapCsvColumnsForm extends EE_Form_Section_Proper
      * @throws InvalidDataTypeException
      * @throws InvalidInterfaceException
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      */
     protected function initMapToOptions()
     {

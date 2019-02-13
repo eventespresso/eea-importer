@@ -6,6 +6,7 @@ use EE_Error;
 use EE_Form_Section_Proper;
 use EE_Registry;
 use EED_Attendee_Importer;
+use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms\MapCsvColumnsForm;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFormSubmissionException;
@@ -13,6 +14,7 @@ use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\libraries\form_sections\form_handlers\FormHandler;
 use EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepForm;
 use EventEspresso\core\services\loaders\LoaderFactory;
+use EventEspresso\core\services\options\JsonWpOptionManager;
 use InvalidArgumentException;
 use LogicException;
 
@@ -26,18 +28,24 @@ use LogicException;
  * @since         $VID:$
  *
  */
-class MapCsvColumns extends SequentialStepForm
+class MapCsvColumns extends ImportCsvAttendeesStep
 {
 
     /**
      * MapCsvColumns constructor
      *
      * @param EE_Registry $registry
+     * @param ImportCsvAttendeesConfig $config
+     * @param JsonWpOptionManager $option_manager
      * @throws DomainException
-     * @throws InvalidDataTypeException
      * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
      */
-    public function __construct(EE_Registry $registry)
+    public function __construct(
+        EE_Registry $registry,
+        ImportCsvAttendeesConfig $config,
+        JsonWpOptionManager $option_manager
+    )
     {
         $this->setDisplayable(true);
         parent::__construct(
@@ -47,7 +55,9 @@ class MapCsvColumns extends SequentialStepForm
             'map',
             '',
             FormHandler::ADD_FORM_TAGS_AND_SUBMIT,
-            $registry
+            $registry,
+            $config,
+            $option_manager
         );
     }
 
@@ -62,8 +72,10 @@ class MapCsvColumns extends SequentialStepForm
      */
     public function generate()
     {
-        return LoaderFactory::getLoader()->getShared(
-            'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms\MapCsvColumnsForm'
+        $this->option_manager->populateFromDb($this->config);
+        return new MapCsvColumnsForm(
+            array(),
+            $this->config
         );
     }
 

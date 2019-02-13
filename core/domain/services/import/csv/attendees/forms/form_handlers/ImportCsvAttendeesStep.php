@@ -7,6 +7,7 @@ use EE_Registry;
 use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepForm;
+use EventEspresso\core\services\options\JsonWpOptionManager;
 use InvalidArgumentException;
 
 /**
@@ -27,6 +28,11 @@ abstract class ImportCsvAttendeesStep extends SequentialStepForm
     protected $config;
 
     /**
+     * @var JsonWpOptionManager
+     */
+    protected $option_manager;
+
+    /**
      * UploadCsv constructor
      *
      * @param $order
@@ -37,13 +43,24 @@ abstract class ImportCsvAttendeesStep extends SequentialStepForm
      * @param $form_config
      * @param EE_Registry $registry
      * @param ImportCsvAttendeesConfig $config
+     * @param JsonWpOptionManager $option_manager
      * @throws DomainException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      */
-    public function __construct($order, $name, $longer_name, $slug, $form_action, $form_config, EE_Registry $registry, ImportCsvAttendeesConfig $config)
+    public function __construct(
+        $order,
+        $name,
+        $longer_name,
+        $slug,
+        $form_action,
+        $form_config,
+        EE_Registry $registry,
+        ImportCsvAttendeesConfig $config,
+        JsonWpOptionManager $option_manager)
     {
         $this->config = $config;
+        $this->option_manager = $option_manager;
         parent::__construct(
             $order,
             $name,

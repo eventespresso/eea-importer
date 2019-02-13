@@ -120,22 +120,27 @@ Class  EE_Attendee_Importer extends EE_Addon {
             'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\UploadCsv'                             => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache
             ),
             'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\MapCsvColumns'                            => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
             ),
             'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\ChooseEvent'                           => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
             ),
             'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\ChooseTicket'                          => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
             ),
             'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\Complete'                                => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
             ),
             'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms\MapCsvColumnsForm'                              => [
                 array(),
@@ -155,7 +160,6 @@ Class  EE_Attendee_Importer extends EE_Addon {
             'EventEspresso\AttendeeImporter\core\domain\services\import\managers\ui\ImportCsvAttendeesUiManager' => [
                 'EventEspresso\core\services\loaders\Loader' => EE_Dependency_Map::load_from_cache
             ]
-
         );
         foreach ($attendee_mover_dependencies as $class => $dependencies) {
             if (! EE_Dependency_Map::register_dependencies($class, $dependencies)) {
