@@ -89,7 +89,11 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
                 // FQCNs for classes to add (all classes within that namespace will be loaded)
                 [
                     'EventEspresso\AttendeeImporter\core\services\import\config\models\ImportAttendeeConfig'
-                ]
+                ],
+                [],
+                '',
+                CollectionDetails::ID_CALLBACK_METHOD,
+                'getModelName'
             )
         );
         return $loader->getCollection();
@@ -103,7 +107,7 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
      */
     public function toJsonSerializableData()
     {
-        $simple_obj = new stdClass();
+        $simple_obj = parent::toJsonSerializableData();
         $simple_obj->file = $this->file;
         return $simple_obj;
     }
@@ -116,6 +120,7 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
      */
     public function fromJsonSerializedData($data)
     {
+        parent::fromJsonSerializedData($data);
         if($data instanceof stdClass
         && property_exists($data, 'file')){
             $this->file = $data->file;

@@ -1,9 +1,13 @@
 <?php
 
 namespace EventEspresso\AttendeeImporter\core\services\import\config\models;
+
 use EE_Model_Field_Base;
 use EEM_Base;
+use EventEspresso\AttendeeImporter\core\services\import\mapping\ImportFieldMap;
 use EventEspresso\AttendeeImporter\services\import\mapping\ImportMappingCollection;
+use EventEspresso\core\services\collections\CollectionInterface;
+use EventEspresso\core\services\json\JsonSerializableAndUnserializable;
 
 /**
  * Class ImportModelConfigInterface
@@ -15,7 +19,7 @@ use EventEspresso\AttendeeImporter\services\import\mapping\ImportMappingCollecti
  * @since         $VID:$
  *
  */
-interface ImportModelConfigInterface
+interface ImportModelConfigInterface extends JsonSerializableAndUnserializable
 {
     /**
      * Gets the model this configuration is for
@@ -34,14 +38,14 @@ interface ImportModelConfigInterface
     /**
      * Returns the list of model fields that can be imported for this model.
      * @since $VID:$
-     * @return ImportMappingCollection|EE_Model_Field_Base[]
+     * @return EE_Model_Field_Base[]
      */
     public function fieldsMapped();
 
     /**
      * Gets a collection that states how this import fields should be mapped to EE model fields for this model.
      * @since $VID:$
-     * @return ImportMappingCollection
+     * @return CollectionInterface|ImportFieldMap[]
      */
     public function mapping();
 

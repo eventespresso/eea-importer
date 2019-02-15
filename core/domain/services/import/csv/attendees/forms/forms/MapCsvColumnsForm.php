@@ -94,7 +94,8 @@ class MapCsvColumnsForm extends EE_Form_Section_Proper
                 $item_name = $modelConfig->getModel()->item_name();
                 $options[$item_name] = [];
                 foreach($modelConfig->fieldsMapped() as $mapped_field) {
-                    $options[$item_name][$mapped_field->get_name()] = $mapped_field->get_nicename();
+                    $input_name = $modelConfig->getModel()->get_this_model_name() . '.' . $mapped_field->get_name();
+                    $options[$item_name][$input_name] = $mapped_field->get_nicename();
                 }
             }
         }
@@ -146,25 +147,25 @@ class MapCsvColumnsForm extends EE_Form_Section_Proper
         return $options;
     }
 
-    /**
-     * Generates the input options from the model and its list of fields to include.
-     * @since $VID:$
-     * @param EEM_Base $model
-     * @param $fields_to_include
-     * @return array
-     */
-    protected function optionsFromModel(EEM_Base $model, array $fields_to_include)
-    {
-        $fields = array_intersect_key(
-            $model->field_settings(),
-            array_flip($fields_to_include)
-        );
-        $options = [];
-        foreach($fields as $field){
-            $options[$model->item_name()][$model->get_this_model_name() . '.' . $field->get_name()] = $field->get_nicename();
-        }
-        return $options;
-    }
+//    /**
+//     * Generates the input options from the model and its list of fields to include.
+//     * @since $VID:$
+//     * @param EEM_Base $model
+//     * @param $fields_to_include
+//     * @return array
+//     */
+//    protected function optionsFromModel(EEM_Base $model, array $fields_to_include)
+//    {
+//        $fields = array_intersect_key(
+//            $model->field_settings(),
+//            array_flip($fields_to_include)
+//        );
+//        $options = [];
+//        foreach($fields as $field){
+//            $options[$model->item_name()][$model->get_this_model_name() . '.' . $field->get_name()] = $field->get_nicename();
+//        }
+//        return $options;
+//    }
 
     /**
      * When validating the form, make sure no two columns have the same value.

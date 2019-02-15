@@ -2,7 +2,6 @@
 
 namespace EventEspresso\AttendeeImporter\core\services\import\mapping\coercion;
 use EE_Base_Class;
-use EventEspresso\AttendeeImporter\core\services\import\mapping\strategies\ImportFieldCoercionInterface;
 
 /**
  * Class ImportFieldCoerceInt
@@ -28,6 +27,27 @@ class ImportFieldCoerceInt implements ImportFieldCoercionInterface
     public function coerce($inputProperty, EE_Base_Class $destinationObject)
     {
         return (int)$inputProperty;
+    }
+
+    /**
+     * Creates a simple PHP array or stdClass from this object's properties, which can be easily serialized using
+     * wp_json_serialize().
+     * @since $VID:$
+     * @return mixed
+     */
+    public function toJsonSerializableData()
+    {
+        return 'int';
+    }
+
+    /**
+     * Initializes this object from data
+     * @since $VID:$
+     * @param mixed $data
+     * @return boolean success
+     */
+    public function fromJsonSerializedData($data)
+    {
     }
 }
 // End of file ImportFieldCoerceInt.php

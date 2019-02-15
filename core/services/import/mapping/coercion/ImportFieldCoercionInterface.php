@@ -1,8 +1,9 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\services\import\mapping\strategies;
+namespace EventEspresso\AttendeeImporter\core\services\import\mapping\coercion;
 
 use EE_Base_Class;
+use EventEspresso\core\services\json\JsonSerializableAndUnserializable;
 
 /**
  * Class ImportFieldMappingStrategyInterface
@@ -14,7 +15,7 @@ use EE_Base_Class;
  * @since         $VID:$
  *
  */
-interface ImportFieldCoercionInterface
+interface ImportFieldCoercionInterface extends JsonSerializableAndUnserializable
 {
     /**
      * Takes the input and converts
@@ -24,7 +25,6 @@ interface ImportFieldCoercionInterface
      * @return mixed
      */
     public function coerce($inputProperty, EE_Base_Class $destinationObject);
-
 }
 // End of file ImportFieldMappingStrategyInterface.php
 // Location: EventEspresso\AttendeeImporter\core\services\import\mapping\strategies/ImportFieldMappingStrategyInterface.php

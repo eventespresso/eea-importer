@@ -65,6 +65,7 @@ class UploadCsv extends ImportCsvAttendeesStep
      */
     public function generate()
     {
+        $this->option_manager->populateFromDb($this->config);
         return new UploadCSVForm();
     }
 
@@ -91,8 +92,7 @@ class UploadCsv extends ImportCsvAttendeesStep
         if (empty($valid_data)) {
             return false;
         }
-
-        $this->option_manager->populateFromDb($this->config);
+        // Config was already populated from the DB during generate().
         $this->config->setFile($valid_data['file_path']);
         $this->option_manager->saveToDb($this->config);
         $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);

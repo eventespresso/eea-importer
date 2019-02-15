@@ -1,9 +1,14 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\services\import\mapping;
+namespace EventEspresso\AttendeeImporter\core\services\import\mapping;
+
 use EE_Base_Class;
+use EE_Error;
 use EE_Model_Field_Base;
-use EventEspresso\AttendeeImporter\core\services\import\mapping\strategies\ImportFieldCoercionInterface;
+use EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceString;
+use EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoercionInterface;
+use EventEspresso\core\services\json\JsonSerializableAndUnserializable;
+use stdClass;
 
 /**
  * Class ImportFieldMap
@@ -15,7 +20,7 @@ use EventEspresso\AttendeeImporter\core\services\import\mapping\strategies\Impor
  * @since         $VID:$
  *
  */
-class ImportFieldMap
+class ImportFieldMap implements JsonSerializableAndUnserializable
 {
     protected $sourceProperty;
 
@@ -36,21 +41,46 @@ class ImportFieldMap
      * @param ImportFieldCoercionInterface $coercionStrategy
      */
     public function __construct(
-        $sourceProperty,
         EE_Model_Field_Base $destinationField,
-        ImportFieldCoercionInterface $coercionStrategy
+        $sourceProperty = null,
+        ImportFieldCoercionInterface $coercionStrategy = null
     ){
         $this->sourceProperty = $sourceProperty;
         $this->destinationField = $destinationField;
+        if(! $coercionStrategy instanceof ImportFieldCoercionInterface) {
+            $coercionStrategy = new ImportFieldCoerceString();
+        }
         $this->coercionStrategy = $coercionStrategy;
     }
 
     /**
-     * Uses the input value
+     * Gets the name of the model field that is mapped.
+     * @since $VID:$
+     * @return string
+     * @throws EE_Error
+     */
+    public function destinationFieldName()
+    {
+        return $this->destinationField->get_name();
+    }
+
+    /**
+     * @since $VID:$
+     * @param $column
+     * @param $coercion_strategy_name
+     */
+    public function map($column, $coercion_strategy_name = '')
+    {
+        $this->sourceProperty = $column;
+        $this->coercionStrategy = new ImportFieldCoerceString();
+    }
+
+    /**
+     * Uses the input value, and the established mapping, to apply the input to destination object's field.
      * @since $VID:$
      * @param $input
      * @param EE_Base_Class $destinationObject
-     * @throws \EE_Error
+     * @throws EE_Error
      * @throws \EventEspresso\core\exceptions\InvalidDataTypeException
      * @throws \EventEspresso\core\exceptions\InvalidInterfaceException
      * @throws \InvalidArgumentException
@@ -61,6 +91,35 @@ class ImportFieldMap
             $this->destinationField->get_name(),
             $this->coercionStrategy->coerce($input, $destinationObject)
         );
+    }
+
+    /**
+     * Creates a simple PHP array or stdClass from this object's properties, which can be easily serialized using
+     * wp_json_serialize().
+     * @since $VID:$
+     * @return mixed
+     */
+    public function toJsonSerializableData()
+    {
+        $simple_obj = new stdClass();
+        $simple_obj->input = $this->sourceProperty;
+        $simple_obj->coercionStrategy = $this->coercionStrategy->toJsonSerializableData();
+        return $simple_obj;
+    }
+
+    /**
+     * Initializes this object from data
+     * @since $VID:$
+     * @param mixed $data
+     * @return boolean success
+     */
+    public function fromJsonSerializedData($data)
+    {
+        if($data instanceof stdClass
+        && has_property($data, 'input')
+        && has_property($data, 'coercionStrategy')) {
+            $this->map($data->input, $data->coersionStrategy);
+        }
     }
 }
 // End of file ImportFieldMap.php

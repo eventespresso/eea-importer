@@ -4,6 +4,7 @@ namespace EventEspresso\AttendeeImporter\core\services\import\config;
 
 use EventEspresso\AttendeeImporter\core\services\import\config\models\ImportModelConfigInterface;
 use EventEspresso\core\services\collections\CollectionInterface;
+use stdClass;
 
 /**
  * Class ImportConfigBase
@@ -18,7 +19,7 @@ use EventEspresso\core\services\collections\CollectionInterface;
 abstract class ImportConfigBase implements ImportConfigInterface
 {
     /**
-     * @var ImportModelConfigInterface[]
+     * @var CollectionInterface|ImportModelConfigInterface[]
      */
     protected $model_configs;
 
@@ -29,7 +30,7 @@ abstract class ImportConfigBase implements ImportConfigInterface
 
     /**
      * @since $VID:$
-     * @return ImportModelConfigInterface[]
+     * @return CollectionInterface|ImportModelConfigInterface[]
      */
     public function getModelConfigs()
     {
@@ -51,6 +52,48 @@ abstract class ImportConfigBase implements ImportConfigInterface
      * @return CollectionInterface|ImportModelConfigInterface[]
      */
     abstract protected function initializeModelConfigCollection();
+
+
+    /**
+     * Creates a simple PHP array or stdClass from this object's properties, which can be easily serialized using
+     * wp_json_serialize().
+     * @since $VID:$
+     * @return mixed
+     */
+    public function toJsonSerializableData()
+    {
+        $simple_obj = new stdClass();
+        $simple_obj->json_model_configs = [];
+        foreach ($this->getModelConfigs() as $model_config) {
+            $simple_obj->json_model_configs[$model_config->getModelName()] = $model_config->toJsonSerializableData();
+        }
+        return $simple_obj;
+    }
+
+    /**
+     * Initializes this object from data
+     * @since $VID:$
+     * @param mixed $data
+     * @return boolean success
+     */
+    public function fromJsonSerializedData($data)
+    {
+        if($data instanceof stdClass
+            && property_exists($data, 'json_model_config')
+            && is_array($data->json_model_config)){
+            foreach($data->json_model_config as $json_key => $json_value) {
+                if(property_exists($json_value, 'class_name')) {
+                    $class_name = $json_value->class_name;
+                    $obj = new $class_name;
+                    $obj->fromJsonSerializedData($json_value);
+                }
+                $this->getModelConfigs()->add($obj, $obj->getModelName());
+            }
+            $this->model_configs_initialized = true;
+            return true;
+        }
+        return false;
+    }
 }
 // End of file ImportConfigBase.php
 // Location: EventEspresso\core\services\import\config/ImportConfigBase.php

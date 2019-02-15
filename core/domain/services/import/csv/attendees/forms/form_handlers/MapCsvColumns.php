@@ -1,6 +1,7 @@
 <?php
 
 namespace EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers;
+
 use DomainException;
 use EE_Error;
 use EE_Form_Section_Proper;
@@ -8,6 +9,7 @@ use EE_Registry;
 use EED_Attendee_Importer;
 use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms\MapCsvColumnsForm;
+use EventEspresso\AttendeeImporter\core\services\import\config\models\ImportModelConfigInterface;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFormSubmissionException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
@@ -95,15 +97,19 @@ class MapCsvColumns extends ImportCsvAttendeesStep
     public function process($form_data = array())
     {
         try {
-            $valid_data = (array) parent::process($form_data);
+            $valid_data = (array)parent::process($form_data);
         } catch (InvalidFormSubmissionException  $e) {
             return false;
         }
-        // Remove the submit button, that didn't count.
-        unset($valid_data['map-submit-btn ']);
-        $config = EED_Attendee_Importer::instance()->getConfig();
-        $config->column_mapping = $valid_data;
-        EED_Attendee_Importer::instance()->updateConfig();
+        $model_configs = $this->config->getModelConfigs();
+        foreach ($valid_data['columns'] as $column_name => $model_and_field) {
+            $model_and_field_array = explode('.', $model_and_field, 2);
+            $model_config = $model_configs->get($model_and_field_array[0]);
+            if ($model_config instanceof ImportModelConfigInterface) {
+                $model_config->map($column_name, $model_and_field_array[1]);
+            }
+        }
+        $this->option_manager->saveToDb($this->config);
         $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);
         return true;
     }

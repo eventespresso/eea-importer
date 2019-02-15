@@ -2,7 +2,6 @@
 
 namespace EventEspresso\AttendeeImporter\core\services\import\mapping\coercion;
 use EE_Base_Class;
-use EventEspresso\AttendeeImporter\core\services\import\mapping\strategies\ImportFieldCoercionInterface;
 
 /**
  * Class ImportFieldBoolean
@@ -28,6 +27,28 @@ class ImportFieldCoerceBoolean implements ImportFieldCoercionInterface
     public function coerce($inputProperty, EE_Base_Class $destinationObject)
     {
         return filter_var($inputProperty, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /**
+     * Creates a simple PHP array or stdClass from this object's properties, which can be easily serialized using
+     * wp_json_serialize().
+     * @since $VID:$
+     * @return mixed
+     */
+    public function toJsonSerializableData()
+    {
+        return 'bool';
+    }
+
+    /**
+     * Initializes this object from data
+     * @since $VID:$
+     * @param mixed $data
+     * @return boolean success
+     */
+    public function fromJsonSerializedData($data)
+    {
+        // TODO: Implement fromJsonSerializedData() method.
     }
 }
 // End of file ImportFieldBoolean.php
