@@ -68,9 +68,7 @@ class MapCsvColumns extends ImportCsvAttendeesStep
      * creates and returns the actual form
      *
      * @return EE_Form_Section_Proper
-     * @throws InvalidArgumentException
-     * @throws InvalidDataTypeException
-     * @throws InvalidInterfaceException
+     * @throws EE_Error
      */
     public function generate()
     {

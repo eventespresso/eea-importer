@@ -27,16 +27,6 @@ class ImportRegistrationConfig extends ImportModelConfigBase
     {
         return \EEM_Registration::instance();
     }
-
-    /**
-     * Returns the list of model fields that can be imported for this model.
-     * @since $VID:$
-     * @return EE_Model_Field_Base[]
-     */
-    public function fieldsMapped()
-    {
-        // TODO: Implement fieldsMapped() method.
-    }
 }
 // End of file ImportRegistrationConfig.php
 // Location: EventEspresso\AttendeeImporter\core\services\import\config\models/ImportRegistrationConfig.php

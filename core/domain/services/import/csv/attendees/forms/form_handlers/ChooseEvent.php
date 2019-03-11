@@ -8,11 +8,13 @@ use EE_Form_Section_Proper;
 use EE_Registry;
 use EE_Select_Ajax_Model_Rest_Input;
 use EED_Attendee_Importer;
+use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFormSubmissionException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\libraries\form_sections\form_handlers\FormHandler;
 use EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepForm;
+use EventEspresso\core\services\options\JsonWpOptionManager;
 use InvalidArgumentException;
 use LogicException;
 
@@ -33,12 +35,17 @@ class ChooseEvent extends SequentialStepForm
      * ChooseEvent constructor
      *
      * @param EE_Registry $registry
-     * @throws InvalidArgumentException
+     * @param ImportCsvAttendeesConfig $config
+     * @param JsonWpOptionManager $option_manager
      * @throws DomainException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      */
-    public function __construct(EE_Registry $registry)
-    {
+    public function __construct(
+        EE_Registry $registry,
+        ImportCsvAttendeesConfig $config,
+        JsonWpOptionManager $option_manager
+    ) {
         $this->setDisplayable(true);
         parent::__construct(
             3,
@@ -47,7 +54,9 @@ class ChooseEvent extends SequentialStepForm
             'choose-event',
             '',
             FormHandler::ADD_FORM_TAGS_AND_SUBMIT,
-            $registry
+            $registry,
+            $config,
+            $option_manager
         );
     }
 
@@ -59,6 +68,7 @@ class ChooseEvent extends SequentialStepForm
      */
     public function generate()
     {
+        $this->option_manager->populateFromDb($this->config);
         return new EE_Form_Section_Proper(
             [
                 'name' => 'event',

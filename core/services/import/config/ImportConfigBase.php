@@ -28,6 +28,10 @@ abstract class ImportConfigBase implements ImportConfigInterface
      */
     protected $model_configs_initialized = false;
 
+    public function __construct()
+    {
+    }
+
     /**
      * @since $VID:$
      * @return CollectionInterface|ImportModelConfigInterface[]
@@ -79,17 +83,12 @@ abstract class ImportConfigBase implements ImportConfigInterface
     public function fromJsonSerializedData($data)
     {
         if($data instanceof stdClass
-            && property_exists($data, 'json_model_config')
-            && is_array($data->json_model_config)){
-            foreach($data->json_model_config as $json_key => $json_value) {
-                if(property_exists($json_value, 'class_name')) {
-                    $class_name = $json_value->class_name;
-                    $obj = new $class_name;
+            && property_exists($data, 'json_model_configs')
+            && $data->json_model_configs instanceof stdClass){
+            foreach($data->json_model_configs as $json_key => $json_value) {
+                    $obj = $this->getModelConfigs()->get($json_key);
                     $obj->fromJsonSerializedData($json_value);
-                }
-                $this->getModelConfigs()->add($obj, $obj->getModelName());
             }
-            $this->model_configs_initialized = true;
             return true;
         }
         return false;

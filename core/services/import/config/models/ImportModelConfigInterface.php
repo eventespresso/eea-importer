@@ -12,7 +12,7 @@ use EventEspresso\core\services\json\JsonSerializableAndUnserializable;
 /**
  * Class ImportModelConfigInterface
  *
- * Description
+ * Configuration details on how to map a model from source data to EE model fields.
  *
  * @package     Event Espresso
  * @author         Mike Nelson
@@ -36,19 +36,19 @@ interface ImportModelConfigInterface extends JsonSerializableAndUnserializable
     public function fieldNamesMapped();
 
     /**
-     * Returns the list of model fields that can be imported for this model.
-     * @since $VID:$
-     * @return EE_Model_Field_Base[]
-     */
-    public function fieldsMapped();
-
-    /**
      * Gets a collection that states how this import fields should be mapped to EE model fields for this model.
      * @since $VID:$
      * @return CollectionInterface|ImportFieldMap[]
      */
     public function mapping();
 
+    /**
+     * Gets the mapping info for the specified input (eg a CSV column name)
+     * @since $VID:$
+     * @param string $input
+     * @return ImportFieldMap
+     */
+    public function getMappingInfoForInput($input);
 }
 // End of file ImportModelConfigInterface.php
 // Location: EventEspresso\core\services\import/ImportModelConfigInterface.php

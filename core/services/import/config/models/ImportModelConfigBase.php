@@ -30,13 +30,29 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
     protected $mapping;
 
     /**
-     * @var EE_Model_Field_Base[]
-     */
-    protected $fields;
-    /**
      * @var bool
      */
     protected $initialized = false;
+
+    public function __construct()
+    {
+        // Create the collection from the fields mapped.
+        $loader = new CollectionLoader(
+            new CollectionDetails(
+            // collection name
+                'import_csv_attendees_config_model_configs_field_mapping',
+                // collection interface
+                'EventEspresso\AttendeeImporter\core\services\import\mapping\ImportFieldMap',
+                // FQCNs for classes to add (all classes within that namespace will be loaded)
+                [],
+                [],
+                '',
+                CollectionDetails::ID_CALLBACK_METHOD,
+                'destinationFieldName'
+            )
+        );
+        $this->mapping = $loader->getCollection();
+    }
 
     /**
      * @since $VID:$
@@ -60,26 +76,8 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
      */
     public function init()
     {
-        // Create the collection from the fields mapped.
-        $loader = new CollectionLoader(
-            new CollectionDetails(
-                // collection name
-                'import_csv_attendees_config_model_configs_field_mapping',
-                // collection interface
-                'EventEspresso\AttendeeImporter\core\services\import\mapping\ImportFieldMap',
-                // FQCNs for classes to add (all classes within that namespace will be loaded)
-                [],
-                [],
-                '',
-                CollectionDetails::ID_CALLBACK_METHOD,
-                'destinationFieldName'
-            )
-        );
-        $this->mapping = $loader->getCollection();
-        $this->fields = [];
         foreach ($this->fieldNamesMapped() as $field_name) {
             $field = $this->getModel()->field_settings_for($field_name);
-            $this->fields[ $field_name ] = $field;
             $this->mapping->add(
                 new ImportFieldMap(
                     $field
@@ -104,20 +102,6 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
         return $this->mapping;
     }
 
-    /**
-     * Returns the list of model fields that can be imported for this model.
-     * @since $VID:$
-     * @return EE_Model_Field_Base[]
-     * @throws CollectionDetailsException
-     * @throws CollectionLoaderException
-     * @throws EE_Error
-     */
-    public function fieldsMapped()
-    {
-        $this->checkInitialized();
-        return $this->fields;
-
-    }
 
     /**
      * Shortcut to get the name of the model this affects.
@@ -133,6 +117,26 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
     {
         $map_obj = $this->mapping->get($field_name);
         $map_obj->map($input_column);
+    }
+
+    /**
+     * Gets the mapping info for the specified input (eg a CSV column name),
+     * or null if the input source property isn't mapped.
+     * @since $VID:$
+     * @param string $input
+     * @return ImportFieldMap|null
+     * @throws CollectionDetailsException
+     * @throws CollectionLoaderException
+     * @throws EE_Error
+     */
+    public function getMappingInfoForInput($input)
+    {
+        foreach($this->mapping() as $mapped_field){
+            if ($mapped_field->sourceProperty() === $input) {
+                return $mapped_field;
+            }
+        }
+        return null;
     }
 
     /**
@@ -154,11 +158,16 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
     public function fromJsonSerializedData($data)
     {
         if($data instanceof stdClass) {
-            if( property_exists($data, 'map')
-            && is_array($data->mapping)){
+            if( property_exists($data, 'mapping')
+            && $data->mapping instanceof stdClass){
                 foreach($data->mapping as $json_key => $json_value) {
-                    $this->mapping[$json_key] = ImportFieldMap::fromJsonSerializedData($json_value);
+                    $field = $this->getModel()->field_settings_for($json_key);
+                    $field_mapping = new ImportFieldMap($field);
+                    $field_mapping->fromJsonSerializedData($json_value);
+                    $this->mapping->add($field_mapping, $json_key);
                 }
+                // Don't overwrite the mapping we set.
+                $this->initialized = true;
             }
         }
     }

@@ -6,6 +6,7 @@ use EE_Error;
 use EE_Form_Section_Proper;
 use EE_Registry;
 use EED_Attendee_Importer;
+use EEH_File;
 use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms\UploadCSVForm;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
@@ -66,7 +67,13 @@ class UploadCsv extends ImportCsvAttendeesStep
     public function generate()
     {
         $this->option_manager->populateFromDb($this->config);
-        return new UploadCSVForm();
+        $form = new UploadCSVForm();
+//        $form->populate_defaults(
+//            [
+//                'file' => $this->config->getFile()
+//            ]
+//        );
+        return $form;
     }
 
     /**
@@ -92,8 +99,22 @@ class UploadCsv extends ImportCsvAttendeesStep
         if (empty($valid_data)) {
             return false;
         }
+        $new_filepath = wp_normalize_path(
+            EVENT_ESPRESSO_UPLOAD_DIR
+            . 'attendee-importer'
+            . DS
+            . 'csv-uploads'
+            . DS
+            . wp_generate_password(15,false)
+            . '/'
+            .  $valid_data['file']->getName()
+        );
+        EEH_File::copy(
+            $valid_data['file']->getTmpFile(),
+            $new_filepath
+        );
         // Config was already populated from the DB during generate().
-        $this->config->setFile($valid_data['file_path']);
+        $this->config->setFile($new_filepath);
         $this->option_manager->saveToDb($this->config);
         $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);
         return true;

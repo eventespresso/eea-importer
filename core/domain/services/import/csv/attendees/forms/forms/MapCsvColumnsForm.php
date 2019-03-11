@@ -3,12 +3,16 @@ namespace EventEspresso\AttendeeImporter\core\domain\services\import\csv\attende
 use EE_Error;
 use EE_Form_Section_HTML_From_Template;
 use EE_Form_Section_Proper;
+use EE_Model_Field_Base;
+use EE_Select_Input;
+use EEM_Answer;
 use EEM_Attendee;
 use EEM_Base;
 use EEM_Payment;
 use EEM_Registration;
 use EEM_Transaction;
 use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
+use EventEspresso\AttendeeImporter\core\services\import\mapping\ImportFieldMap;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
 use InvalidArgumentException;
@@ -37,8 +41,11 @@ class MapCsvColumnsForm extends EE_Form_Section_Proper
         $columns_inputs = [];
         $options = $this->initMapToOptions();
         foreach ($column_headers as $column_header) {
-            $columns_inputs[$column_header] = new \EE_Select_Input(
-                $options
+            $columns_inputs[$column_header] = new EE_Select_Input(
+                $options,
+                [
+                    'default' => $this->getDefaultFor($column_header)
+                ]
             );
         }
         $options_array = array_replace_recursive(
@@ -88,14 +95,14 @@ class MapCsvColumnsForm extends EE_Form_Section_Proper
             ],
         ];
         foreach($this->config->getModelConfigs() as $modelConfig){
-            if($modelConfig->getModel() === \EEM_Answer::instance()){
+            if($modelConfig->getModel() === EEM_Answer::instance()){
 
             } else {
                 $item_name = $modelConfig->getModel()->item_name();
                 $options[$item_name] = [];
-                foreach($modelConfig->fieldsMapped() as $mapped_field) {
-                    $input_name = $modelConfig->getModel()->get_this_model_name() . '.' . $mapped_field->get_name();
-                    $options[$item_name][$input_name] = $mapped_field->get_nicename();
+                foreach($modelConfig->mapping() as $mapped_field) {
+                    $input_name = $this->getOptionValueForField($mapped_field->destinationField());
+                    $options[$item_name][$input_name] = $mapped_field->destinationField()->get_nicename();
                 }
             }
         }
@@ -145,6 +152,34 @@ class MapCsvColumnsForm extends EE_Form_Section_Proper
 //        );
 
         return $options;
+    }
+
+    /**
+     * Gets the default form value for the CSV column from the config.
+     * @since $VID:$
+     * @param $column_name
+     * @return string
+     * @throws EE_Error
+     */
+    protected function getDefaultFor($column_name)
+    {
+        foreach ($this->config->getModelConfigs() as $modelConfig) {
+            $mapped_info = $modelConfig->getMappingInfoForInput($column_name);
+            if ($mapped_info instanceof ImportFieldMap) {
+                return $this->getOptionValueForField($mapped_info->destinationField());
+            }
+        }
+    }
+
+    /**
+     * Gets the form option value for the field.
+     * @since $VID:$
+     * @param EE_Model_Field_Base $field
+     * @return string
+     * @throws EE_Error
+     */
+    public function getOptionValueForField(EE_Model_Field_Base $field){
+        return $field->get_model_name() . '.' . $field->get_name();
     }
 
 //    /**

@@ -121,8 +121,8 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
     public function fromJsonSerializedData($data)
     {
         parent::fromJsonSerializedData($data);
-        if($data instanceof stdClass
-        && property_exists($data, 'file')){
+        if ($data instanceof stdClass
+            && property_exists($data, 'file')) {
             $this->file = $data->file;
             return true;
         }

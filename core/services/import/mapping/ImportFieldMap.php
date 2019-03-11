@@ -65,6 +65,16 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
     }
 
     /**
+     * Gets the field the source property input maps to.
+     * @since $VID:$
+     * @return EE_Model_Field_Base
+     */
+    public function destinationField()
+    {
+        return $this->destinationField;
+    }
+
+    /**
      * @since $VID:$
      * @param $column
      * @param $coercion_strategy_name
@@ -94,6 +104,16 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
     }
 
     /**
+     * Gets the name of the source's input property.
+     * @since $VID:$
+     * @return string
+     */
+    public function sourceProperty()
+    {
+        return $this->sourceProperty;
+    }
+
+    /**
      * Creates a simple PHP array or stdClass from this object's properties, which can be easily serialized using
      * wp_json_serialize().
      * @since $VID:$
@@ -116,9 +136,9 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
     public function fromJsonSerializedData($data)
     {
         if($data instanceof stdClass
-        && has_property($data, 'input')
-        && has_property($data, 'coercionStrategy')) {
-            $this->map($data->input, $data->coersionStrategy);
+        && property_exists($data, 'input')
+        && property_exists($data, 'coercionStrategy')) {
+            $this->map($data->input, $data->coercionStrategy);
         }
     }
 }
