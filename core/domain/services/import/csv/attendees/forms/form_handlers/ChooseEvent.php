@@ -28,7 +28,7 @@ use LogicException;
  * @since         $VID:$
  *
  */
-class ChooseEvent extends SequentialStepForm
+class ChooseEvent extends ImportCsvAttendeesStep
 {
 
     /**
@@ -106,11 +106,9 @@ class ChooseEvent extends SequentialStepForm
             // Don't die. Admin code knows how to handle invalid forms...
             return;
         }
-        $config = EED_Attendee_Importer::instance()->getConfig();
-        $config->default_event = $valid_data['event'];
-        EED_Attendee_Importer::instance()->updateConfig();
-        // If there is only one ticket for this event, we can set the default ticket now and skip that step.
-        
+        $this->config->setEventId($valid_data['event']);
+        $this->option_manager->saveToDb($this->config);
+        // If there is only one ticket for this event, we can set the default ticket now and skip that step.s
         $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);
         return true;
     }

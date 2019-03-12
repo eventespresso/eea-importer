@@ -18,6 +18,7 @@ use EventEspresso\core\exceptions\InvalidFormSubmissionException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\libraries\form_sections\form_handlers\FormHandler;
 use EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepForm;
+use EventEspresso\core\services\options\JsonWpOptionManager;
 use InvalidArgumentException;
 use LogicException;
 
@@ -31,25 +32,24 @@ use LogicException;
  * @since         $VID:$
  *
  */
-class ChooseTicket extends SequentialStepForm
+class ChooseTicket extends ImportCsvAttendeesStep
 {
-
-    /**
-     * @var EE_Attendee_Importer_Config
-     */
-    protected $config;
 
     /**
      * ChooseTicket constructor
      *
      * @param EE_Registry $registry
-     * @param EE_Attendee_Importer_Config $config
-     * @throws InvalidArgumentException
+     * @param ImportCsvAttendeesConfig $config
+     * @param JsonWpOptionManager $option_manager
      * @throws DomainException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      */
-    public function __construct(EE_Registry $registry, ImportCsvAttendeesConfig $config)
-    {
+    public function __construct(
+        EE_Registry $registry,
+        ImportCsvAttendeesConfig $config,
+        JsonWpOptionManager $option_manager
+    ) {
         $this->setDisplayable(true);
         parent::__construct(
             4,
@@ -59,7 +59,8 @@ class ChooseTicket extends SequentialStepForm
             '',
             FormHandler::ADD_FORM_TAGS_AND_SUBMIT,
             $registry,
-            $config
+            $config,
+            $option_manager
         );
     }
 
@@ -75,6 +76,7 @@ class ChooseTicket extends SequentialStepForm
      */
     public function generate()
     {
+        $this->option_manager->populateFromDb($this->config);
         return new EE_Form_Section_Proper(
             [
                 'name' => 'ticket',
@@ -86,13 +88,20 @@ class ChooseTicket extends SequentialStepForm
                             'help_text' => esc_html__('The Ticket data should be imported to.', 'event_espresso'),
                             'query_params' => [
                                 [
-                                    'Datetime.Event.EVT_ID' => $this->config->default_event
+                                    'Datetime.Event.EVT_ID' => $this->config->getEventId()
                                 ]
                             ]
                         ]
                     ),
                     'notice' => new EE_Form_Section_HTML(
-                        EEH_HTML::p(esc_html__('The import will start after this step. Please wait for it to complete before closing this window, turning off your computer, or navigating away.', 'event_espresso'))
+                        EEH_HTML::p(
+                            esc_html__(
+                                // @codingStandardsIgnoreStart
+                                'The import will start after this step. Please wait for it to complete before closing this window, turning off your computer, or navigating away.',
+                                // @codingStandardsIgnoreEnd
+                                'event_espresso'
+                            )
+                        )
                     )
                 ]
             ]
@@ -108,7 +117,6 @@ class ChooseTicket extends SequentialStepForm
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws EE_Error
-     * @throws InvalidFormSubmissionException
      * @throws InvalidInterfaceException
      * @throws LogicException
      */
@@ -120,12 +128,9 @@ class ChooseTicket extends SequentialStepForm
             // Don't die. Admin code knows how to handle invalid forms...
             return;
         }
-        $config = EED_Attendee_Importer::instance()->getConfig();
-        $config->default_ticket = $valid_data['ticket'];
-        EED_Attendee_Importer::instance()->updateConfig();
-        // If there is only one ticket for this event, we can set the default ticket now and skip that step.
-        
-//        $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);
+
+        $this->config->setTicketId($valid_data['ticket']);
+        $this->option_manager->saveToDb($this->config);
         $this->redirectToBatchJob();
         return true;
     }

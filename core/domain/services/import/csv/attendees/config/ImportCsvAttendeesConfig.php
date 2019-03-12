@@ -31,6 +31,11 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
      */
     protected $file;
 
+
+    protected $event_id;
+
+    protected $ticket_id;
+
     /**
      * Gets the filepath to read.
      * @since $VID:$
@@ -73,6 +78,38 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
     }
 
     /**
+     * @return int
+     */
+    public function getEventId()
+    {
+        return $this->event_id;
+    }
+
+    /**
+     * @param int $event_id
+     */
+    public function setEventId($event_id)
+    {
+        $this->event_id = $event_id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTicketId()
+    {
+        return $this->ticket_id;
+    }
+
+    /**
+     * @param int $ticket_id
+     */
+    public function setTicketId($ticket_id)
+    {
+        $this->ticket_id = $ticket_id;
+    }
+
+    /**
      * @since $VID:$
      * @return CollectionInterface|ImportModelConfigInterface[]
      * @throws CollectionDetailsException
@@ -108,7 +145,9 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
     public function toJsonSerializableData()
     {
         $simple_obj = parent::toJsonSerializableData();
-        $simple_obj->file = $this->file;
+        $simple_obj->file = $this->getFile();
+        $simple_obj->event_id = $this->getEventId();
+        $simple_obj->ticket_id = $this->getTicketId();
         return $simple_obj;
     }
 
@@ -121,9 +160,13 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
     public function fromJsonSerializedData($data)
     {
         parent::fromJsonSerializedData($data);
-        if ($data instanceof stdClass
-            && property_exists($data, 'file')) {
-            $this->file = $data->file;
+        if ($data instanceof stdClass) {
+            $filepath = isset($data->file) ? $data->file : '';
+            $event_id = isset($data->event_id) ? $data->event_id : 0;
+            $ticket_id = isset($data->ticket_id) ? $data->ticket_id : 0;
+            $this->setFile($filepath);
+            $this->setEventId($event_id);
+            $this->setTicketId($ticket_id);
             return true;
         }
         return false;
