@@ -159,6 +159,10 @@ Class  EE_Attendee_Importer extends EE_Addon {
             ],
             'EventEspresso\AttendeeImporter\core\domain\services\import\managers\ui\ImportCsvAttendeesUiManager' => [
                 'EventEspresso\core\services\loaders\Loader' => EE_Dependency_Map::load_from_cache
+            ],
+            'EventEspresso\AttendeeImporter\core\libraries\batch\JobHandlers\AttendeeImporterBatchJob' => [
+                'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
             ]
         );
         foreach ($attendee_mover_dependencies as $class => $dependencies) {
