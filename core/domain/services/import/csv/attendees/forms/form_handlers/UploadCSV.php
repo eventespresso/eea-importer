@@ -68,11 +68,6 @@ class UploadCsv extends ImportCsvAttendeesStep
     {
         $this->option_manager->populateFromDb($this->config);
         $form = new UploadCSVForm();
-//        $form->populate_defaults(
-//            [
-//                'file' => $this->config->getFile()
-//            ]
-//        );
         return $form;
     }
 

@@ -90,7 +90,8 @@ class ChooseTicket extends ImportCsvAttendeesStep
                                 [
                                     'Datetime.Event.EVT_ID' => $this->config->getEventId()
                                 ]
-                            ]
+                            ],
+                            'default' => $this->config->getTicketId()
                         ]
                     ),
                     'notice' => new EE_Form_Section_HTML(

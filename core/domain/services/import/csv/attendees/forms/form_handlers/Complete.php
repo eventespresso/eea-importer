@@ -70,7 +70,7 @@ class Complete extends SequentialStepForm
                 array(
                     'name'        => $this->slug(),
                     'subsections' => [
-                        'input1' => new \EE_Text_Input()
+                        'input1' => new \EE_Form_Section_HTML('right on')
                     ]
                 )
             )

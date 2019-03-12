@@ -44,13 +44,6 @@ class UploadCSVForm extends EE_Form_Section_Proper
                             'required' => true
                         ]
                     ),
-                    'subform' => new EE_Form_Section_Proper(
-                        [
-                            'subsections' => [
-                                'file2' => new EE_File_Input(),
-                            ]
-                        ]
-                    ),
                 )
             ],
             $options_array
