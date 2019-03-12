@@ -2,6 +2,7 @@
 
 namespace EventEspresso\AttendeeImporter\core\libraries\batch\JobHandlers;
 
+use EE_Error;
 use EventEspresso\AttendeeImporter\core\domain\services\commands\ImportCsvRowCommand;
 use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\AttendeeImporter\core\services\import\extractors\ImportExtractorCsv;
@@ -143,10 +144,11 @@ class AttendeeImporterBatchJob extends JobHandler
      * @param JobParameters $job_parameters
      * @return JobStepResponse
      * @throws BatchRequestException
+     * @throws EE_Error
      */
     public function cleanup_job(JobParameters $job_parameters)
     {
-        EEH_File::delete(dirname($this->config->getFile()));
+        EEH_File::delete(dirname($this->config->getFile()), true, 'd');
         return new JobStepResponse(
             $job_parameters,
             esc_html__('Summarizing import...', 'event_espresso')

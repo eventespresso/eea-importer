@@ -4,6 +4,7 @@ namespace EventEspresso\AttendeeImporter\core\domain\services\import\csv\attende
 
 use DomainException;
 use EE_Error;
+use EE_Form_Section_HTML;
 use EE_Form_Section_Proper;
 use EE_Registration;
 use EE_Registry;
@@ -19,6 +20,7 @@ use LogicException;
 use OutOfRangeException;
 use ReflectionException;
 use RuntimeException;
+use EEH_HTML;
 
 /**
  * Class Complete
@@ -70,7 +72,10 @@ class Complete extends SequentialStepForm
                 array(
                     'name'        => $this->slug(),
                     'subsections' => [
-                        'input1' => new \EE_Form_Section_HTML('right on')
+                        'input1' => new EE_Form_Section_HTML(
+                            EEH_HTML::h2(esc_html__('Import Successful', 'event_espresso'))
+                            . 'more content to be placed here...'
+                        )
                     ]
                 )
             )
