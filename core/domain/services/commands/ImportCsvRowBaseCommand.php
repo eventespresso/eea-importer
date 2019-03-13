@@ -46,13 +46,24 @@ class ImportCsvRowBaseCommand  extends Command implements CommandRequiresCapChec
     }
 
     /**
-     * Returns the array from the CSV row, where keys are CSV columsn names, values are their values.
+     * Returns the array from the CSV row, where keys are CSV columns names, values are their values.
      * @since $VID:$
      * @return array
      */
     public function csvRow()
     {
         return $this->csv_row;
+    }
+
+    /**
+     * Gets the raw value from the CSV file at the given column
+     * @since $VID:$
+     * @param $row_name
+     * @return string|null
+     */
+    public function csvColumnValue($row_name)
+    {
+        return isset($this->csv_row[$row_name]) ? $this->csv_row[$row_name] : null;
     }
 }
 // End of file ModelObjFromCsvRowCommand.php

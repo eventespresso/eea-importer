@@ -56,7 +56,8 @@ class ImportExtractorCsv extends ImportExtractorBase
     public function getItemAt($offset)
     {
         $this->fileObject->seek($offset);
-        return $this->fileObject->fgetcsv();
+        $return_value = $this->fileObject->fgetcsv();
+        return $return_value;
     }
 
     /**

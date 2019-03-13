@@ -110,9 +110,9 @@ class AttendeeImporterBatchJob extends JobHandler
         // grab the line from the file
         $processed_this_batch = 0;
         $column_headers = $job_parameters->extra_datum('headers');
-        while ($csv_row = $import_extractor->getItemAt($job_parameters->units_processed() + 1 + $processed_this_batch)
-            && $processed_this_batch < $batch_size) {
-
+        while ($processed_this_batch < $batch_size) {
+            $csv_row = $import_extractor->getItemAt($job_parameters->units_processed() + 1 + $processed_this_batch);
+            if( ! $csv_row ) break;
             if (is_array($csv_row) && count($csv_row) === count($column_headers)) {
                 $command_bus->execute(
                     new ImportCsvRowCommand(
