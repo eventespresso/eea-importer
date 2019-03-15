@@ -2,14 +2,15 @@
 
 namespace EventEspresso\AttendeeImporter\core\services\import\config\models;
 use EE_Error;
-use EE_Model_Field_Base;
-use EEM_Base;
+use EE_Money_Field;
 use EventEspresso\AttendeeImporter\core\services\import\mapping\ImportFieldMap;
-use EventEspresso\core\services\collections\CollectionDetails;
+use EventEspresso\core\exceptions\InvalidInterfaceException;
+use EventEspresso\core\services\collections\Collection;
 use EventEspresso\core\services\collections\CollectionDetailsException;
 use EventEspresso\core\services\collections\CollectionInterface;
-use EventEspresso\core\services\collections\CollectionLoader;
 use EventEspresso\core\services\collections\CollectionLoaderException;
+use EventEspresso\core\services\loaders\Loader;
+use EventEspresso\core\services\loaders\LoaderFactory;
 use stdClass;
 
 /**
@@ -34,24 +35,13 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
      */
     protected $initialized = false;
 
+    /**
+     * ImportModelConfigBase constructor.
+     * @throws InvalidInterfaceException
+     */
     public function __construct()
     {
-        // Create the collection from the fields mapped.
-        $loader = new CollectionLoader(
-            new CollectionDetails(
-            // collection name
-                'import_csv_attendees_config_model_configs_field_mapping',
-                // collection interface
-                'EventEspresso\AttendeeImporter\core\services\import\mapping\ImportFieldMap',
-                // FQCNs for classes to add (all classes within that namespace will be loaded)
-                [],
-                [],
-                '',
-                CollectionDetails::ID_CALLBACK_METHOD,
-                'destinationFieldName'
-            )
-        );
-        $this->mapping = $loader->getCollection();
+        $this->mapping = new Collection('EventEspresso\AttendeeImporter\core\services\import\mapping\ImportFieldMap');
     }
 
     /**
@@ -79,8 +69,12 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
         foreach ($this->fieldNamesMapped() as $field_name) {
             $field = $this->getModel()->field_settings_for($field_name);
             $this->mapping->add(
-                new ImportFieldMap(
-                    $field
+                LoaderFactory::getLoader()->getNew(
+                    'EventEspresso\AttendeeImporter\core\services\import\mapping\ImportFieldMap',
+                    [
+                        null,
+                        $field
+                    ]
                 ),
                 $field_name
             );
@@ -160,11 +154,24 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
         if($data instanceof stdClass) {
             if( property_exists($data, 'mapping')
             && $data->mapping instanceof stdClass){
-                foreach($data->mapping as $json_key => $json_value) {
-                    $field = $this->getModel()->field_settings_for($json_key);
-                    $field_mapping = new ImportFieldMap($field);
-                    $field_mapping->fromJsonSerializedData($json_value);
-                    $this->mapping->add($field_mapping, $json_key);
+                foreach ($this->fieldNamesMapped() as $field_name) {
+                    $field_map = $this->mapping->get($field_name);
+                    if( ! $field_map instanceof ImportFieldMap){
+                        $field = $this->getModel()->field_settings_for($field_name);
+                        $field_map = LoaderFactory::getLoader()->getNew(
+                            'EventEspresso\AttendeeImporter\core\services\import\mapping\ImportFieldMap',
+                            [
+                                null,
+                                $field
+                            ]
+                        );
+                        $this->mapping->add(
+                            $field_map,
+                            $field_name
+                        );
+                    }
+
+                    $field_map->fromJsonSerializedData($data->mapping->{$field_name});
                 }
                 // Don't overwrite the mapping we set.
                 $this->initialized = true;

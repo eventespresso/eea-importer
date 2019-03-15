@@ -18,13 +18,12 @@ use EventEspresso\core\services\json\JsonSerializableAndUnserializable;
 interface ImportFieldCoercionInterface extends JsonSerializableAndUnserializable
 {
     /**
-     * Takes the input and converts
+     * Takes the input and converts to the appropriate type.
      * @since $VID:$
-     * @param $inputProperty
-     * @param EE_Base_Class $destinationObject only used when the value of one field affects the value of another.
+     * @param string $inputProperty
      * @return mixed
      */
-    public function coerce($inputProperty, EE_Base_Class $destinationObject);
+    public function coerce($inputProperty);
 }
 // End of file ImportFieldMappingStrategyInterface.php
 // Location: EventEspresso\AttendeeImporter\core\services\import\mapping\strategies/ImportFieldMappingStrategyInterface.php

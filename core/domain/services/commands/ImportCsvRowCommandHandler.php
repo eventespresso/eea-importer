@@ -100,7 +100,7 @@ class ImportCsvRowCommandHandler extends CompositeCommandHandler
         $attendee_fields = [];
         foreach($fields_mapped as $field_mapped) {
             /* @var $field_mapped ImportFieldMap */
-            $attendee_fields[$field_mapped->destinationFieldName()] = $command->csvColumnValue($field_mapped->sourceProperty());
+            $attendee_fields[$field_mapped->destinationFieldName()] = $field_mapped->applyMap($command->csvColumnValue($field_mapped->sourceProperty()));
         }
         $attendee = $this->commandBus()->execute(
             $this->commandFactory()->getNew(

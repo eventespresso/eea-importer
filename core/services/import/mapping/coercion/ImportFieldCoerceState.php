@@ -1,7 +1,9 @@
 <?php
 
 namespace EventEspresso\AttendeeImporter\core\services\import\mapping\coercion;
-use EE_Base_Class;
+
+use EE_Error;
+use EEM_State;
 
 /**
  * Class ImportFieldString
@@ -13,20 +15,42 @@ use EE_Base_Class;
  * @since         $VID:$
  *
  */
-class ImportFieldCoerceString implements ImportFieldCoercionInterface
+class ImportFieldCoerceState implements ImportFieldCoercionInterface
 {
 
+    /**
+     * @var EEM_State
+     */
+    private $state_model;
+
+    public function __construct(EEM_State $state_model)
+    {
+        $this->state_model = $state_model;
+    }
 
     /**
      * Takes the input and converts
      * @since $VID:$
      * @param $inputProperty
-     * @param EE_Base_Class $destinationObject only used when the value of one field affects the value of another.
-     * @return mixed
+     * @return int
+     * @throws EE_Error
      */
     public function coerce($inputProperty)
     {
-        return (string)$inputProperty;
+        $inputProperty = (string)$inputProperty;
+        return (int) $this->state_model->get_var(
+            [
+                [
+                    'OR' => [
+                        'STA_abbrev' => $inputProperty,
+                        'STA_name' => $inputProperty,
+                        'STA_ID' => $inputProperty
+                    ]
+                ],
+                'limit' => 1
+            ],
+            'STA_ID'
+        );
     }
 
     /**
@@ -37,7 +61,7 @@ class ImportFieldCoerceString implements ImportFieldCoercionInterface
      */
     public function toJsonSerializableData()
     {
-        return 'string';
+        return 'state';
     }
 
     /**

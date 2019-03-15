@@ -24,7 +24,7 @@ class ImportFieldCoerceBoolean implements ImportFieldCoercionInterface
      * @param EE_Base_Class $destinationObject only used when the value of one field affects the value of another.
      * @return mixed
      */
-    public function coerce($inputProperty, EE_Base_Class $destinationObject)
+    public function coerce($inputProperty)
     {
         return filter_var($inputProperty, FILTER_VALIDATE_BOOLEAN);
     }

@@ -3,10 +3,13 @@
 namespace EventEspresso\AttendeeImporter\core\services\import\mapping;
 
 use EE_Base_Class;
+use EE_Boolean_Field;
 use EE_Error;
+use EE_Foreign_Key_Int_Field;
 use EE_Model_Field_Base;
 use EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceString;
 use EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoercionInterface;
+use EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoercionStrategyFactory;
 use EventEspresso\core\services\json\JsonSerializableAndUnserializable;
 use stdClass;
 
@@ -22,17 +25,21 @@ use stdClass;
  */
 class ImportFieldMap implements JsonSerializableAndUnserializable
 {
-    protected $sourceProperty;
+    protected $source_property;
 
     /**
      * @var EE_Model_Field_Base
      */
-    protected $destinationField;
+    protected $destination_field;
 
     /**
      * @var ImportFieldCoercionInterface
      */
-    protected $coercionStrategy;
+    protected $coercion_strategy;
+    /**
+     * @var ImportFieldCoercionStrategyFactory
+     */
+    private $coercion_factory;
 
     /**
      * ImportFieldMap constructor.
@@ -41,16 +48,27 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
      * @param ImportFieldCoercionInterface $coercionStrategy
      */
     public function __construct(
+        ImportFieldCoercionStrategyFactory $coercion_factory,
         EE_Model_Field_Base $destinationField,
-        $sourceProperty = null,
-        ImportFieldCoercionInterface $coercionStrategy = null
-    ){
-        $this->sourceProperty = $sourceProperty;
-        $this->destinationField = $destinationField;
-        if(! $coercionStrategy instanceof ImportFieldCoercionInterface) {
-            $coercionStrategy = new ImportFieldCoerceString();
+        $sourceProperty = null
+    )
+    {
+        $this->source_property = $sourceProperty;
+        $this->destination_field = $destinationField;
+        $this->coercion_factory = $coercion_factory;
+        if ($destinationField instanceof EE_Boolean_Field) {
+            $this->coercion_strategy = $this->coercion_factory->create('boolean');
         }
-        $this->coercionStrategy = $coercionStrategy;
+        if ($destinationField instanceof EE_Foreign_Key_Int_Field && $destinationField->get_model_name()) {
+            if (in_array('State', $destinationField->get_model_names_pointed_to())) {
+                $this->coercion_factory->create('state');
+            } elseif (in_array('Country', $destinationField->get_model_names_pointed_to())) {
+                $this->coercion_factory->create('country');
+            }
+        }
+        if (!$this->coercion_strategy instanceof ImportFieldCoercionInterface) {
+            $this->coercion_strategy = $this->coercion_factory->create('string');
+        }
     }
 
     /**
@@ -61,7 +79,7 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
      */
     public function destinationFieldName()
     {
-        return $this->destinationField->get_name();
+        return $this->destination_field->get_name();
     }
 
     /**
@@ -71,7 +89,7 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
      */
     public function destinationField()
     {
-        return $this->destinationField;
+        return $this->destination_field;
     }
 
     /**
@@ -79,14 +97,13 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
      * @param $column
      * @param $coercion_strategy_name
      */
-    public function map($column, $coercion_strategy_name = '')
+    public function map($column)
     {
-        $this->sourceProperty = $column;
-        $this->coercionStrategy = new ImportFieldCoerceString();
+        $this->source_property = $column;
     }
 
     /**
-     * Uses the input value, and the established mapping, to apply the input to destination object's field.
+     * Applies the established mapping to the input to get the value to set on the model object.
      * @since $VID:$
      * @param $input
      * @param EE_Base_Class $destinationObject
@@ -96,11 +113,9 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
      * @throws \InvalidArgumentException
      * @throws \ReflectionException
      */
-    public function applyMap($input, EE_Base_Class $destinationObject) {
-        $destinationObject->set(
-            $this->destinationField->get_name(),
-            $this->coercionStrategy->coerce($input, $destinationObject)
-        );
+    public function applyMap($input)
+    {
+        return $this->coercion_strategy->coerce($input);
     }
 
     /**
@@ -110,7 +125,7 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
      */
     public function sourceProperty()
     {
-        return $this->sourceProperty;
+        return $this->source_property;
     }
 
     /**
@@ -122,8 +137,8 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
     public function toJsonSerializableData()
     {
         $simple_obj = new stdClass();
-        $simple_obj->input = $this->sourceProperty;
-        $simple_obj->coercionStrategy = $this->coercionStrategy->toJsonSerializableData();
+        $simple_obj->input = $this->source_property;
+        $simple_obj->coercion_strategy = $this->coercion_strategy->toJsonSerializableData();
         return $simple_obj;
     }
 
@@ -135,10 +150,11 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
      */
     public function fromJsonSerializedData($data)
     {
-        if($data instanceof stdClass
-        && property_exists($data, 'input')
-        && property_exists($data, 'coercionStrategy')) {
-            $this->map($data->input, $data->coercionStrategy);
+        if ($data instanceof stdClass
+            && property_exists($data, 'input')
+            && property_exists($data, 'coercion_strategy')) {
+            $this->map($data->input);
+            $this->coercion_strategy = $this->coercion_factory->create($data->coercion_strategy);
         }
     }
 }
