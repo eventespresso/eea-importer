@@ -41,7 +41,7 @@ class ImportFieldCoercionStrategyFactory
             case 'state' :
                 return $this->loader->getNew('EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceState');
             case 'country' :
-                return $this->loader->getNew('EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceState');
+                return $this->loader->getNew('EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceCountry');
             case 'string':
             default:
                 return $this->loader->getNew('EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceString');

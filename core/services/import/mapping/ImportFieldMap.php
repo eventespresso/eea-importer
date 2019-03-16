@@ -59,11 +59,11 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
         if ($destinationField instanceof EE_Boolean_Field) {
             $this->coercion_strategy = $this->coercion_factory->create('boolean');
         }
-        if ($destinationField instanceof EE_Foreign_Key_Int_Field && $destinationField->get_model_name()) {
+        if ($destinationField instanceof \EE_Foreign_Key_Field_Base) {
             if (in_array('State', $destinationField->get_model_names_pointed_to())) {
-                $this->coercion_factory->create('state');
+                $this->coercion_strategy = $this->coercion_factory->create('state');
             } elseif (in_array('Country', $destinationField->get_model_names_pointed_to())) {
-                $this->coercion_factory->create('country');
+                $this->coercion_strategy = $this->coercion_factory->create('country');
             }
         }
         if (!$this->coercion_strategy instanceof ImportFieldCoercionInterface) {
@@ -95,7 +95,6 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
     /**
      * @since $VID:$
      * @param $column
-     * @param $coercion_strategy_name
      */
     public function map($column)
     {
@@ -138,7 +137,6 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
     {
         $simple_obj = new stdClass();
         $simple_obj->input = $this->source_property;
-        $simple_obj->coercion_strategy = $this->coercion_strategy->toJsonSerializableData();
         return $simple_obj;
     }
 
@@ -151,11 +149,8 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
     public function fromJsonSerializedData($data)
     {
         if ($data instanceof stdClass
-            && property_exists($data, 'input')
-            && property_exists($data, 'coercion_strategy')) {
-            $this->map($data->input);
-            $this->coercion_strategy = $this->coercion_factory->create($data->coercion_strategy);
-        }
+            && property_exists($data, 'input')) {
+            $this->map($data->input);}
     }
 }
 // End of file ImportFieldMap.php
