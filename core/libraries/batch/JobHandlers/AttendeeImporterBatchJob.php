@@ -112,7 +112,10 @@ class AttendeeImporterBatchJob extends JobHandler
         $column_headers = $job_parameters->extra_datum('headers');
         while ($processed_this_batch < $batch_size) {
             $csv_row = $import_extractor->getItemAt($job_parameters->units_processed() + 1 + $processed_this_batch);
-            if( ! $csv_row ) break;
+            if( ! $csv_row ){
+                $processed_this_batch++;
+                break;
+            }
             if (is_array($csv_row) && count($csv_row) === count($column_headers)) {
                 $command_bus->execute(
                     new ImportCsvRowCommand(
@@ -134,7 +137,7 @@ class AttendeeImporterBatchJob extends JobHandler
             $job_parameters,
             sprintf(
                 esc_html__('%1$s rows imported.', 'event_espresso'),
-                $batch_size
+                $processed_this_batch
             )
         );
     }
