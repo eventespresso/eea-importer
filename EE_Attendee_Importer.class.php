@@ -142,7 +142,7 @@ Class  EE_Attendee_Importer extends EE_Addon {
                 'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
             ),
-            'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms\MapCsvColumnsForm'                              => [
+            'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms\MapCsvColumnsSubform'                              => [
                 array(),
                 'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
             ],
