@@ -78,7 +78,10 @@ class ChooseEvent extends ImportCsvAttendeesStep
                             'model_name' => 'Event',
                             'required' => true,
                             'help_text' => esc_html__('The Event data should be imported to.', 'event_espresso'),
-                            'default' => $this->config->getEventId()
+                            'default' => $this->config->getEventId(),
+                            'query_params' => [
+                                'order_by' => ['EVT_ID' => 'DESC']
+                            ]
                         ]
                     )
                 ]
