@@ -84,7 +84,7 @@ class AttendeeImporterBatchJob extends JobHandler
                 'headers' => $csv_row
             ]
         );
-        $job_parameters->set_job_size($import_extractor->countItems());
+        $job_parameters->set_job_size($import_extractor->countItems() - 1);
         return new JobStepResponse(
             $job_parameters,
             esc_html__('Beginning import...', 'event_espresso')

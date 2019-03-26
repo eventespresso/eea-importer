@@ -2,9 +2,11 @@
 
 namespace EventEspresso\AttendeeImporter\core\domain\services\commands;
 
+use EE_Answer;
 use EE_Attendee;
 use EE_Error;
 use EE_Registration;
+use EEM_Question;
 use EEM_Registration;
 use EEM_Ticket;
 use EEM_Transaction;
@@ -127,8 +129,21 @@ class ImportCsvRowCommandHandler extends CompositeCommandHandler
         // @todo: Create line items
 
         // @todo: Update that ticket and its datetime's ticket sales
-
-        // @todo: Create answers
+        foreach ($this->config->getQuestionMapping() as $question_id => $csv_column) {
+            $question = EEM_Question::instance()->get_one_by_ID($question_id);
+            $answer = $command->csvColumnValue($csv_column);
+            if(EEM_Question::instance()->question_type_is_in_category($question->type(),'multi-answer-enum')){
+                $answer = explode(',', $answer);
+            }
+            $answer = EE_Answer::new_instance(
+                [
+                    'REG_ID' => $reg->ID(),
+                    'QST_ID' => $question_id,
+                    'ANS_value' => $answer
+                ]
+            );
+            $answer->save();
+        }
         return null;
     }
 

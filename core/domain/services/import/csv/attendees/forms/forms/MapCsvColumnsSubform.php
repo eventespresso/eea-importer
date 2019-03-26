@@ -6,6 +6,7 @@ use EE_Form_Section_Proper;
 use EE_Model_Field_Base;
 use EE_Select_Input;
 use EEM_Answer;
+use EEM_Question_Group;
 use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\AttendeeImporter\core\services\import\mapping\ImportFieldMap;
 
@@ -79,9 +80,7 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
             ],
         ];
         foreach($this->config->getModelConfigs() as $modelConfig){
-            if($modelConfig->getModel() === EEM_Answer::instance()){
-
-            } else {
+            if($modelConfig->getModel() !== \EEM_Attendee::instance()){
                 $item_name = $modelConfig->getModel()->item_name();
                 $options[$item_name] = [];
                 foreach($modelConfig->mapping() as $mapped_field) {
@@ -90,17 +89,24 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
                 }
             }
         }
-//        // And add questions (group by question group).
-//        foreach(\EEM_Question_Group::instance()->get_all() as $question_group){
-//            foreach($question_group->questions() as $question) {
-//                if( $question->is_system_question()) {
-//                    $option_value = 'Attendee.ATT_' . $question->system_ID();
-//                } else {
-//                    $option_value = 'Question.' . $question->ID();
-//                }
-//                $options[$question_group->name()][$option_value] = $question->admin_label();
-//            }
-//        }
+        // And add questions (group by question group).
+        foreach(EEM_Question_Group::instance()->get_all() as $question_group){
+            foreach($question_group->questions() as $question) {
+                if( $question->is_system_question()) {
+                    if($question->system_ID() === 'state'){
+                        $append = 'STA_ID';
+                    } elseif($question->system_ID() === 'country'){
+                        $append = 'CNT_ISO';
+                    } else{
+                        $append = 'ATT_' . $question->system_ID();
+                    }
+                    $option_value = 'Attendee.' . $append;
+                } else {
+                    $option_value = 'Question.' . $question->ID();
+                }
+                $options[$question_group->name()][$option_value] = $question->admin_label();
+            }
+        }
 //        $options = array_merge(
 //            $options,
 //            $this->optionsFromModel(
@@ -151,6 +157,11 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
             $mapped_info = $modelConfig->getMappingInfoForInput($column_name);
             if ($mapped_info instanceof ImportFieldMap) {
                 return $this->getOptionValueForField($mapped_info->destinationField());
+            }
+        }
+        foreach($this->config->getQuestionMapping() as $question_id => $column_for_question){
+            if($column_name === $column_for_question){
+                return 'Question.' . $question_id;
             }
         }
     }

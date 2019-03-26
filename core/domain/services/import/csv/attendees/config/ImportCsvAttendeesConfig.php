@@ -4,12 +4,16 @@ namespace EventEspresso\AttendeeImporter\core\domain\services\import\csv\attende
 
 use EventEspresso\AttendeeImporter\core\services\import\config\ImportConfigBase;
 use EventEspresso\AttendeeImporter\core\services\import\config\ImportModelConfigInterface;
+use EventEspresso\core\exceptions\InvalidDataTypeException;
+use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\services\collections\CollectionDetails;
 use EventEspresso\core\services\collections\CollectionDetailsException;
 use EventEspresso\core\services\collections\CollectionInterface;
 use EventEspresso\core\services\collections\CollectionLoader;
 use EventEspresso\core\services\collections\CollectionLoaderException;
+use InvalidArgumentException;
 use LogicException;
+use ReflectionException;
 use RuntimeException;
 use SplFileObject;
 use stdClass;
@@ -35,6 +39,12 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
     protected $event_id;
 
     protected $ticket_id;
+
+    /**
+     * @var array keys are question IDs, values are the CSV columns they map to.
+     * Maybe we'll think of a more elegant solution than this, but this at least works.
+     */
+    protected $question_mapping;
 
     /**
      * Gets the filepath to read.
@@ -110,6 +120,31 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
     }
 
     /**
+     * @return array keys are question IDs, values are CSV column names
+     */
+    public function getQuestionMapping()
+    {
+        return $this->question_mapping;
+    }
+
+    /**
+     * @param array $question_mapping keys are question IDs, values are CSV column names
+     */
+    public function setQuestionMapping(array $question_mapping)
+    {
+        $this->question_mapping = $question_mapping;
+    }
+
+    public function clearMapping()
+    {
+        foreach($this->model_configs as $model_config)
+        {
+            $model_config->clearMapping();
+        }
+        $this->question_mapping = [];
+    }
+
+    /**
      * @since $VID:$
      * @return CollectionInterface|ImportModelConfigInterface[]
      * @throws CollectionDetailsException
@@ -136,6 +171,8 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
         return $loader->getCollection();
     }
 
+
+
     /**
      * Creates a simple PHP array or stdClass from this object's properties, which can be easily serialized using
      * wp_json_serialize().
@@ -148,6 +185,7 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
         $simple_obj->file = $this->getFile();
         $simple_obj->event_id = $this->getEventId();
         $simple_obj->ticket_id = $this->getTicketId();
+        $simple_obj->question_mapping = $this->question_mapping;
         return $simple_obj;
     }
 
@@ -167,6 +205,9 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
             $this->setFile($filepath);
             $this->setEventId($event_id);
             $this->setTicketId($ticket_id);
+            if (isset($data->question_mapping)) {
+                $this->setQuestionMapping((array)$data->question_mapping);
+            }
             return true;
         }
         return false;

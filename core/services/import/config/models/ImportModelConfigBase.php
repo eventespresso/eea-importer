@@ -41,6 +41,16 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
      */
     public function __construct()
     {
+        $this->setNewMap();
+    }
+
+    /**
+     * Clears the mapping collection.
+     * @since $VID:$
+     * @throws InvalidInterfaceException
+     */
+    protected function setNewMap()
+    {
         $this->mapping = new Collection('EventEspresso\AttendeeImporter\core\services\import\mapping\ImportFieldMap');
     }
 
@@ -111,6 +121,20 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
     {
         $map_obj = $this->mapping->get($field_name);
         $map_obj->map($input_column);
+    }
+
+    /**
+     * Clears all the previously mapped fields. Useful if there is new mapping information.
+     * @since $VID:$
+     * @throws CollectionDetailsException
+     * @throws CollectionLoaderException
+     * @throws EE_Error
+     * @throws InvalidInterfaceException
+     */
+    public function clearMapping()
+    {
+        $this->setNewMap();
+        $this->init();
     }
 
     /**
