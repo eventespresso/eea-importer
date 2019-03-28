@@ -17,7 +17,7 @@ use EventEspresso\core\services\commands\CommandInterface;
  * @package       Event Espresso
  * @author        Brent Christensen
  */
-class TicketFromCsvRowCommandHandler extends CommandHandler
+class ImportRegistrationPaymentCommandHandler extends CommandHandler
 {
 
 
@@ -36,8 +36,8 @@ class TicketFromCsvRowCommandHandler extends CommandHandler
      */
     public function handle(CommandInterface $command)
     {
-        /** @var TicketFromCsvRowCommand $command */
-        if (! $command instanceof TicketFromCsvRowCommand) {
+        /** @var ImportRegistrationPaymentRowCommand $command */
+        if (! $command instanceof ImportRegistrationPaymentRowCommand) {
             throw new InvalidEntityException(get_class($command), 'CreateAttendeeCommand');
         }
 //        $this->commandBus()->execute(

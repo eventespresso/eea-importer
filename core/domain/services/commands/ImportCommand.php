@@ -4,13 +4,12 @@ namespace EventEspresso\AttendeeImporter\core\domain\services\commands;
 
 /**
  * Class CreateAttendeeCommand
- * DTO for passing data to a AttendeeFromCsvRowCommandHandler
+ * DTO for passing data to a ImportCommandHandler
  *
  * @package       Event Espresso
  * @author        Michael Nelson
  */
-class AttendeeFromCsvRowCommand extends ImportCsvRowBaseCommand
+class ImportCommand extends ImportBaseCommand
 {
-
 
 }

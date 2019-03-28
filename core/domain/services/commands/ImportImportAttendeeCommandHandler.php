@@ -22,7 +22,7 @@ use ReflectionException;
  * @package       Event Espresso
  * @author        Brent Christensen
  */
-class AttendeeFromCsvRowCommandHandler extends CommandHandler
+class ImportAttendeeCommandHandler extends CommandHandler
 {
     /**
      * @var EE_Attendee_Importer_Config
@@ -50,11 +50,11 @@ class AttendeeFromCsvRowCommandHandler extends CommandHandler
      */
     public function handle(CommandInterface $command)
     {
-        /** @var AttendeeFromCsvRowCommand $command */
-        if (! $command instanceof AttendeeFromCsvRowCommand) {
+        /** @var ImportAttendeeCommand $command */
+        if (! $command instanceof ImportAttendeeCommand) {
             throw new InvalidEntityException(
                 get_class($command),
-                'EventEspresso\AttendeeImporter\core\domain\services\commands\AttendeeFromCsvRowCommand'
+                'EventEspresso\AttendeeImporter\core\domain\services\commands\ImportAttendeeCommand'
             );
         }
         // Find columns that correspond to the Attendee model.

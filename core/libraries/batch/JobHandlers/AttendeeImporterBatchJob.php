@@ -3,7 +3,7 @@
 namespace EventEspresso\AttendeeImporter\core\libraries\batch\JobHandlers;
 
 use EE_Error;
-use EventEspresso\AttendeeImporter\core\domain\services\commands\ImportCsvRowCommand;
+use EventEspresso\AttendeeImporter\core\domain\services\commands\ImportCommand;
 use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\AttendeeImporter\core\services\import\extractors\ImportExtractorCsv;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
@@ -117,7 +117,7 @@ class AttendeeImporterBatchJob extends JobHandler
             }
             if (is_array($csv_row) && count($csv_row) === count($column_headers)) {
                 $command_bus->execute(
-                    new ImportCsvRowCommand(
+                    new ImportCommand(
                         array_combine(
                             $column_headers,
                             $csv_row

@@ -17,7 +17,7 @@ use EventEspresso\core\services\commands\CommandRequiresCapCheckInterface;
  * @since         $VID:$
  *
  */
-class ImportCsvRowBaseCommand  extends Command implements CommandRequiresCapCheckInterface
+class ImportBaseCommand extends Command implements CommandRequiresCapCheckInterface
 {
     /**
      * @var array $csv_row
@@ -58,12 +58,12 @@ class ImportCsvRowBaseCommand  extends Command implements CommandRequiresCapChec
     /**
      * Gets the raw value from the CSV file at the given column
      * @since $VID:$
-     * @param $row_name
+     * @param $column_name
      * @return string|null
      */
-    public function csvColumnValue($row_name)
+    public function csvColumnValue($column_name)
     {
-        return isset($this->csv_row[$row_name]) ? $this->csv_row[$row_name] : null;
+        return isset($this->csv_row[$column_name]) ? $this->csv_row[$column_name] : null;
     }
 }
 // End of file ModelObjFromCsvRowCommand.php

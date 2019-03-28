@@ -147,13 +147,13 @@ Class  EE_Attendee_Importer extends EE_Addon {
                 'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
             ],
             // commands handlers
-            'EventEspresso\AttendeeImporter\core\domain\services\commands\ImportCsvRowCommandHandler' => [
+            'EventEspresso\AttendeeImporter\core\domain\services\commands\ImportCommandHandler' => [
                 'EventEspresso\core\services\commands\CommandBusInterface' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\commands\CommandFactoryInterface' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
             ],
-            'EventEspresso\AttendeeImporter\core\domain\services\commands\AttendeeFromCsvRowCommandHandler' => [
+            'EventEspresso\AttendeeImporter\core\domain\services\commands\ImportAttendeeCommandHandler' => [
                 'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache
             ],
             'EventEspresso\AttendeeImporter\core\services\import\ImportManager' => [

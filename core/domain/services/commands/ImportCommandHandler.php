@@ -26,7 +26,7 @@ use EventEspresso\core\services\options\JsonWpOptionManager;
  * @package       Event Espresso
  * @author        Brent Christensen
  */
-class ImportCsvRowCommandHandler extends CompositeCommandHandler
+class ImportCommandHandler extends CompositeCommandHandler
 {
 
     /**
@@ -58,9 +58,9 @@ class ImportCsvRowCommandHandler extends CompositeCommandHandler
      */
     public function handle(CommandInterface $command)
     {
-        /** @var ImportCsvRowCommand $command */
-        if (!$command instanceof ImportCsvRowCommand) {
-            throw new InvalidEntityException(get_class($command), 'EventEspresso\AttendeeImporter\core\domain\services\commands\ImportCsvRowCommand');
+        /** @var ImportCommand $command */
+        if (!$command instanceof ImportCommand) {
+            throw new InvalidEntityException(get_class($command), 'EventEspresso\AttendeeImporter\core\domain\services\commands\ImportCommand');
         }
 
         // Determine the ticket and event ID

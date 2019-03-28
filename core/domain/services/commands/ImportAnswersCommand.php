@@ -17,7 +17,7 @@ use EventEspresso\core\services\commands\CommandRequiresCapCheckInterface;
  * @package       Event Espresso
  * @author        Michael Nelson
  */
-class AnswersFromCsvRowCommand extends Command implements CommandRequiresCapCheckInterface
+class ImportAnswersCommand extends Command implements CommandRequiresCapCheckInterface
 {
 
     /**

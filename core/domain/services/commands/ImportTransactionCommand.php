@@ -12,12 +12,12 @@ use EventEspresso\core\services\commands\CommandRequiresCapCheckInterface;
 
 /**
  * Class CreateAttendeeCommand
- * DTO for passing data to a TransactionFromCsvRowCommandHandler
+ * DTO for passing data to a ImportTransactionCommandHandler
  *
  * @package       Event Espresso
  * @author        Michael Nelson
  */
-class TransactionFromCsvRowCommand extends Command implements CommandRequiresCapCheckInterface
+class ImportTransactionCommand extends Command implements CommandRequiresCapCheckInterface
 {
 
     /**
