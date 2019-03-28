@@ -113,7 +113,6 @@ class AttendeeImporterBatchJob extends JobHandler
         while ($processed_this_batch < $batch_size) {
             $csv_row = $import_extractor->getItemAt($job_parameters->units_processed() + 1 + $processed_this_batch);
             if( ! $csv_row ){
-                $processed_this_batch++;
                 break;
             }
             if (is_array($csv_row) && count($csv_row) === count($column_headers)) {
