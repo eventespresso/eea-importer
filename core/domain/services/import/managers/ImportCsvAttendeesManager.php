@@ -28,20 +28,6 @@ class ImportCsvAttendeesManager implements ImportTypeManagerInterface
     }
 
     /**
-     * @since $VID:$
-     * @return mixed
-     */
-    public function getConfig()
-    {
-        // TODO: Implement getConfig() method.
-    }
-
-    public function saveConfig()
-    {
-        // TODO: Implement saveConfig() method.
-    }
-
-    /**
      * Gets the name of this import type (translated).
      * @since $VID:$
      * @return string

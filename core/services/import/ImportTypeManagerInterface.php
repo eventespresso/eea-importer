@@ -42,19 +42,7 @@ interface ImportTypeManagerInterface
      * @return ImportUnitCommandInterface
      */
     public function getImportCommand();
-
-    /**
-     * @since $VID:$
-     * @return mixed
-     */
-    public function getConfig();
-
-    /**
-     * @since $VID:$
-     * @return mixed
-     */
-    public function saveConfig();
-
+    
     /**
      * @since $VID:$
      * @return string
