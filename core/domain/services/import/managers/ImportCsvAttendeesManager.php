@@ -10,7 +10,8 @@ use EventEspresso\core\services\loaders\LoaderInterface;
 /**
  * Class ImportCsvAttendeesManager
  *
- * Description
+ * Knows about importing attendees from a CSV. UI agnostic, this class is all about getting the info and getting the
+ * job done.
  *
  * @package     Event Espresso
  * @author         Mike Nelson

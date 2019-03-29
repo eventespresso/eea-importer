@@ -8,13 +8,12 @@ use EventEspresso\AttendeeImporter\core\services\import\ImportTypeUiManagerBase;
 use EventEspresso\AttendeeImporter\core\services\import\ImportTypeManagerInterface;
 use EventEspresso\core\services\import\JobHandler;
 use EventEspresso\core\services\import\SequentialStepFormManager;
-use EventEspresso\core\services\loaders\Loader;
 use EventEspresso\core\services\loaders\LoaderInterface;
 
 /**
  * Class ImportCsvAttendeesUiManager
  *
- * Description
+ * Knows about the web interface for the import. Knows which step manager, batch job to call, what image to show, etc.
  *
  * @package     Event Espresso
  * @author         Mike Nelson
@@ -67,7 +66,7 @@ class ImportCsvAttendeesUiManager extends ImportTypeUiManagerBase
      */
     public function getBatchJobHandler()
     {
-        // TODO: Implement getBatchJobHandler() method.
+        return $this->loader->getShared('EventEspresso\AttendeeImporter\core\libraries\batch\JobHandlers\AttendeeImporterBatchJob');
     }
 
     /**

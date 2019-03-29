@@ -13,6 +13,7 @@ use EED_Attendee_Importer;
 use EEH_HTML;
 use EEH_URL;
 use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
+use EventEspresso\AttendeeImporter\core\domain\services\import\managers\ui\ImportCsvAttendeesUiManager;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFormSubmissionException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
@@ -34,6 +35,10 @@ use LogicException;
  */
 class ChooseTicket extends ImportCsvAttendeesStep
 {
+    /**
+     * @var ImportCsvAttendeesUiManager
+     */
+    private $attendeesUiManager;
 
     /**
      * ChooseTicket constructor
@@ -41,6 +46,7 @@ class ChooseTicket extends ImportCsvAttendeesStep
      * @param EE_Registry $registry
      * @param ImportCsvAttendeesConfig $config
      * @param JsonWpOptionManager $option_manager
+     * @param ImportCsvAttendeesUiManager $attendeesUiManager
      * @throws DomainException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
@@ -48,9 +54,11 @@ class ChooseTicket extends ImportCsvAttendeesStep
     public function __construct(
         EE_Registry $registry,
         ImportCsvAttendeesConfig $config,
-        JsonWpOptionManager $option_manager
+        JsonWpOptionManager $option_manager,
+        ImportCsvAttendeesUiManager $attendeesUiManager
     ) {
         $this->setDisplayable(true);
+        $this->attendeesUiManager = $attendeesUiManager;
         parent::__construct(
             4,
             esc_html__('Choose Ticket', 'event_espresso'),
@@ -144,7 +152,7 @@ class ChooseTicket extends ImportCsvAttendeesStep
                     'page'        => 'espresso_batch',
                     'batch'       => 'job',
                     'label'       => esc_html__('Applying Offset', 'event_espresso'),
-                    'job_handler' => urlencode('EventEspresso\AttendeeImporter\core\libraries\batch\JobHandlers\AttendeeImporterBatchJob'),
+                    'job_handler' => urlencode(get_class($this->attendeesUiManager->getBatchJobHandler())),
                     'return_url'  => urlencode(
                         add_query_arg(
                             array(
