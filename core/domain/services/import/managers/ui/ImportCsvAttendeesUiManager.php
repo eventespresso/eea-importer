@@ -2,12 +2,14 @@
 
 namespace EventEspresso\AttendeeImporter\core\domain\services\import\managers\ui;
 
+use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\StepsManager;
 use EventEspresso\AttendeeImporter\core\domain\services\import\managers\ImportCsvAttendeesManager;
 use EventEspresso\AttendeeImporter\core\services\import\ImportTypeUiManagerBase;
 use EventEspresso\AttendeeImporter\core\services\import\ImportTypeManagerInterface;
 use EventEspresso\core\services\import\JobHandler;
 use EventEspresso\core\services\import\SequentialStepFormManager;
 use EventEspresso\core\services\loaders\Loader;
+use EventEspresso\core\services\loaders\LoaderInterface;
 
 /**
  * Class ImportCsvAttendeesUiManager
@@ -30,7 +32,7 @@ class ImportCsvAttendeesUiManager extends ImportTypeUiManagerBase
      */
     protected $form_steps_manager;
 
-    public function __construct(Loader $loader)
+    public function __construct(LoaderInterface $loader)
     {
         $this->loader = $loader;
     }
@@ -75,7 +77,7 @@ class ImportCsvAttendeesUiManager extends ImportTypeUiManagerBase
      */
     public function getImportType()
     {
-        return new ImportCsvAttendeesManager();
+        return $this->loader->getShared('EventEspresso\AttendeeImporter\core\domain\services\import\managers\ImportCsvAttendeesManager');
     }
 
     /**

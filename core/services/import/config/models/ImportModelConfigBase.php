@@ -1,6 +1,7 @@
 <?php
 
 namespace EventEspresso\AttendeeImporter\core\services\import\config\models;
+
 use EE_Error;
 use EE_Money_Field;
 use EventEspresso\AttendeeImporter\core\services\import\mapping\ImportFieldMap;
@@ -149,7 +150,7 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
      */
     public function getMappingInfoForInput($input)
     {
-        foreach($this->mapping() as $mapped_field){
+        foreach ($this->mapping() as $mapped_field) {
             if ($mapped_field->sourceProperty() === $input) {
                 return $mapped_field;
             }
@@ -167,20 +168,20 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
         $simple_obj->model_name = $this->getModelName();
         $simple_obj->class_name = get_class($this);
         $simple_obj->mapping = [];
-        foreach($this->mapping() as $mapping_obj) {
-            $simple_obj->mapping[$mapping_obj->destinationFieldName()] = $mapping_obj->toJsonSerializableData();
+        foreach ($this->mapping() as $mapping_obj) {
+            $simple_obj->mapping[ $mapping_obj->destinationFieldName() ] = $mapping_obj->toJsonSerializableData();
         }
         return $simple_obj;
     }
 
     public function fromJsonSerializedData($data)
     {
-        if($data instanceof stdClass) {
-            if( property_exists($data, 'mapping')
-            && $data->mapping instanceof stdClass){
+        if ($data instanceof stdClass) {
+            if (property_exists($data, 'mapping')
+            && $data->mapping instanceof stdClass) {
                 foreach ($this->fieldNamesMapped() as $field_name) {
                     $field_map = $this->mapping->get($field_name);
-                    if( ! $field_map instanceof ImportFieldMap){
+                    if (! $field_map instanceof ImportFieldMap) {
                         $field = $this->getModel()->field_settings_for($field_name);
                         $field_map = LoaderFactory::getLoader()->getNew(
                             'EventEspresso\AttendeeImporter\core\services\import\mapping\ImportFieldMap',

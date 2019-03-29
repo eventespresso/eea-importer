@@ -123,9 +123,9 @@ class ChooseTicket extends ImportCsvAttendeesStep
      */
     public function process($form_data = array())
     {
-        try{
+        try {
             $valid_data = (array) parent::process($form_data);
-        }catch(InvalidFormSubmissionException $e){
+        } catch (InvalidFormSubmissionException $e) {
             // Don't die. Admin code knows how to handle invalid forms...
             return;
         }

@@ -36,7 +36,7 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
         $columns_inputs = [];
         $options = $this->initMapToOptions();
         foreach ($column_headers as $column_header) {
-            $columns_inputs[$column_header] = new EE_Select_Input(
+            $columns_inputs[ $column_header ] = new EE_Select_Input(
                 $options,
                 [
                     'default' => $this->getDefaultFor($column_header)
@@ -79,32 +79,32 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
                 '' => ''
             ],
         ];
-        foreach($this->config->getModelConfigs() as $modelConfig){
-            if($modelConfig->getModel() !== \EEM_Attendee::instance()){
+        foreach ($this->config->getModelConfigs() as $modelConfig) {
+            if ($modelConfig->getModel() !== \EEM_Attendee::instance()) {
                 $item_name = $modelConfig->getModel()->item_name();
-                $options[$item_name] = [];
-                foreach($modelConfig->mapping() as $mapped_field) {
+                $options[ $item_name ] = [];
+                foreach ($modelConfig->mapping() as $mapped_field) {
                     $input_name = $this->getOptionValueForField($mapped_field->destinationField());
-                    $options[$item_name][$input_name] = $mapped_field->destinationField()->get_nicename();
+                    $options[ $item_name ][ $input_name ] = $mapped_field->destinationField()->get_nicename();
                 }
             }
         }
         // And add questions (group by question group).
-        foreach(EEM_Question_Group::instance()->get_all() as $question_group){
-            foreach($question_group->questions() as $question) {
-                if( $question->is_system_question()) {
-                    if($question->system_ID() === 'state'){
+        foreach (EEM_Question_Group::instance()->get_all() as $question_group) {
+            foreach ($question_group->questions() as $question) {
+                if ($question->is_system_question()) {
+                    if ($question->system_ID() === 'state') {
                         $append = 'STA_ID';
-                    } elseif($question->system_ID() === 'country'){
+                    } elseif ($question->system_ID() === 'country') {
                         $append = 'CNT_ISO';
-                    } else{
+                    } else {
                         $append = 'ATT_' . $question->system_ID();
                     }
                     $option_value = 'Attendee.' . $append;
                 } else {
                     $option_value = 'Question.' . $question->ID();
                 }
-                $options[$question_group->name()][$option_value] = $question->admin_label();
+                $options[ $question_group->name() ][ $option_value ] = $question->admin_label();
             }
         }
 //        $options = array_merge(
@@ -159,8 +159,8 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
                 return $this->getOptionValueForField($mapped_info->destinationField());
             }
         }
-        foreach($this->config->getQuestionMapping() as $question_id => $column_for_question){
-            if($column_name === $column_for_question){
+        foreach ($this->config->getQuestionMapping() as $question_id => $column_for_question) {
+            if ($column_name === $column_for_question) {
                 return 'Question.' . $question_id;
             }
         }
@@ -173,7 +173,8 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
      * @return string
      * @throws EE_Error
      */
-    public function getOptionValueForField(EE_Model_Field_Base $field){
+    public function getOptionValueForField(EE_Model_Field_Base $field)
+    {
         return $field->get_model_name() . '.' . $field->get_name();
     }
 
@@ -213,9 +214,9 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
         $found_firstname = false;
         $found_email = false;
         foreach ($valid_data as $input_name1 => $value1) {
-            if($value1 === 'Attendee.ATT_fname') {
+            if ($value1 === 'Attendee.ATT_fname') {
                 $found_firstname = true;
-            } elseif($value1 === 'Attendee.ATT_email'){
+            } elseif ($value1 === 'Attendee.ATT_email') {
                 $found_email = true;
             }
             foreach ($valid_data as $input_name2 => $value2) {
@@ -229,7 +230,7 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
                     $input2->add_validation_error(
                         sprintf(
                             esc_html__(
-                            // translators: %1$s CSV column name, %2$s Event Espresso Data name, %3$s CSV column name
+                                // translators: %1$s CSV column name, %2$s Event Espresso Data name, %3$s CSV column name
                             // @codingStandardsIgnoreStart
                                 'CSV file column "%1$s" maps to the same Event Espresso data (%2$s) as "%3$s". This is not allowed.',
                                 // @codingStandardsIgnoreEnd
@@ -244,18 +245,17 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
             }
         }
 
-        if (! $found_firstname){
+        if (! $found_firstname) {
             $this->add_validation_error(
                 esc_html__('The Attendee First Name must be mapped to a CSV column.', 'event_espresso')
             );
         }
-        if (! $found_email){
+        if (! $found_email) {
             $this->add_validation_error(
                 esc_html__('The Attendee Email must be mapped to a CSV column.', 'event_espresso')
             );
         }
     }
-
 }
 // End of file MapCsvColumnsSubform.php
 // Location: EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms/MapCsvColumnsSubform.php

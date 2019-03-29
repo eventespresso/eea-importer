@@ -57,8 +57,8 @@ abstract class ImportCsvAttendeesStep extends SequentialStepForm
         $form_config,
         EE_Registry $registry,
         ImportCsvAttendeesConfig $config,
-        JsonWpOptionManager $option_manager)
-    {
+        JsonWpOptionManager $option_manager
+    ) {
         $this->config = $config;
         $this->option_manager = $option_manager;
         parent::__construct(
@@ -71,7 +71,6 @@ abstract class ImportCsvAttendeesStep extends SequentialStepForm
             $registry
         );
     }
-
 }
 // End of file ImportCsvAttendeesStep.php
 // Location: EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers/ImportCsvAttendeesStep.php

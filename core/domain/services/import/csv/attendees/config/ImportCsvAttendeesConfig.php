@@ -137,8 +137,7 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
 
     public function clearMapping()
     {
-        foreach($this->model_configs as $model_config)
-        {
+        foreach ($this->model_configs as $model_config) {
             $model_config->clearMapping();
         }
         $this->question_mapping = [];
@@ -206,7 +205,7 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
             $this->setEventId($event_id);
             $this->setTicketId($ticket_id);
             if (isset($data->question_mapping)) {
-                $this->setQuestionMapping((array)$data->question_mapping);
+                $this->setQuestionMapping((array) $data->question_mapping);
             }
             return true;
         }

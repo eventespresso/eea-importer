@@ -1,6 +1,7 @@
 <?php
 
 namespace EventEspresso\AttendeeImporter\core\services\import\mapping\coercion;
+
 use EventEspresso\core\domain\services\factories\FactoryInterface;
 use EventEspresso\core\services\loaders\LoaderInterface;
 
@@ -34,13 +35,13 @@ class ImportFieldCoercionStrategyFactory
      */
     public function create($coercion_strategy_name)
     {
-        switch(strtolower($coercion_strategy_name)){
+        switch (strtolower($coercion_strategy_name)) {
             case 'boolean':
             case 'bool':
                 return $this->loader->getNew('EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceBoolean');
-            case 'state' :
+            case 'state':
                 return $this->loader->getNew('EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceState');
-            case 'country' :
+            case 'country':
                 return $this->loader->getNew('EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceCountry');
             case 'string':
             default:

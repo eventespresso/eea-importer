@@ -51,8 +51,7 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
         ImportFieldCoercionStrategyFactory $coercion_factory,
         EE_Model_Field_Base $destinationField,
         $sourceProperty = null
-    )
-    {
+    ) {
         $this->source_property = $sourceProperty;
         $this->destination_field = $destinationField;
         $this->coercion_factory = $coercion_factory;
@@ -150,7 +149,8 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
     {
         if ($data instanceof stdClass
             && property_exists($data, 'input')) {
-            $this->map($data->input);}
+            $this->map($data->input);
+        }
     }
 }
 // End of file ImportFieldMap.php

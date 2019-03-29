@@ -1,6 +1,7 @@
 <?php
 
 namespace EventEspresso\AttendeeImporter\core\services\import\config\models;
+
 use EE_Model_Field_Base;
 use EEM_Base;
 

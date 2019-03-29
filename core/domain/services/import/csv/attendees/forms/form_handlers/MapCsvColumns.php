@@ -47,8 +47,7 @@ class MapCsvColumns extends ImportCsvAttendeesStep
         EE_Registry $registry,
         ImportCsvAttendeesConfig $config,
         JsonWpOptionManager $option_manager
-    )
-    {
+    ) {
         $this->setDisplayable(true);
         parent::__construct(
             2,
@@ -95,7 +94,7 @@ class MapCsvColumns extends ImportCsvAttendeesStep
     public function process($form_data = array())
     {
         try {
-            $valid_data = (array)parent::process($form_data);
+            $valid_data = (array) parent::process($form_data);
         } catch (InvalidFormSubmissionException  $e) {
             return false;
         }
@@ -105,7 +104,7 @@ class MapCsvColumns extends ImportCsvAttendeesStep
         foreach ($valid_data['columns'] as $column_name => $model_and_field) {
             $model_and_field_array = explode('.', $model_and_field, 2);
             if ($model_and_field_array[0] === 'Question') {
-                $question_mapping[$model_and_field_array[1]] = $column_name;
+                $question_mapping[ $model_and_field_array[1] ] = $column_name;
             }
             $model_config = $model_configs->get($model_and_field_array[0]);
             if ($model_config instanceof ImportModelConfigInterface) {

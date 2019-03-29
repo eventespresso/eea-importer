@@ -24,7 +24,6 @@ abstract class ImportTypeUiManagerBase implements ImportTypeUiManagerInterface
     {
         return $this->getImportType()->getSlug();
     }
-
 }
 // End of file ImportTypeUiManagerBase.php
 // Location: EventEspresso\AttendeeImporter\core\services\import/ImportTypeUiManagerBase.php

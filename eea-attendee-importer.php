@@ -38,9 +38,9 @@
  * ------------------------------------------------------------------------
  */
 // define versions and this file
-define( 'EE_ATTENDEE_IMPORTER_CORE_VERSION_REQUIRED', '4.8.0.rc.0000' );
-define( 'EE_ATTENDEE_IMPORTER_VERSION', '1.0.0.dev.000' );
-define( 'EE_ATTENDEE_IMPORTER_PLUGIN_FILE',  __FILE__ );
+define('EE_ATTENDEE_IMPORTER_CORE_VERSION_REQUIRED', '4.8.0.rc.0000');
+define('EE_ATTENDEE_IMPORTER_VERSION', '1.0.0.dev.000');
+define('EE_ATTENDEE_IMPORTER_PLUGIN_FILE', __FILE__);
 
 
 
@@ -48,60 +48,64 @@ define( 'EE_ATTENDEE_IMPORTER_PLUGIN_FILE',  __FILE__ );
 /**
  *    captures plugin activation errors for debugging
  */
-function espresso_attendee_importer_plugin_activation_errors() {
+function espresso_attendee_importer_plugin_activation_errors()
+{
 
-	if ( WP_DEBUG ) {
-		$activation_errors = ob_get_contents();
-		file_put_contents( EVENT_ESPRESSO_UPLOAD_DIR . 'logs' . DS . 'espresso_attendee_importer_plugin_activation_errors.html', $activation_errors );
-	}
+    if (WP_DEBUG) {
+        $activation_errors = ob_get_contents();
+        file_put_contents(EVENT_ESPRESSO_UPLOAD_DIR . 'logs' . DS . 'espresso_attendee_importer_plugin_activation_errors.html', $activation_errors);
+    }
 }
-add_action( 'activated_plugin', 'espresso_attendee_importer_plugin_activation_errors' );
+add_action('activated_plugin', 'espresso_attendee_importer_plugin_activation_errors');
 
 
 
 /**
  *    registers addon with EE core
  */
-function load_espresso_attendee_importer() {
-  if ( defined('PHP_VERSION_ID')
+function load_espresso_attendee_importer()
+{
+    if (defined('PHP_VERSION_ID')
         && PHP_VERSION_ID > 50600
-        && class_exists( 'EE_Addon' )) {
-      // attendee_importer version
-      require_once ( plugin_dir_path( __FILE__ ) . 'EE_Attendee_Importer.class.php' );
-      EE_Attendee_Importer::register_addon();
-  } else {
-    add_action( 'admin_notices', 'espresso_attendee_importer_activation_error' );
-  }
+        && class_exists('EE_Addon')) {
+        // attendee_importer version
+        require_once(plugin_dir_path(__FILE__) . 'EE_Attendee_Importer.class.php');
+        EE_Attendee_Importer::register_addon();
+    } else {
+        add_action('admin_notices', 'espresso_attendee_importer_activation_error');
+    }
 }
-add_action( 'AHEE__EE_System__load_espresso_addons', 'load_espresso_attendee_importer' );
+add_action('AHEE__EE_System__load_espresso_addons', 'load_espresso_attendee_importer');
 
 
 
 /**
  *    verifies that addon was activated
  */
-function espresso_attendee_importer_activation_check() {
-  if ( ! did_action( 'AHEE__EE_System__load_espresso_addons' ) ) {
-    add_action( 'admin_notices', 'espresso_attendee_importer_activation_error' );
-  }
+function espresso_attendee_importer_activation_check()
+{
+    if (! did_action('AHEE__EE_System__load_espresso_addons')) {
+        add_action('admin_notices', 'espresso_attendee_importer_activation_error');
+    }
 }
-add_action( 'init', 'espresso_attendee_importer_activation_check', 1 );
+add_action('init', 'espresso_attendee_importer_activation_check', 1);
 
 
 
 /**
  *    displays activation error admin notice
  */
-function espresso_attendee_importer_activation_error() {
-  unset( $_GET[ 'activate' ] );
-  unset( $_REQUEST[ 'activate' ] );
-  if ( ! function_exists( 'deactivate_plugins' ) ) {
-    require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-  }
-  deactivate_plugins( plugin_basename( EE_ATTENDEE_IMPORTER_PLUGIN_FILE ) );
-  ?>
+function espresso_attendee_importer_activation_error()
+{
+    unset($_GET['activate']);
+    unset($_REQUEST['activate']);
+    if (! function_exists('deactivate_plugins')) {
+        require_once(ABSPATH . 'wp-admin/includes/plugin.php');
+    }
+    deactivate_plugins(plugin_basename(EE_ATTENDEE_IMPORTER_PLUGIN_FILE));
+    ?>
   <div class="error">
-    <p><?php printf( __( 'Event Espresso Attendee Importer could not be activated. Please ensure that Event Espresso version %1$s and PHP version %2$s or higher is running', 'event_espresso' ), EE_ATTENDEE_IMPORTER_CORE_VERSION_REQUIRED, '5.6' ); ?></p>
+    <p><?php printf(__('Event Espresso Attendee Importer could not be activated. Please ensure that Event Espresso version %1$s and PHP version %2$s or higher is running', 'event_espresso'), EE_ATTENDEE_IMPORTER_CORE_VERSION_REQUIRED, '5.6'); ?></p>
   </div>
 <?php
 }

@@ -69,7 +69,7 @@ abstract class ImportConfigBase implements ImportConfigInterface
         $simple_obj = new stdClass();
         $simple_obj->json_model_configs = [];
         foreach ($this->getModelConfigs() as $model_config) {
-            $simple_obj->json_model_configs[$model_config->getModelName()] = $model_config->toJsonSerializableData();
+            $simple_obj->json_model_configs[ $model_config->getModelName() ] = $model_config->toJsonSerializableData();
         }
         return $simple_obj;
     }
@@ -82,10 +82,10 @@ abstract class ImportConfigBase implements ImportConfigInterface
      */
     public function fromJsonSerializedData($data)
     {
-        if($data instanceof stdClass
+        if ($data instanceof stdClass
             && property_exists($data, 'json_model_configs')
-            && $data->json_model_configs instanceof stdClass){
-            foreach($data->json_model_configs as $json_key => $json_value) {
+            && $data->json_model_configs instanceof stdClass) {
+            foreach ($data->json_model_configs as $json_key => $json_value) {
                     $obj = $this->getModelConfigs()->get($json_key);
                     $obj->fromJsonSerializedData($json_value);
             }

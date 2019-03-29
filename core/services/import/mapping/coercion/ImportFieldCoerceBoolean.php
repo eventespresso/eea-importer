@@ -1,6 +1,7 @@
 <?php
 
 namespace EventEspresso\AttendeeImporter\core\services\import\mapping\coercion;
+
 use EE_Base_Class;
 
 /**

@@ -1,6 +1,7 @@
 <?php
 
 namespace EventEspresso\AttendeeImporter\core\services\import\extractors;
+
 use EventEspresso\core\exceptions\InvalidFilePathException;
 use LogicException;
 use RuntimeException;
@@ -45,7 +46,7 @@ class ImportExtractorCsv extends ImportExtractorBase
      */
     public function setSource($source)
     {
-        $this->filepath = (string)$source;
+        $this->filepath = (string) $source;
 
         $this->fileObject = new SplFileObject($this->filepath, 'r');
         $this->fileObject->setFlags(SplFileObject::READ_CSV);
@@ -64,7 +65,7 @@ class ImportExtractorCsv extends ImportExtractorBase
      */
     public function getItemAt($offset)
     {
-        if($offset >= $this->countItems()){
+        if ($offset >= $this->countItems()) {
             return null;
         }
         $this->fileObject->seek($offset);

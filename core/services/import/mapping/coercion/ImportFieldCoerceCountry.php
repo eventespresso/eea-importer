@@ -38,7 +38,7 @@ class ImportFieldCoerceCountry implements ImportFieldCoercionInterface
      */
     public function coerce($inputProperty)
     {
-        $inputProperty = (string)$inputProperty;
+        $inputProperty = (string) $inputProperty;
         return $this->country_model->get_var(
             [
                 [

@@ -2,6 +2,8 @@
 
 namespace EventEspresso\AttendeeImporter\core\services\import;
 
+use EventEspresso\AttendeeImporter\core\domain\services\commands\ImportBaseCommand;
+use EventEspresso\AttendeeImporter\core\services\import\extractors\ImportExtractorBase;
 
 /**
  * Class ImportTypeInterface
@@ -39,10 +41,16 @@ interface ImportTypeManagerInterface
 
     /**
      * @since $VID:$
-     * @return ImportUnitCommandInterface
+     * @return ImportBaseCommand
      */
-    public function getImportCommand();
-    
+    public function getImportCommand($args);
+
+    /**
+     * @since $VID:$
+     * @return ImportExtractorBase
+     */
+    public function getExtractor();
+
     /**
      * @since $VID:$
      * @return string

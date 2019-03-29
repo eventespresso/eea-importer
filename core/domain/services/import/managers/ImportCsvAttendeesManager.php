@@ -2,7 +2,10 @@
 
 namespace EventEspresso\AttendeeImporter\core\domain\services\import\managers;
 
+use EventEspresso\AttendeeImporter\core\domain\services\commands\ImportBaseCommand;
+use EventEspresso\AttendeeImporter\core\services\import\extractors\ImportExtractorBase;
 use EventEspresso\AttendeeImporter\core\services\import\ImportTypeManagerInterface;
+use EventEspresso\core\services\loaders\LoaderInterface;
 
 /**
  * Class ImportCsvAttendeesManager
@@ -16,15 +19,25 @@ use EventEspresso\AttendeeImporter\core\services\import\ImportTypeManagerInterfa
  */
 class ImportCsvAttendeesManager implements ImportTypeManagerInterface
 {
+    /**
+     * @var LoaderInterface
+     */
+    private $loader;
+
+    /**
+     * @var ImportExtractorBase
+     */
+    protected $extractor;
 
 
     /**
-     * @since $VID:$
-     * @return ImportUnitCommandInterface
+     * ImportCsvAttendeesManager constructor.
+     * @param LoaderInterface $loader
      */
-    public function getImportCommand()
+    public function __construct(LoaderInterface $loader)
     {
-        // TODO: Implement getImportCommand() method.
+
+        $this->loader = $loader;
     }
 
     /**
@@ -70,6 +83,30 @@ class ImportCsvAttendeesManager implements ImportTypeManagerInterface
     public function getUrlToFiles()
     {
         return EE_ATTENDEE_IMPORTER_URL . 'core/domain/services/import/csv/attendees';
+    }
+
+    /**
+     * @since $VID:$
+     * @return ImportBaseCommand
+     */
+    public function getImportCommand($args)
+    {
+        return $this->loader->getNew(
+            'EventEspresso\AttendeeImporter\core\domain\services\commands\ImportCommand',
+            $args
+        );
+    }
+
+    /**
+     * @since $VID:$
+     * @return ImportExtractorBase
+     */
+    public function getExtractor()
+    {
+        if (! $this->extractor instanceof ImportExtractorBase) {
+            $this->extractor = $this->loader->getShared('EventEspresso\AttendeeImporter\core\services\import\extractors\ImportExtractorCsv');
+        }
+        return $this->extractor;
     }
 }
 // End of file ImportCsvAttendeesManager.php

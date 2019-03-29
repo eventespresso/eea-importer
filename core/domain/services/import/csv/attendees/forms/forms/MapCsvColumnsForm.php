@@ -1,5 +1,6 @@
 <?php
 namespace EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms;
+
 use EE_Error;
 use EE_Form_Section_HTML_From_Template;
 use EE_Form_Section_Proper;

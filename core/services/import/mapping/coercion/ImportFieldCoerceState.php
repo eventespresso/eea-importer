@@ -37,7 +37,7 @@ class ImportFieldCoerceState implements ImportFieldCoercionInterface
      */
     public function coerce($inputProperty)
     {
-        $inputProperty = (string)$inputProperty;
+        $inputProperty = (string) $inputProperty;
         return (int) $this->state_model->get_var(
             [
                 [

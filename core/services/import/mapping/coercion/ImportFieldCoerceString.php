@@ -1,6 +1,7 @@
 <?php
 
 namespace EventEspresso\AttendeeImporter\core\services\import\mapping\coercion;
+
 use EE_Base_Class;
 
 /**
@@ -26,7 +27,7 @@ class ImportFieldCoerceString implements ImportFieldCoercionInterface
      */
     public function coerce($inputProperty)
     {
-        return (string)$inputProperty;
+        return (string) $inputProperty;
     }
 
     /**

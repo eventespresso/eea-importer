@@ -5,6 +5,7 @@ namespace EventEspresso\AttendeeImporter\core\libraries\batch\JobHandlers;
 use EE_Error;
 use EventEspresso\AttendeeImporter\core\domain\services\commands\ImportCommand;
 use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
+use EventEspresso\AttendeeImporter\core\domain\services\import\managers\ImportCsvAttendeesManager;
 use EventEspresso\AttendeeImporter\core\services\import\extractors\ImportExtractorCsv;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFilePathException;
@@ -42,16 +43,20 @@ class AttendeeImporterBatchJob extends JobHandler
      * @var JsonWpOptionManager
      */
     private $option_manager;
+    /**
+     * @var ImportCsvAttendeesManager
+     */
+    private $manager;
 
     public function __construct(
         ImportCsvAttendeesConfig $config,
-        JsonWpOptionManager $option_manager
-    )
-    {
-
+        JsonWpOptionManager $option_manager,
+        ImportCsvAttendeesManager $manager
+    ) {
         $this->config = $config;
         $this->option_manager = $option_manager;
         $this->option_manager->populateFromDb($config);
+        $this->manager = $manager;
     }
 
 
@@ -66,11 +71,10 @@ class AttendeeImporterBatchJob extends JobHandler
      */
     public function create_job(JobParameters $job_parameters)
     {
-        $import_extractor = new ImportExtractorCsv();
-        $import_extractor->setSource($this->config->getFile());
+        $this->manager->getExtractor()->setSource($this->config->getFile());
 
         // Get the header row
-        $csv_row = $import_extractor->getNextItem();
+        $csv_row = $this->manager->getExtractor()->getNextItem();
         if (empty($csv_row)) {
             // The file's totally empty. That's whack.
             $job_parameters->set_status(JobParameters::status_error);
@@ -84,7 +88,7 @@ class AttendeeImporterBatchJob extends JobHandler
                 'headers' => $csv_row
             ]
         );
-        $job_parameters->set_job_size($import_extractor->countItems() - 1);
+        $job_parameters->set_job_size($this->manager->getExtractor()->countItems() - 1);
         return new JobStepResponse(
             $job_parameters,
             esc_html__('Beginning import...', 'event_espresso')
@@ -103,21 +107,20 @@ class AttendeeImporterBatchJob extends JobHandler
      */
     public function continue_job(JobParameters $job_parameters, $batch_size = 50)
     {
-        $import_extractor = new ImportExtractorCsv();
-        $import_extractor->setSource($this->config->getFile());
+        $this->manager->getExtractor()->setSource($this->config->getFile());
 
         $command_bus = LoaderFactory::getLoader()->getShared('EventEspresso\core\services\commands\CommandBus');
         // grab the line from the file
         $processed_this_batch = 0;
         $column_headers = $job_parameters->extra_datum('headers');
         while ($processed_this_batch < $batch_size) {
-            $csv_row = $import_extractor->getItemAt($job_parameters->units_processed() + 1 + $processed_this_batch);
-            if( ! $csv_row ){
+            $csv_row = $this->manager->getExtractor()->getItemAt($job_parameters->units_processed() + 1 + $processed_this_batch);
+            if (! $csv_row) {
                 break;
             }
             if (is_array($csv_row) && count($csv_row) === count($column_headers)) {
                 $command_bus->execute(
-                    new ImportCommand(
+                    $this->manager->getImportCommand(
                         array_combine(
                             $column_headers,
                             $csv_row

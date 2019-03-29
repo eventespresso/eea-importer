@@ -1,6 +1,7 @@
 <?php
 
 namespace EventEspresso\AttendeeImporter\core\domain\services\commands;
+
 use EventEspresso\core\domain\services\capabilities\CapCheck;
 use EventEspresso\core\domain\services\capabilities\CapCheckInterface;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
@@ -63,7 +64,7 @@ class ImportBaseCommand extends Command implements CommandRequiresCapCheckInterf
      */
     public function csvColumnValue($column_name)
     {
-        return isset($this->csv_row[$column_name]) ? $this->csv_row[$column_name] : null;
+        return isset($this->csv_row[ $column_name ]) ? $this->csv_row[ $column_name ] : null;
     }
 }
 // End of file ModelObjFromCsvRowCommand.php

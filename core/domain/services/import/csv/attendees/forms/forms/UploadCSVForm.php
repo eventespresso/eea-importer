@@ -61,7 +61,7 @@ class UploadCSVForm extends EE_Form_Section_Proper
     {
         parent::_validate();
         $valid_data = $this->valid_data();
-        if( ! isset($valid_data['file'])) {
+        if (! isset($valid_data['file'])) {
             return;
         }
         $file = $valid_data['file'];
@@ -88,12 +88,12 @@ class UploadCSVForm extends EE_Form_Section_Proper
      * @param $url
      * @return int
      */
-    protected function getAttachmentId( $url ) {
+    protected function getAttachmentId($url)
+    {
         global $wpdb;
         $attachment_id = $wpdb->get_var($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE guid=%s LIMIT 1", $url));
         return $attachment_id;
     }
-
 }
 // End of file UploadCSVForm.php
 // Location: EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms/UploadCSVForm.php

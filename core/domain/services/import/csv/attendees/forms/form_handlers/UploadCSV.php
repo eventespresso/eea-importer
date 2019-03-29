@@ -100,7 +100,7 @@ class UploadCsv extends ImportCsvAttendeesStep
             . DS
             . 'csv-uploads'
             . DS
-            . wp_generate_password(15,false)
+            . wp_generate_password(15, false)
             . '/'
             .  $valid_data['file']->getName()
         );

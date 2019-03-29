@@ -98,7 +98,6 @@ class StepsManager extends SequentialStepFormManager
         }
         return $this->form_steps;
     }
-
 }
 // End of file StesManager.php
 // Location: EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers/StesManager.php

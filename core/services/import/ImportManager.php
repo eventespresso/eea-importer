@@ -21,7 +21,7 @@ use EventEspresso\core\services\loaders\Loader;
 class ImportManager
 {
     protected $loader;
-    public function __construct( Loader $loader)
+    public function __construct(Loader $loader)
     {
         $this->loader = $loader;
     }
@@ -35,7 +35,7 @@ class ImportManager
     public function loadImportTypeUiManagers()
     {
         $import_domain_filepath = wp_normalize_path(EE_ATTENDEE_IMPORTER_PATH . 'core/domain/services/import/managers/ui');
-        $import_source_types = glob($import_domain_filepath . '*', GLOB_ONLYDIR );
+        $import_source_types = glob($import_domain_filepath . '*', GLOB_ONLYDIR);
 
         $loader = new CollectionLoader(
             new CollectionDetails(
@@ -47,10 +47,10 @@ class ImportManager
 
                 array('EventEspresso\AttendeeImporter\core\domain\services\import\managers\ui'),
                 // filepaths to classes to add
-//                $import_source_types,
+                //                $import_source_types,
                 array(),
                 // file mask to use if parsing folder for files to add
-//                '*UiManager.php',
+                //                '*UiManager.php',
                 '',
                 // what to use as identifier for collection entities
                 // using CLASS NAME prevents duplicates (works like a singleton)
@@ -68,11 +68,11 @@ class ImportManager
      * @return ImportTypeUiManagerInterface
      * @throws CollectionLoaderException
      */
-    public function getUiManager($slug) {
+    public function getUiManager($slug)
+    {
         $collection = $this->loadImportTypeUiManagers();
         return $collection->get($slug);
     }
-
 }
 // End of file ImportManager.php
 // Location: EventEspresso\core\domain\services\import/ImportManager.php

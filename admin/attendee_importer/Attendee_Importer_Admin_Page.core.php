@@ -103,7 +103,7 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
 
     public function load_scripts_styles()
     {
-        wp_register_script('espresso_attendee_importer_admin', EE_ATTENDEE_IMPORTER_ADMIN_ASSETS_URL . 'espresso_attendee_importer_admin.js', array('espresso_core'), EE_ATTENDEE_IMPORTER_VERSION, TRUE);
+        wp_register_script('espresso_attendee_importer_admin', EE_ATTENDEE_IMPORTER_ADMIN_ASSETS_URL . 'espresso_attendee_importer_admin.js', array('espresso_core'), EE_ATTENDEE_IMPORTER_VERSION, true);
         wp_enqueue_script('espresso_attendee_importer_admin');
     }
 
@@ -122,7 +122,7 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
 
     protected function usage()
     {
-        $this->_template_args['admin_page_content'] = EEH_Template::display_template(EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_PATH . 'attendee_importer_usage_info.template.php', array(), TRUE);
+        $this->_template_args['admin_page_content'] = EEH_Template::display_template(EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_PATH . 'attendee_importer_usage_info.template.php', array(), true);
         $this->display_admin_page_with_no_sidebar();
     }
 
@@ -136,7 +136,7 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
         /* @var $import_manager EventEspresso\core\services\import\ImportManager */
         $import_type_ui_managaers = $import_manager->loadImportTypeUiManagers();
         $html = '';
-        foreach($import_type_ui_managaers as $ui_manager) {
+        foreach ($import_type_ui_managaers as $ui_manager) {
             $import_type = $ui_manager->getImportType();
             $html .= EEH_Template::display_template(
                 EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_PATH . 'attendee_importer_manager_type.template.php',
@@ -217,11 +217,8 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
                     'type' => $this->_req_data['type']
                 ],
                 EE_ATTENDEE_IMPORTER_ADMIN_URL
-            )
-        );
+            ));
     }
-
-
 }
 // End of file Attendee_Importer_Admin_Page.core.php
 // Location: /wp-content/plugins/eea-attendee-importer/admin/attendee_importer/Attendee_Importer_Admin_Page.core.php

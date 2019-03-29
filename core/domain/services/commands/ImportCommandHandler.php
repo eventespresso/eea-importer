@@ -100,9 +100,9 @@ class ImportCommandHandler extends CompositeCommandHandler
         $attendee_config = $this->config->getModelConfigs()->get('Attendee');
         $fields_mapped = $attendee_config->mapping();
         $attendee_fields = [];
-        foreach($fields_mapped as $field_mapped) {
+        foreach ($fields_mapped as $field_mapped) {
             /* @var $field_mapped ImportFieldMap */
-            $attendee_fields[$field_mapped->destinationFieldName()] = $field_mapped->applyMap($command->csvColumnValue($field_mapped->sourceProperty()));
+            $attendee_fields[ $field_mapped->destinationFieldName() ] = $field_mapped->applyMap($command->csvColumnValue($field_mapped->sourceProperty()));
         }
         $attendee = $this->commandBus()->execute(
             $this->commandFactory()->getNew(
@@ -132,7 +132,7 @@ class ImportCommandHandler extends CompositeCommandHandler
         foreach ($this->config->getQuestionMapping() as $question_id => $csv_column) {
             $question = EEM_Question::instance()->get_one_by_ID($question_id);
             $answer = $command->csvColumnValue($csv_column);
-            if(EEM_Question::instance()->question_type_is_in_category($question->type(),'multi-answer-enum')){
+            if (EEM_Question::instance()->question_type_is_in_category($question->type(), 'multi-answer-enum')) {
                 $answer = explode(',', $answer);
             }
             $answer = EE_Answer::new_instance(

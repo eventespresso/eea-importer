@@ -71,8 +71,8 @@ class ImportAttendeeCommandHandler extends CommandHandler
         }
         $fields_to_values = [];
         $row = $command->csvRow();
-        foreach($fields_to_columns as $field_name => $csv_column_name) {
-            $fields_to_values[$field_name] = $row[$csv_column_name];
+        foreach ($fields_to_columns as $field_name => $csv_column_name) {
+            $fields_to_values[ $field_name ] = $row[ $csv_column_name ];
         }
         // Check for a duplicate attendee in the DB already. If it exists, return it.
         $attendee = EEM_Attendee::instance()->find_existing_attendee(
