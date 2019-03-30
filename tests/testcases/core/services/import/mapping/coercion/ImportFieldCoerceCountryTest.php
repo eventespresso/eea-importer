@@ -1,6 +1,6 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\services\import\mapping\coercion;
+namespace EventEspresso\AttendeeImporter\application\services\import\mapping\coercion;
 
 use EEM_Country;
 use EventEspresso\core\services\loaders\LoaderFactory;
@@ -48,13 +48,13 @@ class ImportFieldCoerceCountryTest extends PHPUnit_Framework_TestCase
      */
     public function testCoerce($input, $exists)
     {
-        $coercer = LoaderFactory::getLoader()->getShared('EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceCountry');
+        $coercer = LoaderFactory::getLoader()->getShared('EventEspresso\AttendeeImporter\application\services\import\mapping\coercion\ImportFieldCoerceCountry');
         $this->assertEquals($exists, (bool) $coercer->coerce($input));
     }
 
     public function testCoerceGetsRightId()
     {
-        $coercer = LoaderFactory::getLoader()->getShared('EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceCountry');
+        $coercer = LoaderFactory::getLoader()->getShared('EventEspresso\AttendeeImporter\application\services\import\mapping\coercion\ImportFieldCoerceCountry');
         $a_country = EEM_Country::instance()->get_one();
         $this->assertEquals(
             $a_country->ID(),
@@ -63,4 +63,4 @@ class ImportFieldCoerceCountryTest extends PHPUnit_Framework_TestCase
     }
 }
 // End of file ImportFieldCoerceStateTest.php
-// Location: EventEspresso\AttendeeImporter\core\services\import\mapping\coercion/ImportFieldCoerceStateTest.php
+// Location: EventEspresso\AttendeeImporter\application\services\import\mapping\coercion/ImportFieldCoerceStateTest.php

@@ -1,6 +1,6 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\services\import\mapping\coercion;
+namespace EventEspresso\AttendeeImporter\application\services\import\mapping\coercion;
 
 use EventEspresso\core\services\loaders\LoaderFactory;
 use PHPUnit_Framework_TestCase;
@@ -48,13 +48,13 @@ class ImportFieldCoerceStateTest extends PHPUnit_Framework_TestCase
      */
     public function testCoerce($input, $exists)
     {
-        $coercer = LoaderFactory::getLoader()->getShared('EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceState');
+        $coercer = LoaderFactory::getLoader()->getShared('EventEspresso\AttendeeImporter\application\services\import\mapping\coercion\ImportFieldCoerceState');
         $this->assertEquals($exists, (bool) $coercer->coerce($input));
     }
 
     public function testCoerceGetsRightId()
     {
-        $coercer = LoaderFactory::getLoader()->getShared('EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceState');
+        $coercer = LoaderFactory::getLoader()->getShared('EventEspresso\AttendeeImporter\application\services\import\mapping\coercion\ImportFieldCoerceState');
         $a_state = \EEM_State::instance()->get_one();
         $this->assertEquals(
             $a_state->ID(),
@@ -64,4 +64,4 @@ class ImportFieldCoerceStateTest extends PHPUnit_Framework_TestCase
 
 }
 // End of file ImportFieldCoerceStateTest.php
-// Location: EventEspresso\AttendeeImporter\core\services\import\mapping\coercion/ImportFieldCoerceStateTest.php
+// Location: EventEspresso\AttendeeImporter\application\services\import\mapping\coercion/ImportFieldCoerceStateTest.php
