@@ -5,7 +5,10 @@
 define('EE_ATTENDEE_IMPORTER_BASENAME', plugin_basename(EE_ATTENDEE_IMPORTER_PLUGIN_FILE));
 define('EE_ATTENDEE_IMPORTER_PATH', plugin_dir_path(__FILE__));
 define('EE_ATTENDEE_IMPORTER_URL', plugin_dir_url(__FILE__));
-define('EE_ATTENDEE_IMPORTER_ADMIN', EE_ATTENDEE_IMPORTER_PATH . 'admin' . DS . 'attendee_importer' . DS);
+define(
+    'EE_ATTENDEE_IMPORTER_ADMIN',
+    EE_ATTENDEE_IMPORTER_PATH . 'ui' . DS . 'admin' . DS . 'attendee_importer' . DS
+);
 
 /**
  * Class  EE_Attendee_Importer
@@ -65,7 +68,7 @@ class EE_Attendee_Importer extends EE_Addon
                 'min_core_version'      => EE_ATTENDEE_IMPORTER_CORE_VERSION_REQUIRED,
                 'main_file_path'        => EE_ATTENDEE_IMPORTER_PLUGIN_FILE,
                 'namespace'             => array(
-                    'FQNS' => 'EventEspresso\NewAddon',
+                    'FQNS' => 'EventEspresso\AttendeeImporter',
                     'DIR'  => __DIR__,
                 ),
                 'admin_path'            => EE_ATTENDEE_IMPORTER_ADMIN,
@@ -74,7 +77,11 @@ class EE_Attendee_Importer extends EE_Addon
                     'Attendee_Importer_Admin_Page'      => EE_ATTENDEE_IMPORTER_ADMIN . 'Attendee_Importer_Admin_Page.core.php',
                     'Attendee_Importer_Admin_Page_Init' => EE_ATTENDEE_IMPORTER_ADMIN . 'Attendee_Importer_Admin_Page_Init.core.php',
                 ),
-                'module_paths'          => array( EE_ATTENDEE_IMPORTER_PATH . 'EED_Attendee_Importer.module.php' ),
+                'class_paths' => EE_ATTENDEE_IMPORTER_PATH . 'domain' . DS . 'entities' . DS . 'db_classes',
+                'model_paths' => EE_ATTENDEE_IMPORTER_PATH . 'domain' . DS . 'entities' . DS . 'db_models',
+                'module_paths'          => [
+                    EE_ATTENDEE_IMPORTER_PATH . 'domain' . DS . 'services' . DS . 'modules' . DS . 'EED_Attendee_Importer.module.php'
+                ],
                 // if plugin update engine is being used for auto-updates. not needed if PUE is not being used.
                 'pue_options'           => array(
                     'pue_plugin_slug' => 'eea-attendee-importer',
@@ -96,8 +103,6 @@ class EE_Attendee_Importer extends EE_Addon
                         array( 'Attendee_Importer_Thing', 'edit_things', 'edit_others_things', 'edit_private_things' ),
                     ),
                 ),
-                'class_paths'           => EE_ATTENDEE_IMPORTER_PATH . 'core' . DS . 'db_classes',
-                'model_paths'           => EE_ATTENDEE_IMPORTER_PATH . 'core' . DS . 'db_models',
             )
         );
     }
@@ -109,9 +114,9 @@ class EE_Attendee_Importer extends EE_Addon
      */
     public function after_registration()
     {
-        EE_Psr4AutoloaderInit::psr4_loader()->addNamespace('EventEspresso\AttendeeImporter', __DIR__);
+        EE_Psr4AutoloaderInit::psr4_loader()->addNamespace('EventEspresso\AttendeeImporter', EE_ATTENDEE_IMPORTER_PATH);
         $attendee_mover_dependencies = array(
-            'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\StepsManager'                            => array(
+            'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\StepsManager'                            => array(
                 null,
                 null,
                 null,
@@ -119,73 +124,73 @@ class EE_Attendee_Importer extends EE_Addon
                 null,
                 'EE_Request' => EE_Dependency_Map::load_from_cache,
             ),
-            'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\UploadCsv'                             => array(
+            'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\UploadCsv'                             => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
-                'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache
             ),
-            'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\MapCsvColumns'                            => array(
+            'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\MapCsvColumns'                            => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
-                'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
             ),
-            'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\ChooseEvent'                           => array(
+            'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\ChooseEvent'                           => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
-                'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
             ),
-            'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\ChooseTicket'                          => array(
+            'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\ChooseTicket'                          => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
-                'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
-                '\EventEspresso\AttendeeImporter\core\domain\services\import\managers\ui\ImportCsvAttendeesUiManager' => EE_Dependency_Map::load_from_cache,
+                '\EventEspresso\AttendeeImporter\domain\services\import\managers\ui\ImportCsvAttendeesUiManager' => EE_Dependency_Map::load_from_cache,
             ),
-            'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\Complete'                                => array(
+            'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\Complete'                                => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
-                'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
             ),
-            'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms\MapCsvColumnsSubform'                              => [
+            'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\forms\MapCsvColumnsSubform'                              => [
                 array(),
-                'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
             ],
             // commands handlers
-            'EventEspresso\AttendeeImporter\core\domain\services\commands\ImportCommandHandler' => [
+            'EventEspresso\AttendeeImporter\domain\services\commands\ImportCommandHandler' => [
                 'EventEspresso\core\services\commands\CommandBusInterface' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\commands\CommandFactoryInterface' => EE_Dependency_Map::load_from_cache,
-                'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
             ],
-            'EventEspresso\AttendeeImporter\core\domain\services\commands\ImportAttendeeCommandHandler' => [
-                'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache
+            'EventEspresso\AttendeeImporter\domain\services\commands\ImportAttendeeCommandHandler' => [
+                'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache
             ],
-            'EventEspresso\AttendeeImporter\core\services\import\ImportManager' => [
+            'EventEspresso\AttendeeImporter\application\services\import\ImportManager' => [
                 'EventEspresso\core\services\loaders\Loader' => EE_Dependency_Map::load_from_cache
             ],
-            'EventEspresso\AttendeeImporter\core\domain\services\import\managers\ui\ImportCsvAttendeesUiManager' => [
+            'EventEspresso\AttendeeImporter\domain\services\import\managers\ui\ImportCsvAttendeesUiManager' => [
                 'EventEspresso\core\services\loaders\Loader' => EE_Dependency_Map::load_from_cache
             ],
-            'EventEspresso\AttendeeImporter\core\libraries\batch\JobHandlers\AttendeeImporterBatchJob' => [
-                'EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
+            'EventEspresso\AttendeeImporter\domain\services\batch\JobHandlers\AttendeeImporterBatchJob' => [
+                'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
-                'EventEspresso\AttendeeImporter\core\domain\services\import\managers\ImportCsvAttendeesManager' => EE_Dependency_Map::load_from_cache
+                'EventEspresso\AttendeeImporter\domain\services\import\managers\ImportCsvAttendeesManager' => EE_Dependency_Map::load_from_cache
             ],
-            'EventEspresso\AttendeeImporter\core\services\import\mapping\ImportFieldMap' => [
-                'EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoercionStrategyFactory' => EE_Dependency_Map::load_from_cache,
+            'EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFieldMap' => [
+                'EventEspresso\AttendeeImporter\application\services\import\mapping\coercion\ImportFieldCoercionStrategyFactory' => EE_Dependency_Map::load_from_cache,
             ],
-            'EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoercionStrategyFactory' => [
+            'EventEspresso\AttendeeImporter\application\services\import\mapping\coercion\ImportFieldCoercionStrategyFactory' => [
                 'EventEspresso\core\services\loaders\LoaderInterface' => EE_Dependency_Map::load_from_cache
             ],
-            'EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceState' => [
+            'EventEspresso\AttendeeImporter\application\services\import\mapping\coercion\ImportFieldCoerceState' => [
                 'EEM_State' => EE_Dependency_Map::load_from_cache
             ],
-            'EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceCountry' => [
+            'EventEspresso\AttendeeImporter\application\services\import\mapping\coercion\ImportFieldCoerceCountry' => [
                 'EEM_Country' => EE_Dependency_Map::load_from_cache
             ],
-            'EventEspresso\AttendeeImporter\core\domain\services\import\managers\ImportCsvAttendeesManager' => [
+            'EventEspresso\AttendeeImporter\domain\services\import\managers\ImportCsvAttendeesManager' => [
                 'EventEspresso\core\services\loaders\LoaderInterface' => EE_Dependency_Map::load_from_cache
             ],
-            'EventEspresso\AttendeeImporter\core\domain\services\import\managers\ui\ImportCsvAttendeesUiManager' => [
+            'EventEspresso\AttendeeImporter\domain\services\import\managers\ui\ImportCsvAttendeesUiManager' => [
                 'EventEspresso\core\services\loaders\LoaderInterface' => EE_Dependency_Map::load_from_cache
             ],
         );

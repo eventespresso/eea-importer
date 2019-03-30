@@ -69,7 +69,7 @@ function load_espresso_attendee_importer()
         && PHP_VERSION_ID > 50600
         && class_exists('EE_Addon')) {
         // attendee_importer version
-        require_once(plugin_dir_path(__FILE__) . 'EE_Attendee_Importer.class.php');
+        require_once(plugin_dir_path(__FILE__) . '/src/EE_Attendee_Importer.class.php');
         EE_Attendee_Importer::register_addon();
     } else {
         add_action('admin_notices', 'espresso_attendee_importer_activation_error');
