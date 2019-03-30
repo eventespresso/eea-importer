@@ -1,4 +1,5 @@
-<?php use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\StepsManager;
+<?php
+use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\StepsManager;
 use EventEspresso\core\exceptions\ExceptionStackTraceDisplay;
 use EventEspresso\core\libraries\form_sections\form_handlers\InvalidFormHandlerException;
 use EventEspresso\core\services\loaders\LoaderFactory;
@@ -122,7 +123,11 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
 
     protected function usage()
     {
-        $this->_template_args['admin_page_content'] = EEH_Template::display_template(EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_PATH . 'attendee_importer_usage_info.template.php', array(), true);
+        $this->_template_args['admin_page_content'] = EEH_Template::display_template(
+            EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_PATH . 'attendee_importer_usage_info.template.php',
+            array(),
+            true
+        );
         $this->display_admin_page_with_no_sidebar();
     }
 
@@ -160,14 +165,14 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
 
     /**
      * @since $VID:$
-     * @return EventEspresso\AttendeeImporter\core\services\import\ImportManager
+     * @return EventEspresso\AttendeeImporter\application\services\import\ImportManager
      * @throws InvalidArgumentException
      * @throws \EventEspresso\core\exceptions\InvalidDataTypeException
      * @throws \EventEspresso\core\exceptions\InvalidInterfaceException
      */
     protected function getImportManager()
     {
-        return LoaderFactory::getLoader()->load('EventEspresso\AttendeeImporter\core\services\import\ImportManager');
+        return LoaderFactory::getLoader()->load('EventEspresso\AttendeeImporter\application\services\import\ImportManager');
     }
 
     /**
