@@ -1,12 +1,12 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\libraries\batch\JobHandlers;
+namespace EventEspresso\AttendeeImporter\domain\services\batch\JobHandlers;
 
 use EE_Error;
-use EventEspresso\AttendeeImporter\core\domain\services\commands\ImportCommand;
-use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
-use EventEspresso\AttendeeImporter\core\domain\services\import\managers\ImportCsvAttendeesManager;
-use EventEspresso\AttendeeImporter\core\services\import\extractors\ImportExtractorCsv;
+use EventEspresso\AttendeeImporter\domain\services\commands\ImportCommand;
+use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
+use EventEspresso\AttendeeImporter\domain\services\import\managers\ImportCsvAttendeesManager;
+use EventEspresso\AttendeeImporter\application\services\import\extractors\ImportExtractorCsv;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFilePathException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
