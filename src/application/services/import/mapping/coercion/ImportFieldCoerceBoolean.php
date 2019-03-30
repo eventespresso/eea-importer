@@ -1,6 +1,6 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\services\import\mapping\coercion;
+namespace EventEspresso\AttendeeImporter\application\services\import\mapping\coercion;
 
 use EE_Base_Class;
 
@@ -53,4 +53,4 @@ class ImportFieldCoerceBoolean implements ImportFieldCoercionInterface
     }
 }
 // End of file ImportFieldBoolean.php
-// Location: EventEspresso\AttendeeImporter\core\services\import\mapping\coercion/ImportFieldBoolean.php
+// Location: EventEspresso\AttendeeImporter\application\services\import\mapping\coercion/ImportFieldBoolean.php

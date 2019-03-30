@@ -1,9 +1,9 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\services\import;
+namespace EventEspresso\AttendeeImporter\application\services\import;
 
-use EventEspresso\AttendeeImporter\core\domain\services\commands\ImportBaseCommand;
-use EventEspresso\AttendeeImporter\core\services\import\extractors\ImportExtractorBase;
+use EventEspresso\AttendeeImporter\domain\services\commands\ImportBaseCommand;
+use EventEspresso\AttendeeImporter\application\services\import\extractors\ImportExtractorBase;
 
 /**
  * Class ImportTypeInterface

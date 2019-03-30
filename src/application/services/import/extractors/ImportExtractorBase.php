@@ -1,6 +1,6 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\services\import\extractors;
+namespace EventEspresso\AttendeeImporter\application\services\import\extractors;
 
 /**
  * Class ImportExtractorBase
@@ -16,4 +16,4 @@ abstract class ImportExtractorBase implements ImportExtractorInterface
 {
 }
 // End of file ImportExtractorBase.php
-// Location: EventEspresso\AttendeeImporter\core\services\import\extractors/ImportExtractorBase.php
+// Location: EventEspresso\AttendeeImporter\application\services\import\extractors/ImportExtractorBase.php

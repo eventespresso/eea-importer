@@ -1,10 +1,10 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\services\import\config\models;
+namespace EventEspresso\AttendeeImporter\application\services\import\config\models;
 
 use EE_Error;
 use EE_Money_Field;
-use EventEspresso\AttendeeImporter\core\services\import\mapping\ImportFieldMap;
+use EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFieldMap;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\services\collections\Collection;
 use EventEspresso\core\services\collections\CollectionDetailsException;
@@ -52,7 +52,7 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
      */
     protected function setNewMap()
     {
-        $this->mapping = new Collection('EventEspresso\AttendeeImporter\core\services\import\mapping\ImportFieldMap');
+        $this->mapping = new Collection('EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFieldMap');
     }
 
     /**
@@ -81,7 +81,7 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
             $field = $this->getModel()->field_settings_for($field_name);
             $this->mapping->add(
                 LoaderFactory::getLoader()->getNew(
-                    'EventEspresso\AttendeeImporter\core\services\import\mapping\ImportFieldMap',
+                    'EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFieldMap',
                     [
                         null,
                         $field
@@ -117,7 +117,7 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
     {
         return $this->getModel()->get_this_model_name();
     }
-    
+
     public function map($input_column, $field_name)
     {
         $map_obj = $this->mapping->get($field_name);
@@ -184,7 +184,7 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
                     if (! $field_map instanceof ImportFieldMap) {
                         $field = $this->getModel()->field_settings_for($field_name);
                         $field_map = LoaderFactory::getLoader()->getNew(
-                            'EventEspresso\AttendeeImporter\core\services\import\mapping\ImportFieldMap',
+                            'EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFieldMap',
                             [
                                 null,
                                 $field
@@ -205,4 +205,4 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
     }
 }
 // End of file ImportModelConfigBase.php
-// Location: EventEspresso\AttendeeImporter\core\services\import\config\models/ImportModelConfigBase.php
+// Location: EventEspresso\AttendeeImporter\application\services\import\config\models/ImportModelConfigBase.php

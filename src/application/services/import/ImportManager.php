@@ -1,6 +1,6 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\services\import;
+namespace EventEspresso\AttendeeImporter\application\services\import;
 
 use EventEspresso\core\services\collections\CollectionDetails;
 use EventEspresso\core\services\collections\CollectionInterface;
@@ -34,7 +34,7 @@ class ImportManager
      */
     public function loadImportTypeUiManagers()
     {
-        $import_domain_filepath = wp_normalize_path(EE_ATTENDEE_IMPORTER_PATH . 'core/domain/services/import/managers/ui');
+        $import_domain_filepath = wp_normalize_path(EE_ATTENDEE_IMPORTER_PATH . 'domain/services/import/managers/ui');
         $import_source_types = glob($import_domain_filepath . '*', GLOB_ONLYDIR);
 
         $loader = new CollectionLoader(
@@ -42,10 +42,10 @@ class ImportManager
                 // collection name
                 'import_type_ui_managers',
                 // collection interface
-                'EventEspresso\AttendeeImporter\core\services\import\ImportTypeUiManagerInterface',
+                'EventEspresso\AttendeeImporter\application\services\import\ImportTypeUiManagerInterface',
                 // FQCNs for classes to add (all classes within that namespace will be loaded)
 
-                array('EventEspresso\AttendeeImporter\core\domain\services\import\managers\ui'),
+                array('EventEspresso\AttendeeImporter\domain\services\import\managers\ui'),
                 // filepaths to classes to add
                 //                $import_source_types,
                 array(),

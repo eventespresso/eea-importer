@@ -1,6 +1,6 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\services\import\mapping\coercion;
+namespace EventEspresso\AttendeeImporter\application\services\import\mapping\coercion;
 
 use EE_Base_Class;
 
@@ -52,4 +52,4 @@ class ImportFieldCoerceString implements ImportFieldCoercionInterface
     }
 }
 // End of file ImportFieldString.php
-// Location: EventEspresso\AttendeeImporter\core\services\import\mapping\coercion/ImportFieldString.php
+// Location: EventEspresso\AttendeeImporter\application\services\import\mapping\coercion/ImportFieldString.php

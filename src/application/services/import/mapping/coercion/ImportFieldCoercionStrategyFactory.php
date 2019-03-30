@@ -1,6 +1,6 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\services\import\mapping\coercion;
+namespace EventEspresso\AttendeeImporter\application\services\import\mapping\coercion;
 
 use EventEspresso\core\domain\services\factories\FactoryInterface;
 use EventEspresso\core\services\loaders\LoaderInterface;
@@ -38,16 +38,16 @@ class ImportFieldCoercionStrategyFactory
         switch (strtolower($coercion_strategy_name)) {
             case 'boolean':
             case 'bool':
-                return $this->loader->getNew('EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceBoolean');
+                return $this->loader->getNew('EventEspresso\AttendeeImporter\application\services\import\mapping\coercion\ImportFieldCoerceBoolean');
             case 'state':
-                return $this->loader->getNew('EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceState');
+                return $this->loader->getNew('EventEspresso\AttendeeImporter\application\services\import\mapping\coercion\ImportFieldCoerceState');
             case 'country':
-                return $this->loader->getNew('EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceCountry');
+                return $this->loader->getNew('EventEspresso\AttendeeImporter\application\services\import\mapping\coercion\ImportFieldCoerceCountry');
             case 'string':
             default:
-                return $this->loader->getNew('EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceString');
+                return $this->loader->getNew('EventEspresso\AttendeeImporter\application\services\import\mapping\coercion\ImportFieldCoerceString');
         }
     }
 }
 // End of file ImportFieldCoercionStrategyFactory.php
-// Location: EventEspresso\AttendeeImporter\core\services\import\mapping\coercion/ImportFieldCoercionStrategyFactory.php
+// Location: EventEspresso\AttendeeImporter\application\services\import\mapping\coercion/ImportFieldCoercionStrategyFactory.php

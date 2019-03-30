@@ -1,6 +1,6 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\services\import;
+namespace EventEspresso\AttendeeImporter\application\services\import;
 
 use EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepFormManager;
 

@@ -1,15 +1,15 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\services\import\mapping;
+namespace EventEspresso\AttendeeImporter\application\services\import\mapping;
 
 use EE_Base_Class;
 use EE_Boolean_Field;
 use EE_Error;
 use EE_Foreign_Key_Int_Field;
 use EE_Model_Field_Base;
-use EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoerceString;
-use EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoercionInterface;
-use EventEspresso\AttendeeImporter\core\services\import\mapping\coercion\ImportFieldCoercionStrategyFactory;
+use EventEspresso\AttendeeImporter\application\services\import\mapping\coercion\ImportFieldCoerceString;
+use EventEspresso\AttendeeImporter\application\services\import\mapping\coercion\ImportFieldCoercionInterface;
+use EventEspresso\AttendeeImporter\application\services\import\mapping\coercion\ImportFieldCoercionStrategyFactory;
 use EventEspresso\core\services\json\JsonSerializableAndUnserializable;
 use stdClass;
 
@@ -154,4 +154,4 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
     }
 }
 // End of file ImportFieldMap.php
-// Location: EventEspresso\AttendeeImporter\services\import\mapping/ImportFieldMap.php
+// Location: EventEspresso\AttendeeImporter\application\services\import\mapping/ImportFieldMap.php

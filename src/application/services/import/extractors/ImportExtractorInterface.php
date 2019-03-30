@@ -1,5 +1,5 @@
 <?php
-namespace EventEspresso\AttendeeImporter\core\services\import\extractors;
+namespace EventEspresso\AttendeeImporter\application\services\import\extractors;
 
 /**
  * Class Extractor

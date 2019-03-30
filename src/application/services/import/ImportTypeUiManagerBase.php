@@ -1,6 +1,6 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\services\import;
+namespace EventEspresso\AttendeeImporter\application\services\import;
 
 /**
  * Class ImportTypeUiManagerBase
@@ -26,4 +26,4 @@ abstract class ImportTypeUiManagerBase implements ImportTypeUiManagerInterface
     }
 }
 // End of file ImportTypeUiManagerBase.php
-// Location: EventEspresso\AttendeeImporter\core\services\import/ImportTypeUiManagerBase.php
+// Location: EventEspresso\AttendeeImporter\application\services\import/ImportTypeUiManagerBase.php

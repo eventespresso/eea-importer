@@ -1,8 +1,8 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\services\import\config;
+namespace EventEspresso\AttendeeImporter\application\services\import\config;
 
-use EventEspresso\AttendeeImporter\core\services\import\config\models\ImportModelConfigInterface;
+use EventEspresso\AttendeeImporter\application\services\import\config\models\ImportModelConfigInterface;
 use EventEspresso\core\services\collections\CollectionInterface;
 use stdClass;
 

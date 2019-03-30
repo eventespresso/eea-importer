@@ -1,12 +1,12 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\services\import\config\models;
+namespace EventEspresso\AttendeeImporter\application\services\import\config\models;
 
 use EE_Model_Field_Base;
 use EEM_Attendee;
 use EEM_Base;
-use EventEspresso\AttendeeImporter\core\services\import\config\ImportModelConfigInterface;
-use EventEspresso\AttendeeImporter\services\import\mapping\ImportMappingCollection;
+use EventEspresso\AttendeeImporter\application\services\import\config\ImportModelConfigInterface;
+use EventEspresso\AttendeeImporter\application\services\import\mapping\ImportMappingCollection;
 
 /**
  * Class ImportAnswerConfig
@@ -46,4 +46,4 @@ class ImportAnswerConfig extends ImportModelConfigBase
     }
 }
 // End of file ImportAnswerConfig.php
-// Location: EventEspresso\AttendeeImporter\core\services\import\config\models/ImportAnswerConfig.php
+// Location: EventEspresso\AttendeeImporter\application\services\import\config\models/ImportAnswerConfig.php

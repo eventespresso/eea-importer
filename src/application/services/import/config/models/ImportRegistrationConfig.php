@@ -1,6 +1,6 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\services\import\config\models;
+namespace EventEspresso\AttendeeImporter\application\services\import\config\models;
 
 use EE_Model_Field_Base;
 use EEM_Base;
@@ -30,4 +30,4 @@ class ImportRegistrationConfig extends ImportModelConfigBase
     }
 }
 // End of file ImportRegistrationConfig.php
-// Location: EventEspresso\AttendeeImporter\core\services\import\config\models/ImportRegistrationConfig.php
+// Location: EventEspresso\AttendeeImporter\application\services\import\config\models/ImportRegistrationConfig.php

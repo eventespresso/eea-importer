@@ -1,8 +1,9 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\services\import\mapping\coercion;
+namespace EventEspresso\AttendeeImporter\application\services\import\mapping\coercion;
 
 use EE_Error;
+use EEM_Country;
 use EEM_State;
 
 /**
@@ -15,17 +16,17 @@ use EEM_State;
  * @since         $VID:$
  *
  */
-class ImportFieldCoerceState implements ImportFieldCoercionInterface
+class ImportFieldCoerceCountry implements ImportFieldCoercionInterface
 {
 
     /**
-     * @var EEM_State
+     * @var EEM_Country
      */
-    private $state_model;
+    private $country_model;
 
-    public function __construct(EEM_State $state_model)
+    public function __construct(EEM_Country $state_model)
     {
-        $this->state_model = $state_model;
+        $this->country_model = $state_model;
     }
 
     /**
@@ -38,18 +39,18 @@ class ImportFieldCoerceState implements ImportFieldCoercionInterface
     public function coerce($inputProperty)
     {
         $inputProperty = (string) $inputProperty;
-        return (int) $this->state_model->get_var(
+        return $this->country_model->get_var(
             [
                 [
                     'OR' => [
-                        'STA_abbrev' => $inputProperty,
-                        'STA_name' => $inputProperty,
-                        'STA_ID' => $inputProperty
+                        'CNT_ISO' => $inputProperty,
+                        'CNT_ISO3' => $inputProperty,
+                        'CNT_name' => $inputProperty
                     ]
                 ],
                 'limit' => 1
             ],
-            'STA_ID'
+            'CNT_ISO'
         );
     }
 
@@ -61,7 +62,7 @@ class ImportFieldCoerceState implements ImportFieldCoercionInterface
      */
     public function toJsonSerializableData()
     {
-        return 'state';
+        return 'country';
     }
 
     /**
@@ -75,4 +76,4 @@ class ImportFieldCoerceState implements ImportFieldCoercionInterface
     }
 }
 // End of file ImportFieldString.php
-// Location: EventEspresso\AttendeeImporter\core\services\import\mapping\coercion/ImportFieldString.php
+// Location: EventEspresso\AttendeeImporter\application\services\import\mapping\coercion/ImportFieldString.php
