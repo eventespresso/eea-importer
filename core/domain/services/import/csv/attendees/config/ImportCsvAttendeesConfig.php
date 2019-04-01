@@ -21,7 +21,7 @@ use stdClass;
 /**
  * Class ImportCsvAttendeesConfig
  *
- * Description
+ * Stores all the input from the user about how to perform the import.
  *
  * @package     Event Espresso
  * @author         Mike Nelson
