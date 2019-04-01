@@ -114,7 +114,6 @@ class EE_Attendee_Importer extends EE_Addon
      */
     public function after_registration()
     {
-        EE_Psr4AutoloaderInit::psr4_loader()->addNamespace('EventEspresso\AttendeeImporter', EE_ATTENDEE_IMPORTER_PATH);
         $attendee_mover_dependencies = array(
             'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\StepsManager'                            => array(
                 null,
