@@ -3,6 +3,8 @@
 namespace EventEspresso\AttendeeImporter\application\services\import\config;
 
 use EventEspresso\AttendeeImporter\application\services\import\config\models\ImportModelConfigInterface;
+use EventEspresso\core\exceptions\InvalidClassException;
+use EventEspresso\core\exceptions\InvalidEntityException;
 use EventEspresso\core\services\collections\CollectionInterface;
 use stdClass;
 
@@ -42,10 +44,20 @@ abstract class ImportConfigBase implements ImportConfigInterface
         return $this->model_configs;
     }
 
+    /**
+     * @since $VID:$
+     * @throws InvalidEntityException
+     */
     protected function checkModelConfigsInitialized()
     {
         if (! $this->model_configs_initialized) {
             $this->model_configs = $this->initializeModelConfigCollection();
+            if (! $this->model_configs instanceof CollectionInterface){
+                throw new InvalidEntityException(
+                    $this->model_configs,
+                    'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportModelConfigInterface'
+                );
+            }
             $this->model_configs_initialized = true;
         }
     }

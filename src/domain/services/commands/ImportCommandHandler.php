@@ -10,6 +10,7 @@ use EEM_Question;
 use EEM_Registration;
 use EEM_Ticket;
 use EEM_Transaction;
+use EventEspresso\AttendeeImporter\application\services\import\config\models\ImportModelConfigInterface;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFieldMap;
 use EventEspresso\core\exceptions\InvalidEntityException;
@@ -98,6 +99,9 @@ class ImportCommandHandler extends CompositeCommandHandler
         );
         // Create an attendee
         $attendee_config = $this->config->getModelConfigs()->get('Attendee');
+        if (!$attendee_config instanceof ImportModelConfigInterface) {
+            throw new InvalidEntityException($attendee_config, '\EventEspresso\AttendeeImporter\application\services\import\config\models\ImportModelConfigInterface');
+        }
         $fields_mapped = $attendee_config->mapping();
         $attendee_fields = [];
         foreach ($fields_mapped as $field_mapped) {
@@ -106,7 +110,6 @@ class ImportCommandHandler extends CompositeCommandHandler
         }
         $attendee = $this->commandBus()->execute(
             $this->commandFactory()->getNew(
-
                 'EventEspresso\core\services\commands\attendee\CreateAttendeeCommand',
                 [
                     $attendee_fields,
