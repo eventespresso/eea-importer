@@ -77,8 +77,6 @@ class EE_Attendee_Importer extends EE_Addon
                     'Attendee_Importer_Admin_Page'      => EE_ATTENDEE_IMPORTER_ADMIN . 'Attendee_Importer_Admin_Page.core.php',
                     'Attendee_Importer_Admin_Page_Init' => EE_ATTENDEE_IMPORTER_ADMIN . 'Attendee_Importer_Admin_Page_Init.core.php',
                 ),
-                'class_paths' => EE_ATTENDEE_IMPORTER_PATH . 'domain' . DS . 'entities' . DS . 'db_classes',
-                'model_paths' => EE_ATTENDEE_IMPORTER_PATH . 'domain' . DS . 'entities' . DS . 'db_models',
                 'module_paths'          => [
                     EE_ATTENDEE_IMPORTER_PATH . 'domain' . DS . 'services' . DS . 'modules' . DS . 'EED_Attendee_Importer.module.php'
                 ],
@@ -88,20 +86,6 @@ class EE_Attendee_Importer extends EE_Addon
                     'plugin_basename' => EE_ATTENDEE_IMPORTER_BASENAME,
                     'checkPeriod'     => '24',
                     'use_wp_update'   => false,
-                ),
-                'capabilities'          => array(
-                    'administrator' => array(
-                        'edit_thing',
-                        'edit_things',
-                        'edit_others_things',
-                        'edit_private_things',
-                    ),
-                ),
-                'capability_maps'       => array(
-                    'EE_Meta_Capability_Map_Edit' => array(
-                        'edit_thing',
-                        array( 'Attendee_Importer_Thing', 'edit_things', 'edit_others_things', 'edit_private_things' ),
-                    ),
                 ),
             )
         );
