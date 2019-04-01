@@ -17,7 +17,7 @@ if (!defined('EVENT_ESPRESSO_VERSION')) {
  *
  * @package            Attendee_Importer_Admin_Page (attendee_importer addon)
  * @subpackage    admin/Attendee_Importer_Admin_Page.core.php
- * @author                Darren Ethier, Brent Christensen
+ * @author                Michael Nelson, Brent Christensen
  *
  * ------------------------------------------------------------------------
  */

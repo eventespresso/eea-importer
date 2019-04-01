@@ -10,7 +10,7 @@
  *
  * @package         espresso_events_Attendee_Importer_Hooks
  * @subpackage      wp-content/plugins/eea-attendee-importer/admin/attendee_importer/espresso_events_Attendee_Importer_Hooks.class.php
- * @author              Darren Ethier
+ * @author              Michael Nelson
  *
  * ------------------------------------------------------------------------
  */

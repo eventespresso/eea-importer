@@ -9,7 +9,7 @@
 *
 * @package          Event Espresso (attendee_importer addon)
 * @subpackage       admin/Attendee_Importer_Admin_Page_Init.core.php
-* @author               Darren Ethier
+* @author               Michael Nelson
 *
 * ------------------------------------------------------------------------
 */
