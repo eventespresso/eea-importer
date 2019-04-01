@@ -1,9 +1,9 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms;
+namespace EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\forms;
 
 use EE_Error;
-use EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
+use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -105,4 +105,4 @@ class MapCsvColumnsSubformTest extends PHPUnit_Framework_TestCase
     }
 }
 // End of file MapCsvColumnsFormTest.php
-// Location: EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\forms/MapCsvColumnsFormTest.php
+// Location: EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\forms/MapCsvColumnsFormTest.php

@@ -1,6 +1,6 @@
 <?php
 
-namespace EventEspresso\AttendeeImporter\core\services\import\extractors;
+namespace EventEspresso\AttendeeImporter\application\services\import\extractors;
 
 use EventEspresso\core\exceptions\InvalidFilePathException;
 use LogicException;
@@ -110,4 +110,4 @@ class ImportExtractorCsvTest extends PHPUnit_Framework_TestCase
     }
 }
 // End of file ImportExtractorCsvTest.php
-// Location: EventEspresso\AttendeeImporter\core\services\import\extractors/ImportExtractorCsvTest.php
+// Location: EventEspresso\AttendeeImporter\application\services\import\extractors/ImportExtractorCsvTest.php
