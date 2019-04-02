@@ -85,7 +85,7 @@ class ImportCommandHandler extends CompositeCommandHandler
         );
         $line_item = \EEH_Line_Item::create_ticket_line_item($txn->total_line_item(), $ticket);
         // Create a registration
-        $reg = $this->commandBus()->execute(
+        $registration = $this->commandBus()->execute(
             $this->commandFactory()->getNew(
                 'EventEspresso\core\services\commands\registration\CreateRegistrationCommand',
                 [
@@ -101,19 +101,28 @@ class ImportCommandHandler extends CompositeCommandHandler
             $this->commandFactory()->getNew(
                 '\EventEspresso\AttendeeImporter\domain\services\commands\ImportAttendeeCommand',
                 [
-                    $reg,
+                    $registration,
                     $command->csvRow()
                 ]
             )
         );
 
         // Save the registration, and assign it to the attendee
-        $reg->save(
+        $registration->save(
             [
                 'ATT_ID' => $attendee->ID()
             ]
         );
 
+        $this->commandBus()->execute(
+            $this->commandFactory()->getNew(
+                'EventEspresso\AttendeeImporter\domain\services\commands\ImportAnswersCommand',
+                [
+                    $registration,
+                    $command->csvRow()
+                ]
+            )
+        );
         // @todo: Create a payment
 
         // @todo: Create a payment-registration entry
@@ -121,21 +130,6 @@ class ImportCommandHandler extends CompositeCommandHandler
         // @todo: Create line items
 
         // @todo: Update that ticket and its datetime's ticket sales
-        foreach ($this->config->getQuestionMapping() as $question_id => $csv_column) {
-            $question = EEM_Question::instance()->get_one_by_ID($question_id);
-            $answer = $command->csvColumnValue($csv_column);
-            if (EEM_Question::instance()->question_type_is_in_category($question->type(), 'multi-answer-enum')) {
-                $answer = explode(',', $answer);
-            }
-            $answer = EE_Answer::new_instance(
-                [
-                    'REG_ID' => $reg->ID(),
-                    'QST_ID' => $question_id,
-                    'ANS_value' => $answer
-                ]
-            );
-            $answer->save();
-        }
         return null;
     }
 }

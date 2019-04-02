@@ -6,7 +6,7 @@ use EE_Registration;
 
 /**
  * Class CreateAttendeeCommand
- * DTO for passing data to a AttendeeFromCsvRowCommandHandler
+ * DTO for passing data to a ImportAttendeeCommandHandler
  *
  * @package       Event Espresso
  * @author        Michael Nelson

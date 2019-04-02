@@ -24,10 +24,10 @@ use ReflectionException;
 
 /**
  * Class CreateAttendeeCommandHandler
- * generates and validates an Attendee
+ * Creates an attendee from an unsaved registration.
  *
  * @package       Event Espresso
- * @author        Brent Christensen
+ * @author        Michal Nelson
  */
 class ImportAttendeeCommandHandler extends CompositeCommandHandler
 {
@@ -39,20 +39,14 @@ class ImportAttendeeCommandHandler extends CompositeCommandHandler
      * @var ImportCsvAttendeesConfig
      */
     private $config;
-    /**
-     * @var JsonWpOptionManager
-     */
-    private $option_manager;
 
     public function __construct(
         CommandBusInterface $command_bus,
         CommandFactoryInterface $command_factory,
-        ImportCsvAttendeesConfig $config,
-        JsonWpOptionManager $option_manager
+        ImportCsvAttendeesConfig $config
     ) {
         parent::__construct($command_bus, $command_factory);
         $this->config = $config;
-        $this->option_manager = $option_manager;
     }
 
     /**

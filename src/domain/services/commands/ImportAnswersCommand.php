@@ -11,21 +11,14 @@ use EventEspresso\core\services\commands\Command;
 use EventEspresso\core\services\commands\CommandRequiresCapCheckInterface;
 
 /**
- * Class CreateAttendeeCommand
- * DTO for passing data to a AnswersFromCsvRowCommandHandler
+ * Class ImportAnswersCommand
+ * DTO for passing data to a ImportAnswersCommandHandler
  *
  * @package       Event Espresso
  * @author        Michael Nelson
  */
-class ImportAnswersCommand extends Command implements CommandRequiresCapCheckInterface
+class ImportAnswersCommand extends ImportBaseCommand
 {
-
-    /**
-     * array of details where keys are names of EEM_Attendee model fields
-     *
-     * @var array $csv_row
-     */
-    protected $csv_row;
 
     /**
      * an existing registration to associate this attendee with
@@ -38,22 +31,20 @@ class ImportAnswersCommand extends Command implements CommandRequiresCapCheckInt
     /**
      * CreateAttendeeCommand constructor.
      *
-     * @param array           $csv_row
-     * @param EE_Registration $config
+     * @param EE_Registration $registration
+     * @param array $csv_row
      */
-    public function __construct(array $csv_row, \EE_Attendee_Importer_Config $config)
+    public function __construct(EE_Registration $registration, array $csv_row)
     {
-        $this->csv_row = $csv_row;
-        $this->registration = $config;
+        $this->registration = $registration;
+        parent::__construct($csv_row);
     }
 
-
     /**
-     * @return CapCheckInterface
-     * @throws InvalidDataTypeException
+     * @return EE_Registration
      */
-    public function getCapCheck()
+    public function getRegistration()
     {
-        return new CapCheck('import', 'ee_attendee_import');
+        return $this->registration;
     }
 }

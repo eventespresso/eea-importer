@@ -2,58 +2,72 @@
 
 namespace EventEspresso\AttendeeImporter\domain\services\commands;
 
-use EE_Attendee;
+use EE_Answer;
 use EE_Error;
-use EE_Registration;
-use EEM_Attendee;
-use EventEspresso\core\exceptions\InvalidEntityException;
+use EEM_Question;
+use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
+use EventEspresso\core\exceptions\InvalidDataTypeException;
+use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\services\commands\CommandHandler;
 use EventEspresso\core\services\commands\CommandInterface;
+use EventEspresso\core\services\options\JsonWpOptionManager;
+use InvalidArgumentException;
+use ReflectionException;
 
 /**
- * Class CreateAttendeeCommandHandler
- * generates and validates an Attendee
+ * Class ImportAnswersCommandHandler
+ * Creates the answers to custom questions for the command's registration based on its data.
  *
  * @package       Event Espresso
- * @author        Brent Christensen
+ * @author        Michal Nelson
  */
 class ImportAnswersCommandHandler extends CommandHandler
 {
+    /**
+     * @var ImportCsvAttendeesConfig
+     */
+    private $config;
 
 
     /**
+     * @param ImportCsvAttendeesConfig $config
+     * @param JsonWpOptionManager $option_manager
      */
-    public function __construct()
-    {
+    public function __construct(
+        ImportCsvAttendeesConfig $config
+    ) {
+        $this->config = $config;
     }
 
 
     /**
-     * @param CommandInterface $command
-     * @return EE_Attendee
+     * @param CommandInterface|ImportAnswersCommand $command
+     * @return array
      * @throws EE_Error
-     * @throws InvalidEntityException
+     * @throws InvalidDataTypeException
+     * @throws InvalidInterfaceException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
     public function handle(CommandInterface $command)
     {
-        /** @var ImportAnswersCommand $command */
-        if (! $command instanceof ImportAnswersCommand) {
-            throw new InvalidEntityException(get_class($command), 'CreateAttendeeCommand');
+        $answers = [];
+        foreach ($this->config->getQuestionMapping() as $question_id => $csv_column) {
+            $question = EEM_Question::instance()->get_one_by_ID($question_id);
+            $answer = $command->csvColumnValue($csv_column);
+            if (EEM_Question::instance()->question_type_is_in_category($question->type(), 'multi-answer-enum')) {
+                $answer = explode(',', $answer);
+            }
+            $answer = EE_Answer::new_instance(
+                [
+                    'REG_ID' => $command->getRegistration()->ID(),
+                    'QST_ID' => $question_id,
+                    'ANS_value' => $answer
+                ]
+            );
+            $answer->save();
+            $answers[] = $answer;
         }
-//        $this->commandBus()->execute(
-//            $this->commandFactory()->getNew(
-//                'EventEspresso\core\services\commands\transaction\CreateTransactionCommand'
-//            )
-//        );
-        // TODO: Use commands to...
-        // Create an attendee
-        // Create a transaction
-        // Get a ticket
-        // Get an event
-        // Create a registration
-        // Create answers
-        // Create a registration-answer row
-        // Create line items
-        return null;
+        return $answers;
     }
 }
