@@ -74,7 +74,7 @@ class Complete extends SequentialStepForm
                     'subsections' => [
                         'input1' => new EE_Form_Section_HTML(
                             EEH_HTML::h2(esc_html__('Import Successful', 'event_espresso'))
-                            . 'more content to be placed here...'
+                            . esc_html__('You can now view the newly-created registrations.', 'event_espresso')
                         )
                     ]
                 )
