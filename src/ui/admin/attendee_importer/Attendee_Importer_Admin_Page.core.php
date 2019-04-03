@@ -1,5 +1,4 @@
 <?php
-use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\StepsManager;
 use EventEspresso\core\exceptions\ExceptionStackTraceDisplay;
 use EventEspresso\core\libraries\form_sections\form_handlers\InvalidFormHandlerException;
 use EventEspresso\core\services\loaders\LoaderFactory;

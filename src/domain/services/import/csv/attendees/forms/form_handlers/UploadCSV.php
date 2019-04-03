@@ -45,7 +45,7 @@ class UploadCsv extends ImportCsvAttendeesStep
     {
         $this->setDisplayable(true);
         parent::__construct(
-            1,
+            3,
             esc_html__('Upload', 'event_espresso'),
             esc_html__('"Upload" Attendee Importer Step', 'event_espresso'),
             'upload',
