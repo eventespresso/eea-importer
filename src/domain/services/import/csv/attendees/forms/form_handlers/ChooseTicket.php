@@ -95,16 +95,6 @@ class ChooseTicket extends ImportCsvAttendeesStep
                             'default' => $this->config->getTicketId()
                         ]
                     ),
-                    'notice' => new EE_Form_Section_HTML(
-                        EEH_HTML::p(
-                            esc_html__(
-                                // @codingStandardsIgnoreStart
-                                'The import will start after this step. Please wait for it to complete before closing this window, turning off your computer, or navigating away.',
-                                // @codingStandardsIgnoreEnd
-                                'event_espresso'
-                            )
-                        )
-                    )
                 ]
             ]
         );
@@ -133,7 +123,7 @@ class ChooseTicket extends ImportCsvAttendeesStep
 
         $this->config->setTicketId($valid_data['ticket']);
         $this->option_manager->saveToDb($this->config);
-
+        $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);
         return true;
     }
 }
