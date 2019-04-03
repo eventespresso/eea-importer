@@ -122,7 +122,7 @@ class ChooseEvent extends ImportCsvAttendeesStep
                 ]
             ]
         );
-        if (count($tickets) === 1){
+        if (count($tickets) === 1) {
             $ticket = reset($tickets);
             $this->config->setTicketId($ticket->ID());
             $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_OTHER);

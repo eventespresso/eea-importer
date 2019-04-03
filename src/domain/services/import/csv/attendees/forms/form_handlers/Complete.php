@@ -69,7 +69,9 @@ class Complete extends ImportCsvAttendeesStep
                 [
                 'action'   => 'default',
                 'event_id' => $this->config->getEventId(),
-            ], REG_ADMIN_URL)
+                ],
+                REG_ADMIN_URL
+            )
         );
     }
 
