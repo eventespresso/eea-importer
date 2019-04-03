@@ -3,11 +3,12 @@
 namespace EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers;
 
 use DomainException;
+use EE_Admin_Page;
 use EE_Error;
 use EE_Form_Section_HTML;
 use EE_Form_Section_Proper;
-use EE_Registration;
 use EE_Registry;
+use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\core\exceptions\EntityNotFoundException;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidEntityException;
@@ -15,6 +16,7 @@ use EventEspresso\core\exceptions\InvalidFormSubmissionException;
 use EventEspresso\core\exceptions\UnexpectedEntityException;
 use EventEspresso\core\libraries\form_sections\form_handlers\FormHandler;
 use EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepForm;
+use EventEspresso\core\services\options\JsonWpOptionManager;
 use InvalidArgumentException;
 use LogicException;
 use OutOfRangeException;
@@ -30,7 +32,7 @@ use EEH_HTML;
  * @author        Michael Nelson
  * @since         1.0.0
  */
-class Complete extends SequentialStepForm
+class Complete extends ImportCsvAttendeesStep
 {
 
 
@@ -38,14 +40,17 @@ class Complete extends SequentialStepForm
      * SelectTicket constructor
      *
      * @param EE_Registry $registry
-     * @throws InvalidDataTypeException
-     * @throws InvalidArgumentException
+     * @param ImportCsvAttendeesConfig $config
+     * @param JsonWpOptionManager $option_manager
      * @throws DomainException
-     * @throws EE_Error
-     * @throws ReflectionException
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
      */
-    public function __construct(EE_Registry $registry)
-    {
+    public function __construct(
+        EE_Registry $registry,
+        ImportCsvAttendeesConfig $config,
+        JsonWpOptionManager $option_manager
+    ) {
         parent::__construct(
             5,
             esc_html__('Complete', 'event_espresso'),
@@ -53,7 +58,18 @@ class Complete extends SequentialStepForm
             'complete',
             '',
             FormHandler::ADD_FORM_TAGS_AND_SUBMIT,
-            $registry
+            $registry,
+            $config,
+            $option_manager
+        );
+        $this->setSubmitBtnText(esc_html__('View Imported Registrations', 'event_espresso'));
+        $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_OTHER);
+        $this->setRedirectUrl(
+            EE_Admin_Page::add_query_args_and_nonce(
+                [
+                'action'   => 'default',
+                'event_id' => $this->config->getEventId(),
+            ], REG_ADMIN_URL)
         );
     }
 

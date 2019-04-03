@@ -44,7 +44,7 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
      * @var array keys are question IDs, values are the CSV columns they map to.
      * Maybe we'll think of a more elegant solution than this, but this at least works.
      */
-    protected $question_mapping;
+    protected $question_mapping = array();
 
     /**
      * Gets the filepath to read.
