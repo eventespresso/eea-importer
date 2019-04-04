@@ -126,11 +126,6 @@ class ChooseEvent extends ImportCsvAttendeesStep
             $ticket = reset($tickets);
             $this->config->setTicketId($ticket->ID());
             $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_OTHER);
-            $this->removeRedirectArgs(
-                [
-                    'ee-form-step'
-                ]
-            );
             $this->addRedirectArgs(
                 [
                     'ee-form-step' => 'upload'
