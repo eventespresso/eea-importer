@@ -8,6 +8,8 @@ use EE_Form_Section_Proper;
 use EE_Registry;
 use EE_Select_Ajax_Model_Rest_Input;
 use EED_Attendee_Importer;
+use EEH_URL;
+use EEM_Ticket;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFormSubmissionException;
@@ -48,7 +50,7 @@ class ChooseEvent extends ImportCsvAttendeesStep
     ) {
         $this->setDisplayable(true);
         parent::__construct(
-            3,
+            1,
             esc_html__('Choose Event', 'event_espresso'),
             esc_html__('"Choose Event" Attendee Importer Step', 'event_espresso'),
             'choose-event',
@@ -111,9 +113,35 @@ class ChooseEvent extends ImportCsvAttendeesStep
             return;
         }
         $this->config->setEventId($valid_data['event']);
+
+        // If there is only one ticket for this event, we can set the default ticket now and skip that step.
+        $tickets = EEM_Ticket::instance()->get_all(
+            [
+                [
+                    'Datetime.EVT_ID' => $this->config->getEventId()
+                ]
+            ]
+        );
+        if (count($tickets) === 1) {
+            $ticket = reset($tickets);
+            $this->config->setTicketId($ticket->ID());
+            $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_OTHER);
+            $this->addRedirectArgs(
+                [
+                    'ee-form-step' => 'upload'
+                ]
+            );
+            EE_Error::add_success(
+                esc_html__(
+                    'Ticket Selection step skipped because there is only one ticket for the event selected.',
+                    'event_espresso'
+                )
+            );
+        } else {
+            $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);
+        }
         $this->option_manager->saveToDb($this->config);
-        // If there is only one ticket for this event, we can set the default ticket now and skip that step.s
-        $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);
+
         return true;
     }
 }

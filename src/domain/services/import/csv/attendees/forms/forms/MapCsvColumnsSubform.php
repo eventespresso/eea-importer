@@ -6,6 +6,7 @@ use EE_Form_Section_Proper;
 use EE_Model_Field_Base;
 use EE_Select_Input;
 use EEM_Answer;
+use EEM_Event;
 use EEM_Question_Group;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFieldMap;
@@ -90,7 +91,15 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
             }
         }
         // And add questions (group by question group).
-        foreach (EEM_Question_Group::instance()->get_all() as $question_group) {
+        $question_groups_for_event = EEM_Question_Group::instance()->get_all(
+            [
+                [
+                    'Event_Question_Group.EVT_ID'      => $this->config->getEventId(),
+                    'QSG_deleted'                      => false,
+                ]
+            ]
+        );
+        foreach ($question_groups_for_event as $question_group) {
             foreach ($question_group->questions() as $question) {
                 if ($question->is_system_question()) {
                     if ($question->system_ID() === 'state') {

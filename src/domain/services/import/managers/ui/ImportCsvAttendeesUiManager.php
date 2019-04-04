@@ -51,7 +51,7 @@ class ImportCsvAttendeesUiManager extends ImportTypeUiManagerBase
                     // base redirect URL
                     $base_url,
                     // default step slug
-                    'upload',
+                    'choose-event',
                 )
             );
             $this->form_steps_manager->buildForm();

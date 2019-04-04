@@ -3,13 +3,16 @@
 namespace EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers;
 
 use DomainException;
+use EE_Admin_Page;
 use EE_Error;
 use EE_Form_Section_Proper;
 use EE_Registry;
 use EED_Attendee_Importer;
+use EEH_URL;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\forms\MapCsvColumnsForm;
 use EventEspresso\AttendeeImporter\application\services\import\config\models\ImportModelConfigInterface;
+use EventEspresso\AttendeeImporter\domain\services\import\managers\ui\ImportCsvAttendeesUiManager;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFormSubmissionException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
@@ -32,6 +35,10 @@ use LogicException;
  */
 class MapCsvColumns extends ImportCsvAttendeesStep
 {
+    /**
+     * @var ImportCsvAttendeesUiManager
+     */
+    private $attendeesUiManager;
 
     /**
      * MapCsvColumns constructor
@@ -39,6 +46,7 @@ class MapCsvColumns extends ImportCsvAttendeesStep
      * @param EE_Registry $registry
      * @param ImportCsvAttendeesConfig $config
      * @param JsonWpOptionManager $option_manager
+     * @param ImportCsvAttendeesUiManager $attendeesUiManager
      * @throws DomainException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
@@ -46,11 +54,13 @@ class MapCsvColumns extends ImportCsvAttendeesStep
     public function __construct(
         EE_Registry $registry,
         ImportCsvAttendeesConfig $config,
-        JsonWpOptionManager $option_manager
+        JsonWpOptionManager $option_manager,
+        ImportCsvAttendeesUiManager $attendeesUiManager
     ) {
         $this->setDisplayable(true);
+        $this->attendeesUiManager = $attendeesUiManager;
         parent::__construct(
-            2,
+            4,
             esc_html__('Map CSV Columns To Event Espresso Data', 'event_espresso'),
             esc_html__('"Map CSV Columns to Event Espresso Data" Attendee Importer Step', 'event_espresso'),
             'map',
@@ -73,8 +83,7 @@ class MapCsvColumns extends ImportCsvAttendeesStep
     {
         $this->option_manager->populateFromDb($this->config);
         return new MapCsvColumnsForm(
-            array(),
-            $this->config
+            array()
         );
     }
 
@@ -113,7 +122,36 @@ class MapCsvColumns extends ImportCsvAttendeesStep
         }
         $this->config->setQuestionMapping($question_mapping);
         $this->option_manager->saveToDb($this->config);
-        $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);
+        $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_OTHER);
+        $this->removeRedirectArgs(
+            [
+                'ee-form-step'
+            ]
+        );
+        $this->setRedirectUrl(
+            EE_Admin_Page::add_query_args_and_nonce(
+                array(
+                    'page'        => 'espresso_batch',
+                    'batch'       => 'job',
+                    'label'       => esc_html__('Applying Offset', 'event_espresso'),
+                    'job_handler' => urlencode(get_class($this->attendeesUiManager->getBatchJobHandler())),
+                    'return_url'  => urlencode(
+                        add_query_arg(
+                            array(
+                                'ee-form-step' => 'complete',
+                            ),
+                            EEH_URL::current_url_without_query_paramaters(
+                                array(
+                                    'ee-form-step',
+                                    'return',
+                                )
+                            )
+                        )
+                    ),
+                ),
+                admin_url()
+            )
+        );
         return true;
     }
 }

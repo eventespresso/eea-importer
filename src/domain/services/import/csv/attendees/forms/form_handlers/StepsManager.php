@@ -77,10 +77,10 @@ class StepsManager extends SequentialStepFormManager
                         'FHEE__EventEspresso\AttendeeImporter\core\domain\services\import\csv\attendees\forms\form_handlers\StepsManager__getFormStepsCollection__form_step_classes',
                         // @codingStandardsIgnoreEnd
                         array(
-                            'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\UploadCsv',
-                            'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\MapCsvColumns',
                             'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\ChooseEvent',
                             'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\ChooseTicket',
+                            'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\UploadCsv',
+                            'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\MapCsvColumns',
                             'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\Complete',
                         )
                     ),
@@ -100,4 +100,4 @@ class StepsManager extends SequentialStepFormManager
     }
 }
 // End of file StesManager.php
-// Location: EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers/StesManager.php
+// Location: EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers/StepsManager.php

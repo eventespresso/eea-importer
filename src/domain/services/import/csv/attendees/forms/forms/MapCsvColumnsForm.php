@@ -2,10 +2,12 @@
 namespace EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\forms;
 
 use EE_Error;
+use EE_Form_Section_HTML;
 use EE_Form_Section_HTML_From_Template;
 use EE_Form_Section_Proper;
 use EE_Model_Field_Base;
 use EE_Select_Input;
+use EEH_HTML;
 use EEM_Answer;
 use EEM_Attendee;
 use EEM_Base;
@@ -42,6 +44,16 @@ class MapCsvColumnsForm extends EE_Form_Section_Proper
                         wp_normalize_path(dirname(dirname(dirname(__FILE__))) . '/templates/ee_attendee_importer_mapping_instructions.template.php')
                     ),
                     'columns' => LoaderFactory::getLoader()->getNew('EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\forms\MapCsvColumnsSubform'),
+                    'notice' => new EE_Form_Section_HTML(
+                        EEH_HTML::p(
+                            esc_html__(
+                            // @codingStandardsIgnoreStart
+                                'The import will start after this step. Please wait for it to complete before closing this window, turning off your computer, or navigating away.',
+                                // @codingStandardsIgnoreEnd
+                                'event_espresso'
+                            )
+                        )
+                    )
                 ],
                 'html_style' => 'display:flex'
             ],

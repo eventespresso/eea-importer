@@ -52,7 +52,7 @@ abstract class ImportConfigBase implements ImportConfigInterface
     {
         if (! $this->model_configs_initialized) {
             $this->model_configs = $this->initializeModelConfigCollection();
-            if (! $this->model_configs instanceof CollectionInterface){
+            if (! $this->model_configs instanceof CollectionInterface) {
                 throw new InvalidEntityException(
                     $this->model_configs,
                     'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportModelConfigInterface'
