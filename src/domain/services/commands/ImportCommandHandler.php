@@ -6,6 +6,8 @@ use EE_Answer;
 use EE_Attendee;
 use EE_Error;
 use EE_Registration;
+use EE_Registration_Processor;
+use EE_Registry;
 use EEH_Line_Item;
 use EEM_Question;
 use EEM_Registration;
@@ -69,11 +71,11 @@ class ImportCommandHandler extends CompositeCommandHandler
                     $transaction,
                     $line_item,
                     1,
-                    null,
-                    EEM_Registration::status_id_approved
+                    null
                 ]
             )
         );
+        EE_Registry::instance()->load_class('Registration_Processor')->toggle_incomplete_registration_status_to_default($registration,false);
         $attendee = $this->commandBus()->execute(
             $this->commandFactory()->getNew(
                 'EventEspresso\AttendeeImporter\domain\services\commands\ImportAttendeeCommand',
