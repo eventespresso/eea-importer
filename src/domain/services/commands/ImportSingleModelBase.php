@@ -25,8 +25,8 @@ class ImportSingleModelBase extends ImportBaseCommand
 
     public function __construct(
         array $input_data,
-        ImportModelConfigBase $config)
-    {
+        ImportModelConfigBase $config
+    ) {
         parent::__construct($input_data);
         $this->config = $config;
     }
@@ -53,8 +53,6 @@ class ImportSingleModelBase extends ImportBaseCommand
         }
         return $fields;
     }
-
-
 }
 // End of file ImportSingleModelBase.php
 // Location: EventEspresso\AttendeeImporter\domain\services\commands/ImportSingleModelBase.php

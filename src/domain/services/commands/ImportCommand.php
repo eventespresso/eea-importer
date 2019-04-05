@@ -40,7 +40,8 @@ class ImportCommand extends ImportBaseCommand
      * @since $VID:$
      * @return ImportCsvAttendeesConfig
      */
-    public function getConfig(){
+    public function getConfig()
+    {
         if (! $this->config_populated_from_db) {
             $this->option_manager->populateFromDb($this->config);
             $this->config_populated_from_db = true;

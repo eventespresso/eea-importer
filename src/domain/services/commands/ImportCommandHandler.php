@@ -75,7 +75,7 @@ class ImportCommandHandler extends CompositeCommandHandler
                 ]
             )
         );
-        EE_Registry::instance()->load_class('Registration_Processor')->toggle_incomplete_registration_status_to_default($registration,false);
+        EE_Registry::instance()->load_class('Registration_Processor')->toggle_incomplete_registration_status_to_default($registration, false);
         $attendee = $this->commandBus()->execute(
             $this->commandFactory()->getNew(
                 'EventEspresso\AttendeeImporter\domain\services\commands\ImportAttendeeCommand',
