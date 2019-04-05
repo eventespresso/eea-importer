@@ -2,13 +2,11 @@
 
 namespace EventEspresso\AttendeeImporter\domain\services\commands;
 
-use EE_Registration;
+use EE_Transaction;
+use EventEspresso\AttendeeImporter\application\services\import\config\models\ImportModelConfigBase;
 use EventEspresso\core\domain\services\capabilities\CapCheck;
 use EventEspresso\core\domain\services\capabilities\CapCheckInterface;
-use EventEspresso\core\domain\services\capabilities\PublicCapabilities;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
-use EventEspresso\core\services\commands\Command;
-use EventEspresso\core\services\commands\CommandRequiresCapCheckInterface;
 
 /**
  * Class CreateAttendeeCommand
@@ -17,43 +15,30 @@ use EventEspresso\core\services\commands\CommandRequiresCapCheckInterface;
  * @package       Event Espresso
  * @author        Michael Nelson
  */
-class ImportPaymentCommand extends Command implements CommandRequiresCapCheckInterface
+class ImportPaymentCommand extends ImportSingleModelBase
 {
-
-    /**
-     * array of details where keys are names of EEM_Attendee model fields
-     *
-     * @var array $csv_row
-     */
-    protected $csv_row;
 
     /**
      * an existing registration to associate this attendee with
      *
-     * @var EE_Registration $registration
+     * @var EE_Transaction $transaction
      */
-    protected $registration;
+    protected $transaction;
 
-
-    /**
-     * CreateAttendeeCommand constructor.
-     *
-     * @param array           $csv_row
-     * @param EE_Registration $config
-     */
-    public function __construct(array $csv_row, \EE_Attendee_Importer_Config $config)
-    {
-        $this->csv_row = $csv_row;
-        $this->registration = $config;
+    public function __construct(
+        EE_Transaction$transaction,
+        array $input_data,
+        ImportModelConfigBase $config
+    ) {
+        $this->transaction = $transaction;
+        parent::__construct($input_data, $config);
     }
 
-
     /**
-     * @return CapCheckInterface
-     * @throws InvalidDataTypeException
+     * @return EE_Transaction
      */
-    public function getCapCheck()
+    public function getTransaction()
     {
-        return new CapCheck('import', 'ee_attendee_import');
+        return $this->transaction;
     }
 }

@@ -32,12 +32,12 @@ class ImportAnswersCommand extends ImportBaseCommand
      * CreateAttendeeCommand constructor.
      *
      * @param EE_Registration $registration
-     * @param array $csv_row
+     * @param array $input_data
      */
-    public function __construct(EE_Registration $registration, array $csv_row)
+    public function __construct(EE_Registration $registration, array $input_data)
     {
         $this->registration = $registration;
-        parent::__construct($csv_row);
+        parent::__construct($input_data);
     }
 
     /**

@@ -137,17 +137,22 @@ class EE_Attendee_Importer extends EE_Addon
                 array(),
                 'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
             ],
+            'EventEspresso\AttendeeImporter\domain\services\commands\ImportCommand' => [
+                'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
+            ],
             // commands handlers
             'EventEspresso\AttendeeImporter\domain\services\commands\ImportCommandHandler' => [
                 'EventEspresso\core\services\commands\CommandBusInterface' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\commands\CommandFactoryInterface' => EE_Dependency_Map::load_from_cache,
-                'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
-                'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
             ],
             'EventEspresso\AttendeeImporter\domain\services\commands\ImportAttendeeCommandHandler' => [
                 'EventEspresso\core\services\commands\CommandBusInterface' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\commands\CommandFactoryInterface' => EE_Dependency_Map::load_from_cache,
-                'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
+            ],
+            'EventEspresso\AttendeeImporter\domain\services\commands\ImportPaymentCommandHandler' => [
+                'EventEspresso\core\services\commands\CommandBusInterface' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\commands\CommandFactoryInterface' => EE_Dependency_Map::load_from_cache,
             ],
             'EventEspresso\AttendeeImporter\domain\services\commands\ImportAnswersCommandHandler' => [
                 'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,

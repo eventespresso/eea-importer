@@ -99,7 +99,9 @@ abstract class ImportConfigBase implements ImportConfigInterface
             && $data->json_model_configs instanceof stdClass) {
             foreach ($data->json_model_configs as $json_key => $json_value) {
                     $obj = $this->getModelConfigs()->get($json_key);
-                    $obj->fromJsonSerializedData($json_value);
+                    if($obj instanceof ImportModelConfigInterface){
+                        $obj->fromJsonSerializedData($json_value);
+                    }
             }
             return true;
         }
