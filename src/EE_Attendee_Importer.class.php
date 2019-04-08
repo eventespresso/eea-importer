@@ -143,7 +143,9 @@ class EE_Attendee_Importer extends EE_Addon
             ],
             // commands handlers
             'EventEspresso\AttendeeImporter\domain\services\commands\ImportCommandHandler' => [
-                'EventEspresso\core\services\commands\CommandBusInterface' => EE_Dependency_Map::load_from_cache,
+                'EE_Registration_Processor'                                    => EE_Dependency_Map::load_from_cache,
+                'EEM_Ticket'                                                   => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\commands\CommandBusInterface'     => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\commands\CommandFactoryInterface' => EE_Dependency_Map::load_from_cache,
             ],
             'EventEspresso\AttendeeImporter\domain\services\commands\ImportAttendeeCommandHandler' => [
