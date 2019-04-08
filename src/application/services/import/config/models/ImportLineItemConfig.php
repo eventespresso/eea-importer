@@ -4,10 +4,11 @@ namespace EventEspresso\AttendeeImporter\application\services\import\config\mode
 
 use EE_Model_Field_Base;
 use EEM_Base;
+use EEM_Line_Item;
 use EEM_Registration;
 
 /**
- * Class ImportRegistrationConfig
+ * Class ImportLineItemConfig
  *
  * Description
  *
@@ -16,7 +17,7 @@ use EEM_Registration;
  * @since         $VID:$
  *
  */
-class ImportRegistrationConfig extends ImportModelConfigBase
+class ImportLineItemConfig extends ImportModelConfigBase
 {
 
 
@@ -27,7 +28,7 @@ class ImportRegistrationConfig extends ImportModelConfigBase
      */
     public function getModel()
     {
-        return EEM_Registration::instance();
+        return EEM_Line_Item::instance();
     }
 
     /**
@@ -40,5 +41,5 @@ class ImportRegistrationConfig extends ImportModelConfigBase
         return [];
     }
 }
-// End of file ImportRegistrationConfig.php
-// Location: EventEspresso\AttendeeImporter\application\services\import\config\models/ImportRegistrationConfig.php
+// End of file ImportLineItemConfig.php
+// Location: EventEspresso\AttendeeImporter\application\services\import\config\models/ImportLineItemConfig.php

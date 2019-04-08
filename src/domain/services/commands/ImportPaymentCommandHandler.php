@@ -2,17 +2,18 @@
 
 namespace EventEspresso\AttendeeImporter\domain\services\commands;
 
-use EE_Attendee;
 use EE_Error;
 use EE_Payment;
-use EE_Payment_Processor;
-use EE_Registration;
-use EEM_Attendee;
 use EEM_Payment;
-use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
-use EventEspresso\core\exceptions\InvalidEntityException;
+use EEM_Payment_Method;
+use EventEspresso\core\exceptions\InvalidDataTypeException;
+use EventEspresso\core\exceptions\InvalidInterfaceException;
+use EventEspresso\core\services\collections\CollectionDetailsException;
+use EventEspresso\core\services\collections\CollectionLoaderException;
 use EventEspresso\core\services\commands\CommandHandler;
 use EventEspresso\core\services\commands\CommandInterface;
+use InvalidArgumentException;
+use ReflectionException;
 
 /**
  * Class CreateAttendeeCommandHandler
@@ -24,10 +25,25 @@ use EventEspresso\core\services\commands\CommandInterface;
 class ImportPaymentCommandHandler extends CommandHandler
 {
     /**
+     * @var EEM_Payment_Method
+     */
+    private $payment_method_model;
+
+    public function __construct(EEM_Payment_Method $payment_method)
+    {
+        $this->payment_method_model = $payment_method;
+    }
+
+    /**
      * @param CommandInterface|ImportPaymentCommand $command
-     * @return EE_Attendee
+     * @return EE_Payment|null
      * @throws EE_Error
-     * @throws InvalidEntityException
+     * @throws InvalidDataTypeException
+     * @throws InvalidInterfaceException
+     * @throws CollectionDetailsException
+     * @throws CollectionLoaderException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
     public function handle(CommandInterface $command)
     {
@@ -36,18 +52,12 @@ class ImportPaymentCommandHandler extends CommandHandler
         if (empty($payment_data)) {
             return null;
         }
-        // No messages while importing thanks.
-        add_filter(
-            'FHEE__EED_Messages___maybe_registration__deliver_notifications',
-            '__return_false',
-            999
-        );
-        remove_all_filters('AHEE__EE_Payment_Processor__update_txn_based_on_payment__successful');
+
         $payment_data['TXN_ID'] = $command->getTransaction()->ID();
         $payment_data['STS_ID'] = EEM_Payment::status_id_approved;
         $payment_data['PAY_timestamp'] = $command->getTransaction()->get_DateTime_object('TXN_timestamp');
         $payment_data['PAY_source'] = esc_html__('Imported', 'event_espresso');
-        $payment_data['PMD_ID'] = \EEM_Payment_Method::instance()->get_var(
+        $payment_data['PMD_ID'] = $this->payment_method_model->get_var(
             [
                 [
                     'PMD_slug' => 'other'
@@ -57,7 +67,6 @@ class ImportPaymentCommandHandler extends CommandHandler
         );
         $payment = EE_Payment::new_instance($payment_data);
         $payment->save();
-        EE_Payment_Processor::instance()->update_txn_based_on_payment($command->getTransaction(), $payment);
         return $payment;
     }
 }

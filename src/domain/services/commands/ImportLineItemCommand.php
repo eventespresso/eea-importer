@@ -3,6 +3,7 @@
 namespace EventEspresso\AttendeeImporter\domain\services\commands;
 
 use EE_Ticket;
+use EE_Transaction;
 use EventEspresso\AttendeeImporter\application\services\import\config\models\ImportModelConfigBase;
 
 /**
@@ -12,20 +13,26 @@ use EventEspresso\AttendeeImporter\application\services\import\config\models\Imp
  * @package       Event Espresso
  * @author        Michael Nelson
  */
-class ImportTransactionCommand extends ImportSingleModelBase
+class ImportLineItemCommand extends ImportSingleModelBase
 {
     /**
      * @var EE_Ticket
      */
     private $ticket;
+    /**
+     * @var EE_Transaction
+     */
+    private $transaction;
 
     public function __construct(
+        EE_Transaction $transaction,
         EE_Ticket $ticket,
         array $input_data,
         ImportModelConfigBase $config
     ) {
         parent::__construct($input_data, $config);
         $this->ticket = $ticket;
+        $this->transaction = $transaction;
     }
 
     /**
@@ -34,5 +41,13 @@ class ImportTransactionCommand extends ImportSingleModelBase
     public function getTicket()
     {
         return $this->ticket;
+    }
+
+    /**
+     * @return EE_Transaction
+     */
+    public function getTransaction()
+    {
+        return $this->transaction;
     }
 }

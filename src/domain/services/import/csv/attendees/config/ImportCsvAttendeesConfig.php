@@ -181,7 +181,11 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
                 // FQCNs for classes to add (all classes within that namespace will be loaded)
                 [
                     'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportAttendeeConfig',
-                    'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportPaymentConfig'
+                    'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportPaymentConfig',
+                    'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportRegistrationConfig',
+                    'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportRegistrationPaymentConfig',
+                    'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportTransactionConfig',
+                    'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportLineItemConfig'
                 ],
                 [],
                 '',

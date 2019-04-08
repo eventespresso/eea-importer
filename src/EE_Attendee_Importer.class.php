@@ -153,7 +153,21 @@ class EE_Attendee_Importer extends EE_Addon
                 'EventEspresso\core\services\commands\CommandFactoryInterface' => EE_Dependency_Map::load_from_cache,
             ],
             'EventEspresso\AttendeeImporter\domain\services\commands\ImportPaymentCommandHandler' => [
+                'EEM_Payment_Method' => EE_Dependency_Map::load_from_cache,
+            ],
+            'EventEspresso\AttendeeImporter\domain\services\commands\ImportTransactionCommandHandler' => [
                 'EventEspresso\core\services\commands\CommandBusInterface' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\commands\CommandFactoryInterface' => EE_Dependency_Map::load_from_cache,
+            ],
+            'EventEspresso\AttendeeImporter\domain\services\commands\ImportRegistrationPaymentCommandHandler' => [
+                'EE_Registration_Processor' => EE_Dependency_Map::load_from_cache,
+                'EE_Payment_Processor' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\commands\CommandBusInterface' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\commands\CommandFactoryInterface' => EE_Dependency_Map::load_from_cache,
+            ],
+            'EventEspresso\AttendeeImporter\domain\services\commands\ImportRegistrationCommandHandler' => [
+                'EE_Registration_Processor' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\commands\CommandBusInterface'     => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\commands\CommandFactoryInterface' => EE_Dependency_Map::load_from_cache,
             ],
             'EventEspresso\AttendeeImporter\domain\services\commands\ImportAnswersCommandHandler' => [
