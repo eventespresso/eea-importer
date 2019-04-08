@@ -2,6 +2,8 @@
 
 namespace EventEspresso\AttendeeImporter\domain\services\import\managers;
 
+use EE_Error;
+use EEH_Autoloader;
 use EventEspresso\AttendeeImporter\domain\services\commands\ImportBaseCommand;
 use EventEspresso\AttendeeImporter\application\services\import\extractors\ImportExtractorBase;
 use EventEspresso\AttendeeImporter\application\services\import\ImportTypeManagerInterface;
@@ -33,12 +35,14 @@ class ImportCsvAttendeesManager implements ImportTypeManagerInterface
 
     /**
      * ImportCsvAttendeesManager constructor.
+     *
      * @param LoaderInterface $loader
+     * @throws EE_Error
      */
     public function __construct(LoaderInterface $loader)
     {
-
         $this->loader = $loader;
+        EEH_Autoloader::register_business_classes();
     }
 
     /**
@@ -86,9 +90,11 @@ class ImportCsvAttendeesManager implements ImportTypeManagerInterface
         return EE_ATTENDEE_IMPORTER_URL . 'domain/services/import/csv/attendees';
     }
 
+
     /**
-     * @since $VID:$
+     * @param array $args
      * @return ImportBaseCommand
+     * @since $VID:$
      */
     public function getImportCommand($args)
     {
