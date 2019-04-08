@@ -98,7 +98,7 @@ class EE_Attendee_Importer extends EE_Addon
      */
     public function after_registration()
     {
-        $attendee_mover_dependencies = array(
+        $attendee_importer_dependencies = array(
             'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\StepsManager'                            => array(
                 null,
                 null,
@@ -185,11 +185,8 @@ class EE_Attendee_Importer extends EE_Addon
             'EventEspresso\AttendeeImporter\domain\services\import\managers\ImportCsvAttendeesManager' => [
                 'EventEspresso\core\services\loaders\LoaderInterface' => EE_Dependency_Map::load_from_cache
             ],
-            'EventEspresso\AttendeeImporter\domain\services\import\managers\ui\ImportCsvAttendeesUiManager' => [
-                'EventEspresso\core\services\loaders\LoaderInterface' => EE_Dependency_Map::load_from_cache
-            ],
         );
-        foreach ($attendee_mover_dependencies as $class => $dependencies) {
+        foreach ($attendee_importer_dependencies as $class => $dependencies) {
             if (! EE_Dependency_Map::register_dependencies($class, $dependencies)) {
                 EE_Error::add_error(
                     sprintf(
