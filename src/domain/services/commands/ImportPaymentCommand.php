@@ -4,9 +4,6 @@ namespace EventEspresso\AttendeeImporter\domain\services\commands;
 
 use EE_Transaction;
 use EventEspresso\AttendeeImporter\application\services\import\config\models\ImportModelConfigBase;
-use EventEspresso\core\domain\services\capabilities\CapCheck;
-use EventEspresso\core\domain\services\capabilities\CapCheckInterface;
-use EventEspresso\core\exceptions\InvalidDataTypeException;
 
 /**
  * Class CreateAttendeeCommand

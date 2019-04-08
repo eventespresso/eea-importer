@@ -12,7 +12,7 @@ use EventEspresso\AttendeeImporter\application\services\import\mapping\ImportMap
 /**
  * Class ImportPaymentConfig
  *
- * Description
+ * Configuration saying how to import a payment from source data.
  *
  * @package     Event Espresso
  * @author         Mike Nelson
@@ -43,7 +43,6 @@ class ImportPaymentConfig extends ImportModelConfigBase
     {
         return [
             'PAY_amount',
-//            'PMD_ID'
         ];
     }
 }

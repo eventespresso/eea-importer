@@ -16,7 +16,7 @@ use EventEspresso\core\services\commands\CommandInterface;
 
 /**
  * Class CreateAttendeeCommandHandler
- * generates and validates an Attendee
+ * generates and validates an Payment
  *
  * @package       Event Espresso
  * @author        Brent Christensen

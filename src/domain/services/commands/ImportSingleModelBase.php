@@ -9,7 +9,7 @@ use EventEspresso\core\services\collections\CollectionLoaderException;
 /**
  * Class ImportSingleModelBase
  *
- * Description
+ * Base configuration for when we're importing a single model object from the input data.
  *
  * @package     Event Espresso
  * @author         Mike Nelson
