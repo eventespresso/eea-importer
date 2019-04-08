@@ -32,6 +32,30 @@ use EventEspresso\core\services\options\JsonWpOptionManager;
  */
 class ImportCommandHandler extends CompositeCommandHandler
 {
+
+    /**
+     * @type EE_Registration_Processor $registration_processor
+     */
+    private $registration_processor;
+
+    /**
+     * @type EEM_Ticket $ticket_model
+     */
+    private $ticket_model;
+
+    public function __construct(
+        EE_Registration_Processor $registration_processor,
+        EEM_Ticket $ticket_model,
+        CommandBusInterface $command_bus,
+        CommandFactoryInterface $command_factory
+    )
+    {
+        parent::__construct($command_bus, $command_factory);
+        $this->registration_processor = $registration_processor;
+        $this->ticket_model = $ticket_model;
+    }
+
+
     /**
      * @param CommandInterface $command
      * @return EE_Attendee
@@ -46,7 +70,7 @@ class ImportCommandHandler extends CompositeCommandHandler
         }
 
         // Determine the ticket and event ID
-        $ticket = EEM_Ticket::instance()->get_one_by_ID($command->getConfig()->getTicketId());
+        $ticket = $this->ticket_model->get_one_by_ID($command->getConfig()->getTicketId());
 
         // Create a transaction
         // @var $transaction EE_Transaction
@@ -75,7 +99,7 @@ class ImportCommandHandler extends CompositeCommandHandler
                 ]
             )
         );
-        EE_Registry::instance()->load_class('Registration_Processor')->toggle_incomplete_registration_status_to_default($registration, false);
+        $this->registration_processor->toggle_incomplete_registration_status_to_default($registration, false);
         $attendee = $this->commandBus()->execute(
             $this->commandFactory()->getNew(
                 'EventEspresso\AttendeeImporter\domain\services\commands\ImportAttendeeCommand',
