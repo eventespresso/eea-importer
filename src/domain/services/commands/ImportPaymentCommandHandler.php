@@ -36,10 +36,11 @@ class ImportPaymentCommandHandler extends CommandHandler
         if (empty($payment_data)) {
             return null;
         }
+        // No messages while importing thanks.
         add_filter(
             'FHEE__EED_Messages___maybe_registration__deliver_notifications',
             '__return_false',
-            20
+            999
         );
         remove_all_filters('AHEE__EE_Payment_Processor__update_txn_based_on_payment__successful');
         $payment_data['TXN_ID'] = $command->getTransaction()->ID();
@@ -56,8 +57,6 @@ class ImportPaymentCommandHandler extends CommandHandler
         );
         $payment = EE_Payment::new_instance($payment_data);
         $payment->save();
-        // No messages while importing thanks.
-
         EE_Payment_Processor::instance()->update_txn_based_on_payment($command->getTransaction(), $payment);
         return $payment;
     }
