@@ -57,7 +57,7 @@ class ImportPaymentCommandHandler extends CommandHandler
         $payment = EE_Payment::new_instance($payment_data);
         $payment->save();
         // No messages while importing thanks.
-
+        add_filter('FHEE__EED_Messages___maybe_registration__deliver_notifications', '__return_false', 999);
         EE_Payment_Processor::instance()->update_txn_based_on_payment($command->getTransaction(), $payment);
         return $payment;
     }
