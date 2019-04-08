@@ -45,9 +45,6 @@ class ImportCommandHandler extends CompositeCommandHandler
             throw new InvalidEntityException(get_class($command), 'EventEspresso\AttendeeImporter\domain\services\commands\ImportCommand');
         }
 
-        // Determine the ticket and event ID
-        $ticket = EEM_Ticket::instance()->get_one_by_ID($command->getConfig()->getTicketId());
-
         // Create a transaction
         // @var $transaction EE_Transaction
         $transaction = $this->commandBus()->execute(
@@ -61,7 +58,7 @@ class ImportCommandHandler extends CompositeCommandHandler
         );
         // Mark the transaction as complete eh.
         $transaction->save();
-        $line_item = EEH_Line_Item::create_ticket_line_item($transaction->total_line_item(), $ticket);
+        $line_item = EEH_Line_Item::create_ticket_line_item($transaction->total_line_item(), $command->getConfig()->getTicket());
         $transaction->total_line_item()->recalculate_total_including_taxes();
         // Create a registration
         $registration = $this->commandBus()->execute(
