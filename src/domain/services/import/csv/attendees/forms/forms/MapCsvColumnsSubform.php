@@ -6,6 +6,7 @@ use EE_Form_Section_Proper;
 use EE_Model_Field_Base;
 use EE_Select_Input;
 use EEM_Answer;
+use EEM_Attendee;
 use EEM_Event;
 use EEM_Question_Group;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
@@ -81,12 +82,15 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
             ],
         ];
         foreach ($this->config->getModelConfigs() as $modelConfig) {
-            if ($modelConfig->getModel() !== \EEM_Attendee::instance()) {
+            if ($modelConfig->getModel() !== EEM_Attendee::instance()) {
                 $item_name = $modelConfig->getModel()->item_name();
-                $options[ $item_name ] = [];
+                $this_model_options = [];
                 foreach ($modelConfig->mapping() as $mapped_field) {
                     $input_name = $this->getOptionValueForField($mapped_field->destinationField());
-                    $options[ $item_name ][ $input_name ] = $mapped_field->destinationField()->get_nicename();
+                    $this_model_options[ $input_name ] = $mapped_field->destinationField()->get_nicename();
+                }
+                if (! empty($this_model_options)) {
+                    $options[ $item_name ] =$this_model_options;
                 }
             }
         }
@@ -116,39 +120,6 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
                 $options[ $question_group->name() ][ $option_value ] = $question->admin_label();
             }
         }
-//        $options = array_merge(
-//            $options,
-//            $this->optionsFromModel(
-//                EEM_Registration::instance(),
-//                [
-//                    'STS_ID',
-//                    'REG_date',
-//                    'REG_final_price',
-//                    'REG_paid',
-//                    'REG_code',
-//                    'REG_count'
-//                ]
-//            ),
-//            $this->optionsFromModel(
-//                EEM_Transaction::instance(),
-//                [
-//                    'STS_ID',
-//                    'TXN_total',
-//                    'TXN_paid'
-//                ]
-//            ),
-//            $this->optionsFromModel(
-//                EEM_Payment::instance(),
-//                [
-//                    'STS_ID',
-//                    'PAY_source',
-//                    'PAY_amount',
-//                    'PAY_txn_id_chq_nmbr',
-//                    'PAY_po_number',
-//                    'PAY_extra_accntng'
-//                ]
-//            )
-//        );
 
         return $options;
     }
