@@ -35,10 +35,6 @@ use LogicException;
  */
 class MapCsvColumns extends ImportCsvAttendeesStep
 {
-    /**
-     * @var ImportCsvAttendeesUiManager
-     */
-    private $attendeesUiManager;
 
     /**
      * MapCsvColumns constructor
@@ -54,11 +50,9 @@ class MapCsvColumns extends ImportCsvAttendeesStep
     public function __construct(
         EE_Registry $registry,
         ImportCsvAttendeesConfig $config,
-        JsonWpOptionManager $option_manager,
-        ImportCsvAttendeesUiManager $attendeesUiManager
+        JsonWpOptionManager $option_manager
     ) {
         $this->setDisplayable(true);
-        $this->attendeesUiManager = $attendeesUiManager;
         parent::__construct(
             4,
             esc_html__('Map CSV Columns To Event Espresso Data', 'event_espresso'),
@@ -122,36 +116,7 @@ class MapCsvColumns extends ImportCsvAttendeesStep
         }
         $this->config->setQuestionMapping($question_mapping);
         $this->option_manager->saveToDb($this->config);
-        $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_OTHER);
-        $this->removeRedirectArgs(
-            [
-                'ee-form-step'
-            ]
-        );
-        $this->setRedirectUrl(
-            EE_Admin_Page::add_query_args_and_nonce(
-                array(
-                    'page'        => 'espresso_batch',
-                    'batch'       => 'job',
-                    'label'       => esc_html__('Applying Offset', 'event_espresso'),
-                    'job_handler' => urlencode(get_class($this->attendeesUiManager->getBatchJobHandler())),
-                    'return_url'  => urlencode(
-                        add_query_arg(
-                            array(
-                                'ee-form-step' => 'complete',
-                            ),
-                            EEH_URL::current_url_without_query_paramaters(
-                                array(
-                                    'ee-form-step',
-                                    'return',
-                                )
-                            )
-                        )
-                    ),
-                ),
-                admin_url()
-            )
-        );
+        $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_NEXT_STEP);
         return true;
     }
 }
