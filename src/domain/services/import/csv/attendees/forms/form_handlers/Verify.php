@@ -9,6 +9,7 @@ use EE_Event;
 use EE_Form_Section_HTML;
 use EE_Form_Section_HTML_From_Template;
 use EE_Form_Section_Proper;
+use EE_Hidden_Input;
 use EE_Registry;
 use EE_Select_Ajax_Model_Rest_Input;
 use EE_Ticket;
@@ -47,6 +48,22 @@ class Verify extends ImportCsvAttendeesStep
      * @var ImportCsvAttendeesUiManager
      */
     private $attendeesUiManager;
+    /**
+     * @var EEM_Event
+     */
+    private $event_model;
+    /**
+     * @var EEM_Ticket
+     */
+    private $ticket_model;
+    /**
+     * @var EEM_Attendee
+     */
+    private $attendee_model;
+    /**
+     * @var EEM_Question_Group
+     */
+    private $question_group_model;
 
     /**
      * Verify constructor
@@ -54,6 +71,11 @@ class Verify extends ImportCsvAttendeesStep
      * @param EE_Registry $registry
      * @param ImportCsvAttendeesConfig $config
      * @param JsonWpOptionManager $option_manager
+     * @param ImportCsvAttendeesUiManager $attendeesUiManager
+     * @param EEM_Event $event_model
+     * @param EEM_Ticket $ticket_model
+     * @param EEM_Attendee $attendee_model
+     * @param EEM_Question_Group $question_group_model
      * @throws DomainException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
@@ -62,7 +84,11 @@ class Verify extends ImportCsvAttendeesStep
         EE_Registry $registry,
         ImportCsvAttendeesConfig $config,
         JsonWpOptionManager $option_manager,
-        ImportCsvAttendeesUiManager $attendeesUiManager
+        ImportCsvAttendeesUiManager $attendeesUiManager,
+        EEM_Event $event_model,
+        EEM_Ticket $ticket_model,
+        EEM_Attendee $attendee_model,
+        EEM_Question_Group $question_group_model
     ) {
         $this->setDisplayable(true);
         $this->setFormConfig(FormHandler::ADD_FORM_TAGS_ONLY);
@@ -78,6 +104,10 @@ class Verify extends ImportCsvAttendeesStep
             $option_manager
         );
         $this->attendeesUiManager = $attendeesUiManager;
+        $this->event_model = $event_model;
+        $this->ticket_model = $ticket_model;
+        $this->attendee_model = $attendee_model;
+        $this->question_group_model = $question_group_model;
     }
 
 
@@ -97,7 +127,9 @@ class Verify extends ImportCsvAttendeesStep
                 'subsections' => [
                     'instructions' => new EE_Form_Section_HTML(
                         EEH_HTML::p(
+                            // @codingStandardsIgnoreStart
                             esc_html__('Please verify the data has been mapped correctly. If not, please use your browser’s back button to correct it.', 'event_espresso')
+                            // @codingStandardsIgnoreEnd
                         )
                     ),
                     'data' => new EE_Form_Section_HTML_From_Template(
@@ -105,12 +137,12 @@ class Verify extends ImportCsvAttendeesStep
                         [
 
                             // Let's add the event and ticket for starters
-                            'event' => EEM_Event::instance()->get_one_by_ID($this->config->getEventId()),
-                            'ticket' => EEM_Ticket::instance()->get_one_by_ID($this->config->getTicketId()),
+                            'event' => $this->event_model->get_one_by_ID($this->config->getEventId()),
+                            'ticket' => $this->ticket_model->get_one_by_ID($this->config->getTicketId()),
                             'table_rows' => $this->getReverseMapping()
                         ]
                     ),
-                    'hidden' => new \EE_Hidden_Input(),
+                    'hidden' => new EE_Hidden_Input(),
                     'notice' => new EE_Form_Section_HTML(
                         EEH_HTML::p(
                             esc_html__(
@@ -154,7 +186,7 @@ class Verify extends ImportCsvAttendeesStep
         $row2 = $extractor->getItemAt(2);
         $table_rows = [];
         foreach ($this->config->getModelConfigs() as $modelConfig) {
-            if ($modelConfig->getModel() === EEM_Attendee::instance()) {
+            if ($modelConfig->getModel() === $this->attendee_model) {
                 continue;
             }
             $item_name = $modelConfig->getModel()->item_name();
@@ -191,7 +223,7 @@ class Verify extends ImportCsvAttendeesStep
         }
         $attendee_config = $this->config->getModelConfigs()->get('Attendee');
         // And add questions (group by question group).
-        $question_groups_for_event = EEM_Question_Group::instance()->get_all(
+        $question_groups_for_event = $this->question_group_model->get_all(
             [
                 [
                     'Event_Question_Group.EVT_ID' => $this->config->getEventId(),
@@ -208,7 +240,7 @@ class Verify extends ImportCsvAttendeesStep
                 if (isset($question_ids_to_column_names[ $question->ID() ])) {
                     $column_name = $question_ids_to_column_names[ $question->ID() ];
                 } else {
-                    $attendee_field = EEM_Attendee::instance()->get_attendee_field_for_system_question($question->system_ID());
+                    $attendee_field = $this->attendee_model->get_attendee_field_for_system_question($question->system_ID());
                     $mapping_info = $attendee_config->getMappingInfoForField($attendee_field);
                     if ($mapping_info instanceof ImportFieldMap) {
                         $column_name = $mapping_info->sourceProperty();

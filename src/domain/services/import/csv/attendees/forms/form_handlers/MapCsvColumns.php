@@ -42,7 +42,6 @@ class MapCsvColumns extends ImportCsvAttendeesStep
      * @param EE_Registry $registry
      * @param ImportCsvAttendeesConfig $config
      * @param JsonWpOptionManager $option_manager
-     * @param ImportCsvAttendeesUiManager $attendeesUiManager
      * @throws DomainException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
