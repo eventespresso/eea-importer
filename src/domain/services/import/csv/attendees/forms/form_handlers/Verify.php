@@ -1,0 +1,292 @@
+<?php
+
+namespace EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers;
+
+use DomainException;
+use EE_Admin_Page;
+use EE_Error;
+use EE_Event;
+use EE_Form_Section_HTML;
+use EE_Form_Section_HTML_From_Template;
+use EE_Form_Section_Proper;
+use EE_Registry;
+use EE_Select_Ajax_Model_Rest_Input;
+use EE_Ticket;
+use EED_Attendee_Importer;
+use EEH_HTML;
+use EEH_URL;
+use EEM_Attendee;
+use EEM_Event;
+use EEM_Question_Group;
+use EEM_Ticket;
+use EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFieldMap;
+use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
+use EventEspresso\AttendeeImporter\domain\services\import\managers\ui\ImportCsvAttendeesUiManager;
+use EventEspresso\core\exceptions\InvalidDataTypeException;
+use EventEspresso\core\exceptions\InvalidFormSubmissionException;
+use EventEspresso\core\exceptions\InvalidInterfaceException;
+use EventEspresso\core\libraries\form_sections\form_handlers\FormHandler;
+use EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepForm;
+use EventEspresso\core\services\options\JsonWpOptionManager;
+use InvalidArgumentException;
+use LogicException;
+
+/**
+ * Class Verify
+ *
+ * Step for verifying all the setup is correct.
+ *
+ * @package     Event Espresso
+ * @author         Mike Nelson
+ * @since         $VID:$
+ *
+ */
+class Verify extends ImportCsvAttendeesStep
+{
+    /**
+     * @var ImportCsvAttendeesUiManager
+     */
+    private $attendeesUiManager;
+
+    /**
+     * Verify constructor
+     *
+     * @param EE_Registry $registry
+     * @param ImportCsvAttendeesConfig $config
+     * @param JsonWpOptionManager $option_manager
+     * @throws DomainException
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     */
+    public function __construct(
+        EE_Registry $registry,
+        ImportCsvAttendeesConfig $config,
+        JsonWpOptionManager $option_manager,
+        ImportCsvAttendeesUiManager $attendeesUiManager
+    )
+    {
+        $this->setDisplayable(true);
+        parent::__construct(
+            5,
+            esc_html__('Verify', 'event_espresso'),
+            esc_html__('"Verify" Attendee Importer Step', 'event_espresso'),
+            'verify',
+            '',
+            FormHandler::ADD_FORM_TAGS_AND_SUBMIT,
+            $registry,
+            $config,
+            $option_manager
+        );
+        $this->attendeesUiManager = $attendeesUiManager;
+    }
+
+
+    /**
+     * creates and returns the actual form
+     *
+     * @return EE_Form_Section_Proper
+     * @throws EE_Error
+     */
+    public function generate()
+    {
+        $this->option_manager->populateFromDb($this->config);
+
+        return new EE_Form_Section_Proper(
+            [
+                'name' => 'verify',
+                'subsections' => [
+                    'instructions' => new EE_Form_Section_HTML(
+                        EEH_HTML::p(
+                            esc_html__('Please verify the data has been mapped correctly. If not, please use your browser’s back button to correct it.', 'event_espresso')
+                        )
+                    ),
+                    'data' => new EE_Form_Section_HTML_From_Template(
+                        dirname(dirname(dirname(__FILE__))) . '/templates/attendee_importer_verify_info.template.php',
+                        [
+
+                            // Let's add the event and ticket for starters
+                            'event' => EEM_Event::instance()->get_one_by_ID($this->config->getEventId()),
+                            'ticket' => EEM_Ticket::instance()->get_one_by_ID($this->config->getTicketId()),
+                            'table_rows' => $this->getReverseMapping()
+                        ]
+                    ),
+                    'hidden' => new \EE_Hidden_Input(),
+                    'notice' => new EE_Form_Section_HTML(
+                        EEH_HTML::p(
+                            esc_html__(
+                            // @codingStandardsIgnoreStart
+                                'The import will start after this step. Please wait for it to complete before closing this window, turning off your computer, or navigating away.',
+                                // @codingStandardsIgnoreEnd
+                                'event_espresso'
+                            )
+                        )
+                    )
+                ]
+            ]
+        );
+    }
+
+    protected function getReverseMapping()
+    {
+        $extractor = $this->attendeesUiManager->getImportType()->getExtractor();
+        $extractor->setSource($this->config->getFile());
+        $csv_headers = $extractor->getItemAt(0);
+        $row1 = $extractor->getItemAt(1);
+        $row2 = $extractor->getItemAt(2);
+        $table_rows = [];
+        foreach ($this->config->getModelConfigs() as $modelConfig) {
+            if ($modelConfig->getModel() === EEM_Attendee::instance()) {
+                continue;
+            }
+            $item_name = $modelConfig->getModel()->item_name();
+            $options[ $item_name ] = [];
+            $model_table_rows = [];
+            foreach ($modelConfig->mapping() as $mapped_field) {
+                $input_column = array_search(
+                    $mapped_field->sourceProperty(),
+                    $csv_headers,
+                    true
+                );
+
+                $value = $value2 = null;
+                if ($input_column) {
+                    if (isset($row1[ $input_column ])) {
+                        $value = $row1[ $input_column ];
+                    }
+                    if (isset($row2[ $input_column ])) {
+                        $value2 = $row2[ $input_column ];
+                    }
+                }
+                $model_table_rows[] = [
+                    $mapped_field->destinationField()->get_nicename(),
+                    $mapped_field->sourceProperty(),
+                    $value,
+                    $value2
+                ];
+            }
+            // Only show the header if there were rows to show for it.
+            if (! empty($model_table_rows)) {
+                $table_rows[] = $modelConfig->getModel()->item_name();
+                $table_rows = array_merge($table_rows, $model_table_rows);
+            }
+        }
+        $attendee_config = $this->config->getModelConfigs()->get('Attendee');
+        // And add questions (group by question group).
+        $question_groups_for_event = EEM_Question_Group::instance()->get_all(
+            [
+                [
+                    'Event_Question_Group.EVT_ID' => $this->config->getEventId(),
+                    'QSG_deleted' => false,
+                ]
+            ]
+        );
+        $question_ids_to_column_names = $this->config->getQuestionMapping();
+        foreach ($question_groups_for_event as $question_group) {
+            $question_rows = [];
+            foreach ($question_group->questions() as $question) {
+                // Try to find the column, assuming its a custom question.
+                $column_name = null;
+                if (isset($question_ids_to_column_names[ $question->ID() ])) {
+                    $column_name = $question_ids_to_column_names[ $question->ID() ];
+                } else {
+                    $attendee_field = EEM_Attendee::instance()->get_attendee_field_for_system_question($question->system_ID());
+                    $mapping_info = $attendee_config->getMappingInfoForField($attendee_field);
+                    if ($mapping_info instanceof ImportFieldMap) {
+                        $column_name = $mapping_info->sourceProperty();
+                    }
+                }
+
+                $input_column = null;
+                if ($column_name) {
+                    $input_column = array_search(
+                        $column_name,
+                        $csv_headers,
+                        true
+                    );
+                }
+
+                // Ok if either of those worked, find the values for the first two rows.
+                $value = $value2 = null;
+                if ($input_column !== false) {
+                    if (isset($row1[ $input_column ])) {
+                        $value = $row1[ $input_column ];
+                    }
+                    if (isset($row2[ $input_column ])) {
+                        $value2 = $row2[ $input_column ];
+                    }
+                }
+
+                $question_rows[] = [
+                    $question->admin_label(),
+                    $column_name,
+                    $value,
+                    $value2
+                ];
+            }
+
+            if (! empty($question_rows)){
+                $table_rows[] = $question_group->name(true);
+                $table_rows = array_merge($table_rows, $question_rows);
+            }
+        }
+        return $table_rows;
+    }
+
+    /**
+     * handles processing the form submission
+     * returns true or false depending on whether the form was processed successfully or not
+     *
+     * @param array $form_data
+     * @return bool
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws EE_Error
+     * @throws InvalidFormSubmissionException
+     * @throws InvalidInterfaceException
+     * @throws LogicException
+     */
+    public function process($form_data = array())
+    {
+        try {
+            $valid_data = (array) parent::process($form_data);
+        } catch (InvalidFormSubmissionException $e) {
+            // Don't die. Admin code knows how to handle invalid forms...
+            return;
+        }
+
+        $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_OTHER);
+        $this->removeRedirectArgs(
+            [
+                'ee-form-step'
+            ]
+        );
+        $this->setRedirectUrl(
+            EE_Admin_Page::add_query_args_and_nonce(
+                array(
+                    'page' => 'espresso_batch',
+                    'batch' => 'job',
+                    'label' => esc_html__('Applying Offset', 'event_espresso'),
+                    'job_handler' => urlencode(get_class($this->attendeesUiManager->getBatchJobHandler())),
+                    'return_url' => urlencode(
+                        add_query_arg(
+                            array(
+                                'ee-form-step' => 'complete',
+                            ),
+                            EEH_URL::current_url_without_query_paramaters(
+                                array(
+                                    'ee-form-step',
+                                    'return',
+                                )
+                            )
+                        )
+                    ),
+                ),
+                admin_url()
+            )
+        );
+
+        return true;
+    }
+}
+// End of file Verify.php
+// Location: EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers/Verify.php
