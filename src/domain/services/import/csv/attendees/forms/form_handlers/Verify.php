@@ -237,8 +237,9 @@ class Verify extends ImportCsvAttendeesStep
             foreach ($question_group->questions() as $question) {
                 // Try to find the column, assuming its a custom question.
                 $column_name = null;
-                if (isset($question_ids_to_column_names[ $question->ID() ])) {
-                    $column_name = $question_ids_to_column_names[ $question->ID() ];
+                $question_id = (int) $question->ID();
+                if (array_key_exists($question_id, $question_ids_to_column_names)) {
+                    $column_name = $question_ids_to_column_names[ $question_id ];
                 } else {
                     $attendee_field = $this->attendee_model->get_attendee_field_for_system_question($question->system_ID());
                     $mapping_info = $attendee_config->getMappingInfoForField($attendee_field);
