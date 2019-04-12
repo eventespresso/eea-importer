@@ -1,6 +1,6 @@
 
-<p><b><?php esc_html_e('Event', 'event_espresso');?></b> <?php echo $event instanceof EE_Event ? $event->name() : esc_html__('None', 'event_espresso');?></p>
-<p><b><?php esc_html_e('Ticket', 'event_espresso');?></b> <?php echo $ticket instanceof EE_Ticket ? $ticket->name() : esc_html__('None', 'event_espresso');?></p>
+<p><b><?php esc_html_e('Event', 'event_espresso');?></b> <?php echo esc_html( $event instanceof EE_Event ? $event->name() : esc_html__('None', 'event_espresso'));?></p>
+<p><b><?php esc_html_e('Ticket', 'event_espresso');?></b> <?php echo esc_html( $ticket instanceof EE_Ticket ? $ticket->name() : esc_html__('None', 'event_espresso'));?></p>
 
 <table class="ee-responsive-table">
     <thead>
@@ -20,7 +20,7 @@
         if (is_string($table_row)) {
             ?>
             <td colspan="4">
-                <h2><?php echo $table_row;?></h2>
+                <h2><?php echo esc_html($table_row);?></h2>
             </td>
             <?php
         } else {
@@ -28,7 +28,7 @@
                 ?>
                 <td>
                 <?php
-                echo $cell;
+                echo esc_html($cell);
                 ?>
                 </td><?php
             }
