@@ -66,6 +66,7 @@ class Verify extends ImportCsvAttendeesStep
     )
     {
         $this->setDisplayable(true);
+        $this->setFormConfig(FormHandler::ADD_FORM_TAGS_ONLY);
         parent::__construct(
             5,
             esc_html__('Verify', 'event_espresso'),
@@ -91,7 +92,7 @@ class Verify extends ImportCsvAttendeesStep
     {
         $this->option_manager->populateFromDb($this->config);
 
-        return new EE_Form_Section_Proper(
+        $form = new EE_Form_Section_Proper(
             [
                 'name' => 'verify',
                 'subsections' => [
@@ -120,10 +121,24 @@ class Verify extends ImportCsvAttendeesStep
                                 'event_espresso'
                             )
                         )
+                        . EEH_HTML::p(
+                            esc_html__(
+                            // @codingStandardsIgnoreStart
+                                'Please ensure you have a database backup so you can easily revert the import if it doesn’t work as expected.',
+                                // @codingStandardsIgnoreEnd
+                                'event_espresso'
+                            )
+                        )
                     )
                 ]
             ]
         );
+        $form->add_subsections(
+            array($this->slug() . '-submit-btn' => $this->generateSubmitButton(esc_html__('I have a database backup. Begin Import', 'event_espresso'))),
+            null,
+            false
+        );
+        return $form;
     }
 
     protected function getReverseMapping()
@@ -253,7 +268,6 @@ class Verify extends ImportCsvAttendeesStep
             // Don't die. Admin code knows how to handle invalid forms...
             return;
         }
-
         $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_OTHER);
         $this->removeRedirectArgs(
             [
