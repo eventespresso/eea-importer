@@ -63,8 +63,7 @@ class Verify extends ImportCsvAttendeesStep
         ImportCsvAttendeesConfig $config,
         JsonWpOptionManager $option_manager,
         ImportCsvAttendeesUiManager $attendeesUiManager
-    )
-    {
+    ) {
         $this->setDisplayable(true);
         $this->setFormConfig(FormHandler::ADD_FORM_TAGS_ONLY);
         parent::__construct(
@@ -133,8 +132,13 @@ class Verify extends ImportCsvAttendeesStep
                 ]
             ]
         );
+        // Make our own submit button, with different text.
         $form->add_subsections(
-            array($this->slug() . '-submit-btn' => $this->generateSubmitButton(esc_html__('I have a database backup. Begin Import', 'event_espresso'))),
+            [
+                $this->slug() . '-submit-btn' => $this->generateSubmitButton(
+                    esc_html__('I have a database backup. Begin Import', 'event_espresso')
+                )
+            ],
             null,
             false
         );
@@ -239,7 +243,7 @@ class Verify extends ImportCsvAttendeesStep
                 ];
             }
 
-            if (! empty($question_rows)){
+            if (! empty($question_rows)) {
                 $table_rows[] = $question_group->name(true);
                 $table_rows = array_merge($table_rows, $question_rows);
             }
