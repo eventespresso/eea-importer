@@ -31,6 +31,7 @@ use EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepForm;
 use EventEspresso\core\services\options\JsonWpOptionManager;
 use InvalidArgumentException;
 use LogicException;
+use ReflectionException;
 
 /**
  * Class Verify
@@ -139,7 +140,7 @@ class Verify extends ImportCsvAttendeesStep
                             // Let's add the event and ticket for starters
                             'event' => $this->event_model->get_one_by_ID($this->config->getEventId()),
                             'ticket' => $this->ticket_model->get_one_by_ID($this->config->getTicketId()),
-                            'table_rows' => $this->getReverseMapping()
+                            'table_rows' => $this->getTableRows()
                         ]
                     ),
                     'hidden' => new EE_Hidden_Input(),
@@ -177,13 +178,41 @@ class Verify extends ImportCsvAttendeesStep
         return $form;
     }
 
-    protected function getReverseMapping()
+    /**
+     * Gets the data to put into the HTML table when displaying this step.
+     * This includes both data from the model configs and the custom questions config.
+     * @since $VID:$
+     * @return array
+     * @throws EE_Error
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidInterfaceException
+     * @throws ReflectionException
+     */
+    protected function getTableRows()
     {
         $extractor = $this->attendeesUiManager->getImportType()->getExtractor();
         $extractor->setSource($this->config->getFile());
         $csv_headers = $extractor->getItemAt(0);
         $row1 = $extractor->getItemAt(1);
         $row2 = $extractor->getItemAt(2);
+        $table_rows = $this->getModelFieldsTableRows($csv_headers, $row1, $row2);
+        $table_rows = array_merge(
+            $table_rows,
+            $this->getCustomQuestionTableRows($csv_headers, $row1, $row2)
+        );
+        return $table_rows;
+    }
+
+    /**
+     * @since $VID:$
+     * @param $csv_headers
+     * @param $row1
+     * @param $row2
+     * @return array
+     */
+    protected function getModelFieldsTableRows($csv_headers, $row1, $row2)
+    {
         $table_rows = [];
         foreach ($this->config->getModelConfigs() as $modelConfig) {
             if ($modelConfig->getModel() === $this->attendee_model) {
@@ -221,6 +250,23 @@ class Verify extends ImportCsvAttendeesStep
                 $table_rows = array_merge($table_rows, $model_table_rows);
             }
         }
+        return $table_rows;
+    }
+
+    /**
+     * @since $VID:$
+     * @param $csv_headers
+     * @param $row1
+     * @param $row2
+     * @return array
+     * @throws EE_Error
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidInterfaceException
+     * @throws ReflectionException
+     */
+    protected function getCustomQuestionTableRows($csv_headers, $row1, $row2)
+    {
         $attendee_config = $this->config->getModelConfigs()->get('Attendee');
         // And add questions (group by question group).
         $question_groups_for_event = $this->question_group_model->get_all(
@@ -232,6 +278,7 @@ class Verify extends ImportCsvAttendeesStep
             ]
         );
         $question_ids_to_column_names = $this->config->getQuestionMapping();
+        $table_rows = [];
         foreach ($question_groups_for_event as $question_group) {
             $question_rows = [];
             foreach ($question_group->questions() as $question) {
@@ -241,7 +288,9 @@ class Verify extends ImportCsvAttendeesStep
                 if (array_key_exists($question_id, $question_ids_to_column_names)) {
                     $column_name = $question_ids_to_column_names[ $question_id ];
                 } else {
-                    $attendee_field = $this->attendee_model->get_attendee_field_for_system_question($question->system_ID());
+                    $attendee_field = $this->attendee_model->get_attendee_field_for_system_question(
+                        $question->system_ID()
+                    );
                     $mapping_info = $attendee_config->getMappingInfoForField($attendee_field);
                     if ($mapping_info instanceof ImportFieldMap) {
                         $column_name = $mapping_info->sourceProperty();
