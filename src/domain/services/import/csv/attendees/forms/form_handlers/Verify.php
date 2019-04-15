@@ -342,7 +342,6 @@ class Verify extends ImportCsvAttendeesStep
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws EE_Error
-     * @throws InvalidFormSubmissionException
      * @throws InvalidInterfaceException
      * @throws LogicException
      */
@@ -352,7 +351,7 @@ class Verify extends ImportCsvAttendeesStep
             $valid_data = (array) parent::process($form_data);
         } catch (InvalidFormSubmissionException $e) {
             // Don't die. Admin code knows how to handle invalid forms...
-            return;
+            return false;
         }
         $this->setRedirectTo(SequentialStepForm::REDIRECT_TO_OTHER);
         $this->removeRedirectArgs(
