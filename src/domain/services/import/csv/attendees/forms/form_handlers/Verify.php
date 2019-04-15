@@ -133,7 +133,7 @@ class Verify extends ImportCsvAttendeesStep
                         )
                     ),
                     'data' => new EE_Form_Section_HTML_From_Template(
-                        dirname(dirname(dirname(__FILE__))) . '/templates/attendee_importer_verify_info.template.php',
+                        dirname(dirname(__DIR__)) . '/templates/attendee_importer_verify_info.template.php',
                         [
 
                             // Let's add the event and ticket for starters
