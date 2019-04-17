@@ -98,7 +98,7 @@ class EE_Attendee_Importer extends EE_Addon
      */
     public function after_registration()
     {
-        $attendee_mover_dependencies = array(
+        $attendee_importer_dependencies = array(
             'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\StepsManager'                            => array(
                 null,
                 null,
@@ -116,7 +116,6 @@ class EE_Attendee_Importer extends EE_Addon
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
-                'EventEspresso\AttendeeImporter\domain\services\import\managers\ui\ImportCsvAttendeesUiManager' => EE_Dependency_Map::load_from_cache,
             ),
             'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\ChooseEvent'                           => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
@@ -127,6 +126,16 @@ class EE_Attendee_Importer extends EE_Addon
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
+            ),
+            'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\Verify'                           => array(
+                'EE_Registry' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\AttendeeImporter\domain\services\import\managers\ui\ImportCsvAttendeesUiManager' => EE_Dependency_Map::load_from_cache,
+                'EEM_Event' => EE_Dependency_Map::load_from_cache,
+                'EEM_Ticket' => EE_Dependency_Map::load_from_cache,
+                'EEM_Attendee' => EE_Dependency_Map::load_from_cache,
+                'EEM_Question_Group' => EE_Dependency_Map::load_from_cache,
             ),
             'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\Complete'                                => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
@@ -143,7 +152,9 @@ class EE_Attendee_Importer extends EE_Addon
             ],
             // commands handlers
             'EventEspresso\AttendeeImporter\domain\services\commands\ImportCommandHandler' => [
-                'EventEspresso\core\services\commands\CommandBusInterface' => EE_Dependency_Map::load_from_cache,
+                'EE_Registration_Processor'                                    => EE_Dependency_Map::load_from_cache,
+                'EEM_Ticket'                                                   => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\commands\CommandBusInterface'     => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\commands\CommandFactoryInterface' => EE_Dependency_Map::load_from_cache,
             ],
             'EventEspresso\AttendeeImporter\domain\services\commands\ImportAttendeeCommandHandler' => [
@@ -151,7 +162,21 @@ class EE_Attendee_Importer extends EE_Addon
                 'EventEspresso\core\services\commands\CommandFactoryInterface' => EE_Dependency_Map::load_from_cache,
             ],
             'EventEspresso\AttendeeImporter\domain\services\commands\ImportPaymentCommandHandler' => [
+                'EEM_Payment_Method' => EE_Dependency_Map::load_from_cache,
+            ],
+            'EventEspresso\AttendeeImporter\domain\services\commands\ImportTransactionCommandHandler' => [
                 'EventEspresso\core\services\commands\CommandBusInterface' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\commands\CommandFactoryInterface' => EE_Dependency_Map::load_from_cache,
+            ],
+            'EventEspresso\AttendeeImporter\domain\services\commands\ImportRegistrationPaymentCommandHandler' => [
+                'EE_Registration_Processor' => EE_Dependency_Map::load_from_cache,
+                'EE_Payment_Processor' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\commands\CommandBusInterface' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\commands\CommandFactoryInterface' => EE_Dependency_Map::load_from_cache,
+            ],
+            'EventEspresso\AttendeeImporter\domain\services\commands\ImportRegistrationCommandHandler' => [
+                'EE_Registration_Processor' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\commands\CommandBusInterface'     => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\commands\CommandFactoryInterface' => EE_Dependency_Map::load_from_cache,
             ],
             'EventEspresso\AttendeeImporter\domain\services\commands\ImportAnswersCommandHandler' => [
@@ -186,8 +211,11 @@ class EE_Attendee_Importer extends EE_Addon
             'EventEspresso\AttendeeImporter\domain\services\import\managers\ui\ImportCsvAttendeesUiManager' => [
                 'EventEspresso\core\services\loaders\LoaderInterface' => EE_Dependency_Map::load_from_cache
             ],
+            'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => [
+                'EEM_Ticket' => EE_Dependency_Map::load_from_cache
+            ]
         );
-        foreach ($attendee_mover_dependencies as $class => $dependencies) {
+        foreach ($attendee_importer_dependencies as $class => $dependencies) {
             if (! EE_Dependency_Map::register_dependencies($class, $dependencies)) {
                 EE_Error::add_error(
                     sprintf(

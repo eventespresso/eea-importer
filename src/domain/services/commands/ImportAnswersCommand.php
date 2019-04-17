@@ -3,12 +3,6 @@
 namespace EventEspresso\AttendeeImporter\domain\services\commands;
 
 use EE_Registration;
-use EventEspresso\core\domain\services\capabilities\CapCheck;
-use EventEspresso\core\domain\services\capabilities\CapCheckInterface;
-use EventEspresso\core\domain\services\capabilities\PublicCapabilities;
-use EventEspresso\core\exceptions\InvalidDataTypeException;
-use EventEspresso\core\services\commands\Command;
-use EventEspresso\core\services\commands\CommandRequiresCapCheckInterface;
 
 /**
  * Class ImportAnswersCommand

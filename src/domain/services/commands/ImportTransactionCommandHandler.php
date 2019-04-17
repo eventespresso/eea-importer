@@ -3,57 +3,46 @@
 namespace EventEspresso\AttendeeImporter\domain\services\commands;
 
 use EE_Attendee;
-use EE_Error;
-use EE_Registration;
-use EEM_Attendee;
-use EventEspresso\core\exceptions\InvalidEntityException;
-use EventEspresso\core\services\commands\CommandHandler;
+use EventEspresso\core\exceptions\InvalidDataTypeException;
+use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\services\commands\CommandInterface;
+use EventEspresso\core\services\commands\CompositeCommandHandler;
+use InvalidArgumentException;
 
 /**
  * Class CreateAttendeeCommandHandler
- * generates and validates an Attendee
+ * Creates a transaction and line item tree from the inputted data.
  *
  * @package       Event Espresso
  * @author        Brent Christensen
  */
-class ImportTransactionCommandHandler extends CommandHandler
+class ImportTransactionCommandHandler extends CompositeCommandHandler
 {
-
-
-    /**
-     */
-    public function __construct()
-    {
-    }
-
 
     /**
      * @param CommandInterface $command
      * @return EE_Attendee
-     * @throws EE_Error
-     * @throws InvalidEntityException
+     * @throws InvalidDataTypeException
+     * @throws InvalidInterfaceException
+     * @throws InvalidArgumentException
      */
     public function handle(CommandInterface $command)
     {
-        /** @var ImportTransactionCommand $command */
-        if (! $command instanceof ImportTransactionCommand) {
-            throw new InvalidEntityException(get_class($command), 'CreateAttendeeCommand');
-        }
-//        $this->commandBus()->execute(
-//            $this->commandFactory()->getNew(
-//                'EventEspresso\core\services\commands\transaction\CreateTransactionCommand'
-//            )
-//        );
-        // TODO: Use commands to...
-        // Create an attendee
         // Create a transaction
-        // Get a ticket
-        // Get an event
-        // Create a registration
-        // Create answers
-        // Create a registration-answer row
-        // Create line items
-        return null;
+        /*
+         * @var $transaction EE_Transaction
+         */
+        $transaction = $this->commandBus()->execute(
+            $this->commandFactory()->getNew(
+                'EventEspresso\core\services\commands\transaction\CreateTransactionCommand',
+                [
+                    null,
+                    []
+                ]
+            )
+        );
+        // Mark the transaction as complete eh.
+        $transaction->save();
+        return $transaction;
     }
 }
