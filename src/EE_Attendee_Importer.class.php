@@ -116,7 +116,6 @@ class EE_Attendee_Importer extends EE_Addon
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
-                'EventEspresso\AttendeeImporter\domain\services\import\managers\ui\ImportCsvAttendeesUiManager' => EE_Dependency_Map::load_from_cache,
             ),
             'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\ChooseEvent'                           => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
@@ -127,6 +126,16 @@ class EE_Attendee_Importer extends EE_Addon
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
+            ),
+            'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\Verify'                           => array(
+                'EE_Registry' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\core\services\options\JsonWpOptionManager' => EE_Dependency_Map::load_from_cache,
+                'EventEspresso\AttendeeImporter\domain\services\import\managers\ui\ImportCsvAttendeesUiManager' => EE_Dependency_Map::load_from_cache,
+                'EEM_Event' => EE_Dependency_Map::load_from_cache,
+                'EEM_Ticket' => EE_Dependency_Map::load_from_cache,
+                'EEM_Attendee' => EE_Dependency_Map::load_from_cache,
+                'EEM_Question_Group' => EE_Dependency_Map::load_from_cache,
             ),
             'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\Complete'                                => array(
                 'EE_Registry' => EE_Dependency_Map::load_from_cache,

@@ -159,6 +159,26 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
     }
 
     /**
+     * Gets the mapping info for the specified model field (eg EEM_Attendee's `ATT_fname` field).
+     * Or null if the field wasn't mapped.
+     * @since $VID:$
+     * @param $field_name
+     * @return ImportFieldMap|null
+     * @throws CollectionDetailsException
+     * @throws CollectionLoaderException
+     * @throws EE_Error
+     */
+    public function getMappingInfoForField($field_name)
+    {
+        foreach ($this->mapping() as $mapped_field) {
+            if ($mapped_field->destinationFieldName() === $field_name) {
+                return $mapped_field;
+            }
+        }
+        return null;
+    }
+
+    /**
      * @since $VID:$
      * @return mixed|void
      */

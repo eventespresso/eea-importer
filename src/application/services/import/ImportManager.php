@@ -3,6 +3,7 @@
 namespace EventEspresso\AttendeeImporter\application\services\import;
 
 use EventEspresso\core\services\collections\CollectionDetails;
+use EventEspresso\core\services\collections\CollectionDetailsException;
 use EventEspresso\core\services\collections\CollectionInterface;
 use EventEspresso\core\services\collections\CollectionLoader;
 use EventEspresso\core\services\collections\CollectionLoaderException;
@@ -29,14 +30,12 @@ class ImportManager
     /**
      * Gets all the import type ui managers
      * @since $VID:$
-     * @return CollectionInterface
+     * @return CollectionInterface|ImportTypeUiManagerInterface[]
      * @throws CollectionLoaderException
+     * @throws CollectionDetailsException
      */
     public function loadImportTypeUiManagers()
     {
-        $import_domain_filepath = wp_normalize_path(EE_ATTENDEE_IMPORTER_PATH . 'domain/services/import/managers/ui');
-        $import_source_types = glob($import_domain_filepath . '*', GLOB_ONLYDIR);
-
         $loader = new CollectionLoader(
             new CollectionDetails(
                 // collection name
