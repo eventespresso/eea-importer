@@ -2,26 +2,14 @@
 
 namespace EventEspresso\AttendeeImporter\domain\services\commands;
 
-use EE_Answer;
 use EE_Attendee;
-use EE_Error;
-use EE_Registration;
-use EE_Registration_Processor;
-use EE_Registry;
-use EEH_Line_Item;
-use EEM_Question;
-use EEM_Registration;
-use EEM_Ticket;
-use EEM_Transaction;
-use EventEspresso\AttendeeImporter\application\services\import\config\models\ImportModelConfigInterface;
-use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
-use EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFieldMap;
+
+use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidEntityException;
-use EventEspresso\core\services\commands\CommandBusInterface;
-use EventEspresso\core\services\commands\CommandFactoryInterface;
+use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\services\commands\CommandInterface;
 use EventEspresso\core\services\commands\CompositeCommandHandler;
-use EventEspresso\core\services\options\JsonWpOptionManager;
+use InvalidArgumentException;
 
 /**
  * Class CreateAttendeeCommandHandler
@@ -32,51 +20,93 @@ use EventEspresso\core\services\options\JsonWpOptionManager;
  */
 class ImportCommandHandler extends CompositeCommandHandler
 {
+
     /**
      * @param CommandInterface $command
      * @return EE_Attendee
-     * @throws EE_Error
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
      * @throws InvalidEntityException
+     * @throws InvalidInterfaceException
      */
     public function handle(CommandInterface $command)
     {
         /** @var ImportCommand $command */
         if (!$command instanceof ImportCommand) {
-            throw new InvalidEntityException(get_class($command), 'EventEspresso\AttendeeImporter\domain\services\commands\ImportCommand');
+            throw new InvalidEntityException(
+                get_class($command),
+                'EventEspresso\AttendeeImporter\domain\services\commands\ImportCommand'
+            );
         }
 
-        // Determine the ticket and event ID
-        $ticket = EEM_Ticket::instance()->get_one_by_ID($command->getConfig()->getTicketId());
+        // No messages while importing thanks.
+        add_filter(
+            'FHEE__EED_Messages___maybe_registration__deliver_notifications',
+            '__return_false',
+            999
+        );
+        remove_all_filters('AHEE__EE_Payment_Processor__update_txn_based_on_payment__successful');
 
-        // Create a transaction
-        // @var $transaction EE_Transaction
-        $transaction = $this->commandBus()->execute(
+        $transaction = $attendee = $this->commandBus()->execute(
             $this->commandFactory()->getNew(
-                'EventEspresso\core\services\commands\transaction\CreateTransactionCommand',
+                'EventEspresso\AttendeeImporter\domain\services\commands\ImportTransactionCommand',
                 [
-                    null,
-                    []
+                    $command->getConfig()->getTicket(),
+                    $command->csvRow(),
+                    $command->getConfig()->getModelConfigs()->get('Transaction')
                 ]
             )
         );
-        // Mark the transaction as complete eh.
-        $transaction->save();
-        $line_item = EEH_Line_Item::create_ticket_line_item($transaction->total_line_item(), $ticket);
-        $transaction->total_line_item()->recalculate_total_including_taxes();
-        // Create a registration
+
+        $line_item = $this->commandBus()->execute(
+            $this->commandFactory()->getNew(
+                'EventEspresso\AttendeeImporter\domain\services\commands\ImportLineItemCommand',
+                [
+                    $transaction,
+                    $command->getConfig()->getTicket(),
+                    $command->csvRow(),
+                    $command->getConfig()->getModelConfigs()->get('Line_Item')
+                ]
+            )
+        );
+
+        // Create a payment and payment-registration entries.
+        $payment = $this->commandBus()->execute(
+            $this->commandFactory()->getNew(
+                'EventEspresso\AttendeeImporter\domain\services\commands\ImportPaymentCommand',
+                [
+                    $transaction,
+                    $command->csvRow(),
+                    $command->getConfig()->getModelConfigs()->get('Payment')
+                ]
+            )
+        );
+
         $registration = $this->commandBus()->execute(
             $this->commandFactory()->getNew(
-                'EventEspresso\core\services\commands\registration\CreateRegistrationCommand',
+                'EventEspresso\AttendeeImporter\domain\services\commands\ImportRegistrationCommand',
                 [
                     $transaction,
                     $line_item,
-                    1,
-                    null
+                    $command->csvRow(),
+                    $command->getConfig()->getModelConfigs()->get('Registration')
                 ]
             )
         );
-        EE_Registry::instance()->load_class('Registration_Processor')->toggle_incomplete_registration_status_to_default($registration, false);
-        $attendee = $this->commandBus()->execute(
+
+        $this->commandBus()->execute(
+            $this->commandFactory()->getNew(
+                'EventEspresso\AttendeeImporter\domain\services\commands\ImportRegistrationPaymentCommand',
+                [
+                    $registration,
+                    $payment,
+                    $command->csvRow(),
+                    $command->getConfig()->getModelConfigs()->get('Registration_Payment')
+                ]
+            )
+        );
+
+        $this->commandBus()->execute(
             $this->commandFactory()->getNew(
                 'EventEspresso\AttendeeImporter\domain\services\commands\ImportAttendeeCommand',
                 [
@@ -87,30 +117,12 @@ class ImportCommandHandler extends CompositeCommandHandler
             )
         );
 
-        // Save the registration, and assign it to the attendee
-        $registration->save(
-            [
-                'ATT_ID' => $attendee->ID()
-            ]
-        );
-
         $this->commandBus()->execute(
             $this->commandFactory()->getNew(
                 'EventEspresso\AttendeeImporter\domain\services\commands\ImportAnswersCommand',
                 [
                     $registration,
                     $command->csvRow()
-                ]
-            )
-        );
-        // Create a payment and payment-registration entries.
-        $payment = $this->commandBus()->execute(
-            $this->commandFactory()->getNew(
-                'EventEspresso\AttendeeImporter\domain\services\commands\ImportPaymentCommand',
-                [
-                    $transaction,
-                    $command->csvRow(),
-                    $command->getConfig()->getModelConfigs()->get('Payment')
                 ]
             )
         );

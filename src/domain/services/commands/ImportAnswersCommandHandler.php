@@ -10,7 +10,6 @@ use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\services\commands\CommandHandler;
 use EventEspresso\core\services\commands\CommandInterface;
-use EventEspresso\core\services\options\JsonWpOptionManager;
 use InvalidArgumentException;
 use ReflectionException;
 
@@ -31,7 +30,6 @@ class ImportAnswersCommandHandler extends CommandHandler
 
     /**
      * @param ImportCsvAttendeesConfig $config
-     * @param JsonWpOptionManager $option_manager
      */
     public function __construct(
         ImportCsvAttendeesConfig $config

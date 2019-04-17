@@ -2,9 +2,15 @@
 
 namespace EventEspresso\AttendeeImporter\domain\services\commands;
 
+use EE_Error;
 use EventEspresso\AttendeeImporter\application\services\import\config\models\ImportModelConfigBase;
+use EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFieldMap;
+use EventEspresso\core\exceptions\InvalidDataTypeException;
+use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\services\collections\CollectionDetailsException;
 use EventEspresso\core\services\collections\CollectionLoaderException;
+use InvalidArgumentException;
+use ReflectionException;
 
 /**
  * Class ImportSingleModelBase
@@ -35,9 +41,13 @@ class ImportSingleModelBase extends ImportBaseCommand
      * Gets an array where keys are model field names, and values are their coerced values fromthe input data.
      * @since $VID:$
      * @return array
-     * @throws \EE_Error
      * @throws CollectionDetailsException
      * @throws CollectionLoaderException
+     * @throws EE_Error
+     * @throws InvalidDataTypeException
+     * @throws InvalidInterfaceException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
     public function getFieldsFromMappedData()
     {
