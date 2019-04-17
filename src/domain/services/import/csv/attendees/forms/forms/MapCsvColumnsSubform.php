@@ -90,7 +90,7 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
                     $this_model_options[ $input_name ] = $mapped_field->destinationField()->get_nicename();
                 }
                 if (! empty($this_model_options)) {
-                    $options[ $item_name ] =$this_model_options;
+                    $options[ $item_name ] = $this_model_options;
                 }
             }
         }
