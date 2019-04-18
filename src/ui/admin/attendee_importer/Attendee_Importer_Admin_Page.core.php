@@ -1,6 +1,11 @@
 <?php
+
+use EventEspresso\AttendeeImporter\application\services\import\ImportManager;
 use EventEspresso\core\exceptions\ExceptionStackTraceDisplay;
-use EventEspresso\core\libraries\form_sections\form_handlers\InvalidFormHandlerException;
+use EventEspresso\core\exceptions\InvalidDataTypeException;
+use EventEspresso\core\exceptions\InvalidInterfaceException;
+use EventEspresso\core\services\collections\CollectionDetailsException;
+use EventEspresso\core\services\collections\CollectionLoaderException;
 use EventEspresso\core\services\loaders\LoaderFactory;
 
 if (!defined('EVENT_ESPRESSO_VERSION')) {
@@ -11,7 +16,8 @@ if (!defined('EVENT_ESPRESSO_VERSION')) {
  *
  * Attendee_Importer_Admin_Page
  *
- * This contains the logic for setting up the Attendee_Importer Addon Admin related pages.  Any methods without PHP doc comments have inline docs with parent class.
+ * This contains the logic for setting up the Attendee_Importer Addon Admin related pages.  Any methods without PHP doc
+ * comments have inline docs with parent class.
  *
  *
  * @package            Attendee_Importer_Admin_Page (attendee_importer addon)
@@ -58,7 +64,6 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
                 'headers_sent_route' => 'show_import_step',
                 'args' => ['type' => $import_type]
             ),
-            'usage' => 'usage',
             'show_import_step' => array(
                 'func' => 'show_import_step',
                 'args' => ['type' => $import_type]
@@ -72,13 +77,6 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
 
         $this->_page_config = array(
             'default' => array(
-                'require_nonce' => false
-            ),
-            'usage' => array(
-                'nav' => array(
-                    'label' => __('Attendee Importer Usage', 'event_espresso'),
-                    'order' => 30
-                ),
                 'require_nonce' => false
             ),
             'show_import_step' => array(
@@ -106,7 +104,13 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
 
     public function load_scripts_styles()
     {
-        wp_register_script('espresso_attendee_importer_admin', EE_ATTENDEE_IMPORTER_ADMIN_ASSETS_URL . 'espresso_attendee_importer_admin.js', array('espresso_core'), EE_ATTENDEE_IMPORTER_VERSION, true);
+        wp_register_script(
+            'espresso_attendee_importer_admin',
+            EE_ATTENDEE_IMPORTER_ADMIN_ASSETS_URL . 'espresso_attendee_importer_admin.js',
+            array('espresso_core'),
+            EE_ATTENDEE_IMPORTER_VERSION,
+            true
+        );
         wp_enqueue_script('espresso_attendee_importer_admin');
     }
 
@@ -122,31 +126,26 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     {
     }
 
-
-    protected function usage()
-    {
-        $this->_template_args['admin_page_content'] = EEH_Template::display_template(
-            EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_PATH . 'attendee_importer_usage_info.template.php',
-            array(),
-            true
-        );
-        $this->display_admin_page_with_no_sidebar();
-    }
-
     /**
-     * Shows the list of importers available.
+     * Shows the list of importers available. If there's only one though, just send the user to that one.
      * @since $VID:$
+     * @return void
+     * @throws DomainException
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidInterfaceException
+     * @throws CollectionDetailsException
+     * @throws CollectionLoaderException
      */
     protected function main()
     {
         $import_manager = $this->getImportManager();
-        /* @var $import_manager EventEspresso\core\services\import\ImportManager */
         $import_type_ui_managaers = $import_manager->loadImportTypeUiManagers();
 
         // If there's only one importer, don't bother asking what they want to import.
         if (count($import_type_ui_managaers) === 1) {
             $import_type = $import_type_ui_managaers->current();
-            return $this->show_import_step($import_type->getSlug());
+            $this->show_import_step($import_type->getSlug());
         }
         
         $html = '';
@@ -174,21 +173,26 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     }
 
     /**
+     * Gets the import manager.
      * @since $VID:$
-     * @return EventEspresso\AttendeeImporter\application\services\import\ImportManager
+     * @return ImportManager
      * @throws InvalidArgumentException
-     * @throws \EventEspresso\core\exceptions\InvalidDataTypeException
-     * @throws \EventEspresso\core\exceptions\InvalidInterfaceException
+     * @throws InvalidDataTypeException
+     * @throws InvalidInterfaceException
      */
     protected function getImportManager()
     {
-        return LoaderFactory::getLoader()->load('EventEspresso\AttendeeImporter\application\services\import\ImportManager');
+        return LoaderFactory::getLoader()->load(
+            'EventEspresso\AttendeeImporter\application\services\import\ImportManager'
+        );
     }
 
     /**
+     * Handles import step requests. If it's a post, processes the form. Otherwise, does nothing and lets
+     * `show_import_step()` take care of the request.
      * @since $VID:$
-     * @throws InvalidArgumentException
-     * @throws InvalidFormHandlerException
+     * @param $import_type
+     * @throws Exception
      */
     protected function import($import_type)
     {
@@ -202,6 +206,13 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
         }
     }
 
+    /**
+     * Handles GET requests to show an import step.
+     * @since $VID:$
+     * @param $import_type
+     * @throws DomainException
+     * @throws EE_Error
+     */
     protected function show_import_step($import_type)
     {
         try {
@@ -216,12 +227,13 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     }
 
     /**
+     * Just grabs the form step manager, based on the import type provided.
      * @param string $import_type
      * @return EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepFormManager
      * @throws InvalidArgumentException
-     * @throws \EventEspresso\core\exceptions\InvalidDataTypeException
-     * @throws \EventEspresso\core\exceptions\InvalidInterfaceException
-     * @throws \EventEspresso\core\services\collections\CollectionLoaderException
+     * @throws InvalidDataTypeException
+     * @throws InvalidInterfaceException
+     * @throws CollectionLoaderException
      */
     public function getFormStepManager($import_type)
     {
