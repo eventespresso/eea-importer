@@ -140,16 +140,17 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     protected function main()
     {
         $import_manager = $this->getImportManager();
-        $import_type_ui_managaers = $import_manager->loadImportTypeUiManagers();
+        $import_type_ui_managers = $import_manager->loadImportTypeUiManagers();
 
         // If there's only one importer, don't bother asking what they want to import.
-        if (count($import_type_ui_managaers) === 1) {
-            $import_type = $import_type_ui_managaers->current();
+        if (count($import_type_ui_managers) === 1) {
+            $import_type = $import_type_ui_managers->current();
             $this->show_import_step($import_type->getSlug());
+            return;
         }
         
         $html = '';
-        foreach ($import_type_ui_managaers as $ui_manager) {
+        foreach ($import_type_ui_managers as $ui_manager) {
             $import_type = $ui_manager->getImportType();
             $html .= EEH_Template::display_template(
                 EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_PATH . 'attendee_importer_manager_type.template.php',
