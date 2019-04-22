@@ -52,9 +52,9 @@ class Complete extends ImportCsvAttendeesStep
         JsonWpOptionManager $option_manager
     ) {
         parent::__construct(
-            5,
+            6,
             esc_html__('Complete', 'event_espresso'),
-            esc_html__('"Complete" Attendee Mover Step', 'event_espresso'),
+            esc_html__('"Complete" Attendee Importer Step', 'event_espresso'),
             'complete',
             '',
             FormHandler::ADD_FORM_TAGS_AND_SUBMIT,

@@ -2,6 +2,8 @@
 
 namespace EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config;
 
+use EE_Base_Class;
+use EEM_Ticket;
 use EventEspresso\AttendeeImporter\application\services\import\config\ImportConfigBase;
 use EventEspresso\AttendeeImporter\application\services\import\config\ImportModelConfigInterface;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
@@ -45,6 +47,16 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
      * Maybe we'll think of a more elegant solution than this, but this at least works.
      */
     protected $question_mapping = array();
+
+    /**
+     * @var EEM_Ticket
+     */
+    private $ticket_model;
+
+    public function __construct(EEM_Ticket $ticket_model)
+    {
+        $this->ticket_model = $ticket_model;
+    }
 
     /**
      * Gets the filepath to read.
@@ -112,6 +124,15 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
     }
 
     /**
+     * @since $VID:$
+     * @return EE_Ticket
+     */
+    public function getTicket()
+    {
+        return $this->ticket_model->get_one_by_ID($this->ticket_id);
+    }
+
+    /**
      * @param int $ticket_id
      */
     public function setTicketId($ticket_id)
@@ -132,7 +153,10 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
      */
     public function setQuestionMapping(array $question_mapping)
     {
-        $this->question_mapping = $question_mapping;
+        $this->question_mapping = [];
+        foreach($question_mapping as $question_id => $column) {
+            $this->question_mapping[intval( $question_id)] = $column;
+        }
     }
 
     public function clearMapping()
@@ -159,7 +183,12 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
                 'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportModelConfigBase',
                 // FQCNs for classes to add (all classes within that namespace will be loaded)
                 [
-                    'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportAttendeeConfig'
+                    'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportAttendeeConfig',
+                    'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportPaymentConfig',
+                    'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportRegistrationConfig',
+                    'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportRegistrationPaymentConfig',
+                    'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportTransactionConfig',
+                    'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportLineItemConfig'
                 ],
                 [],
                 '',

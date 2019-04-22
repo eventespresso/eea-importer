@@ -10,7 +10,6 @@ use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\services\commands\CommandHandler;
 use EventEspresso\core\services\commands\CommandInterface;
-use EventEspresso\core\services\options\JsonWpOptionManager;
 use InvalidArgumentException;
 use ReflectionException;
 
@@ -31,7 +30,6 @@ class ImportAnswersCommandHandler extends CommandHandler
 
     /**
      * @param ImportCsvAttendeesConfig $config
-     * @param JsonWpOptionManager $option_manager
      */
     public function __construct(
         ImportCsvAttendeesConfig $config
@@ -56,7 +54,10 @@ class ImportAnswersCommandHandler extends CommandHandler
             $question = EEM_Question::instance()->get_one_by_ID($question_id);
             $answer = $command->csvColumnValue($csv_column);
             if (EEM_Question::instance()->question_type_is_in_category($question->type(), 'multi-answer-enum')) {
-                $answer = explode(',', $answer);
+                $answer = array_map(
+                    'trim',
+                    explode('|', $answer)
+                );
             }
             $answer = EE_Answer::new_instance(
                 [

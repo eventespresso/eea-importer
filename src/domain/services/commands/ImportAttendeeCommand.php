@@ -3,6 +3,7 @@
 namespace EventEspresso\AttendeeImporter\domain\services\commands;
 
 use EE_Registration;
+use EventEspresso\AttendeeImporter\application\services\import\config\models\ImportAttendeeConfig;
 
 /**
  * Class CreateAttendeeCommand
@@ -11,7 +12,7 @@ use EE_Registration;
  * @package       Event Espresso
  * @author        Michael Nelson
  */
-class ImportAttendeeCommand extends ImportBaseCommand
+class ImportAttendeeCommand extends ImportSingleModelBase
 {
 
     /**
@@ -19,9 +20,12 @@ class ImportAttendeeCommand extends ImportBaseCommand
      */
     private $registration;
 
-    public function __construct(EE_Registration $reg, array $csv_row)
-    {
-        parent::__construct($csv_row);
+    public function __construct(
+        EE_Registration $reg,
+        array $input_data,
+        ImportAttendeeConfig $config
+    ) {
+        parent::__construct($input_data, $config);
         $this->registration = $reg;
     }
 
