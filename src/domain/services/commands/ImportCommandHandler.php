@@ -97,7 +97,7 @@ class ImportCommandHandler extends CompositeCommandHandler
                 ]
             )
         );
-        if ($payment instanceof EE_Payment){
+        if ($payment instanceof EE_Payment) {
             $this->commandBus()->execute(
                 $this->commandFactory()->getNew(
                     'EventEspresso\AttendeeImporter\domain\services\commands\ImportRegistrationPaymentCommand',

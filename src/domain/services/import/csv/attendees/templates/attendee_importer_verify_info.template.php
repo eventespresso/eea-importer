@@ -1,6 +1,6 @@
 
-<p><b><?php esc_html_e('Event', 'event_espresso');?></b> <?php echo esc_html( $event instanceof EE_Event ? $event->name() : esc_html__('None', 'event_espresso'));?></p>
-<p><b><?php esc_html_e('Ticket', 'event_espresso');?></b> <?php echo esc_html( $ticket instanceof EE_Ticket ? $ticket->name() : esc_html__('None', 'event_espresso'));?></p>
+<p><b><?php esc_html_e('Event', 'event_espresso');?></b> <?php echo esc_html($event instanceof EE_Event ? $event->name() : esc_html__('None', 'event_espresso'));?></p>
+<p><b><?php esc_html_e('Ticket', 'event_espresso');?></b> <?php echo esc_html($ticket instanceof EE_Ticket ? $ticket->name() : esc_html__('None', 'event_espresso'));?></p>
 
 <table class="ee-responsive-table">
     <thead>
