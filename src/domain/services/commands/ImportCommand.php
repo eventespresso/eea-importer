@@ -48,4 +48,22 @@ class ImportCommand extends ImportBaseCommand
         }
         return $this->config;
     }
+
+    /**
+     * Checks if absolutely all datapoints are blank. If so, returns true. Otherwise, returns false.
+     * @since $VID:$
+     * @return bool
+     */
+    public function rowIsOnlyBlanks()
+    {
+        foreach ($this->inputData() as $column => $value) {
+            if (is_string($value)) {
+                $value = trim($value);
+            }
+            if ($value !== null && $value !== '') {
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -38,6 +38,10 @@ class ImportCommandHandler extends CompositeCommandHandler
                 'EventEspresso\AttendeeImporter\domain\services\commands\ImportCommand'
             );
         }
+        // If the row only contains blanks, don't import anything.
+        if ($command->rowIsOnlyBlanks()) {
+            return null;
+        }
 
         // No messages while importing thanks.
         add_filter(
@@ -52,7 +56,7 @@ class ImportCommandHandler extends CompositeCommandHandler
                 'EventEspresso\AttendeeImporter\domain\services\commands\ImportTransactionCommand',
                 [
                     $command->getConfig()->getTicket(),
-                    $command->csvRow(),
+                    $command->inputData(),
                     $command->getConfig()->getModelConfigs()->get('Transaction')
                 ]
             )
@@ -64,7 +68,7 @@ class ImportCommandHandler extends CompositeCommandHandler
                 [
                     $transaction,
                     $command->getConfig()->getTicket(),
-                    $command->csvRow(),
+                    $command->inputData(),
                     $command->getConfig()->getModelConfigs()->get('Line_Item')
                 ]
             )
@@ -76,7 +80,7 @@ class ImportCommandHandler extends CompositeCommandHandler
                 'EventEspresso\AttendeeImporter\domain\services\commands\ImportPaymentCommand',
                 [
                     $transaction,
-                    $command->csvRow(),
+                    $command->inputData(),
                     $command->getConfig()->getModelConfigs()->get('Payment')
                 ]
             )
@@ -88,30 +92,31 @@ class ImportCommandHandler extends CompositeCommandHandler
                 [
                     $transaction,
                     $line_item,
-                    $command->csvRow(),
+                    $command->inputData(),
                     $command->getConfig()->getModelConfigs()->get('Registration')
                 ]
             )
         );
-
-        $this->commandBus()->execute(
-            $this->commandFactory()->getNew(
-                'EventEspresso\AttendeeImporter\domain\services\commands\ImportRegistrationPaymentCommand',
-                [
-                    $registration,
-                    $payment,
-                    $command->csvRow(),
-                    $command->getConfig()->getModelConfigs()->get('Registration_Payment')
-                ]
-            )
-        );
+        if ($payment instanceof EE_Payment){
+            $this->commandBus()->execute(
+                $this->commandFactory()->getNew(
+                    'EventEspresso\AttendeeImporter\domain\services\commands\ImportRegistrationPaymentCommand',
+                    [
+                        $registration,
+                        $payment,
+                        $command->inputData(),
+                        $command->getConfig()->getModelConfigs()->get('Registration_Payment')
+                    ]
+                )
+            );
+        }
 
         $this->commandBus()->execute(
             $this->commandFactory()->getNew(
                 'EventEspresso\AttendeeImporter\domain\services\commands\ImportAttendeeCommand',
                 [
                     $registration,
-                    $command->csvRow(),
+                    $command->inputData(),
                     $command->getConfig()->getModelConfigs()->get('Attendee')
                 ]
             )
@@ -122,7 +127,7 @@ class ImportCommandHandler extends CompositeCommandHandler
                 'EventEspresso\AttendeeImporter\domain\services\commands\ImportAnswersCommand',
                 [
                     $registration,
-                    $command->csvRow()
+                    $command->inputData()
                 ]
             )
         );
