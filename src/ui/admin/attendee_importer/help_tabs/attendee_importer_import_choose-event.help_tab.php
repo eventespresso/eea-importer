@@ -1,5 +1,5 @@
 <p>
-    <strong><?php esc_html_e('Choose the Event to Import To','event_espresso' );?></strong>
+    <strong><?php esc_html_e('Choose the Event to Import To', 'event_espresso');?></strong>
 </p>
 <p>
     <?php esc_html_e('The event must be previously created. If you don’t want new online registrations, the event can be private.', 'event_espresso'); ?>

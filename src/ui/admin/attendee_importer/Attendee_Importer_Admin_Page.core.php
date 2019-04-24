@@ -90,11 +90,11 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
         $import_type = isset($this->_req_data['type']) ? $this->_req_data['type'] : '';
         $step_manager = $this->getFormStepManager($import_type);
         $steps = $step_manager->getSteps();
-        foreach($steps as $step){
+        foreach ($steps as $step) {
             if (! $step->hasHelpTab()) {
                 continue;
             }
-            $help_tabs_data['attendee_importer_import_' . $step->slug()] = [
+            $help_tabs_data[ 'attendee_importer_import_' . $step->slug() ] = [
                 'title' => $step->formName(),
                 'filename' => 'attendee_importer_import_' . $step->slug()
             ];
@@ -280,17 +280,17 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     {
         $manager = $this->getImportManager();
         $ui_manager = $manager->getUiManager($import_type);
-        if (! $ui_manager instanceof ImportTypeUiManagerInterface){
+        if (! $ui_manager instanceof ImportTypeUiManagerInterface) {
             $all_ui_managers = $manager->getImportTypeUiManagers();
             $all_ui_managers->rewind();
             $ui_manager = $all_ui_managers->current();
         }
         return $ui_manager->getStepManager(EE_Admin_Page::add_query_args_and_nonce(
-                ['action' => 'import',
+            ['action' => 'import',
                     'type' => $import_type
                 ],
-                EE_ATTENDEE_IMPORTER_ADMIN_URL
-            ));
+            EE_ATTENDEE_IMPORTER_ADMIN_URL
+        ));
     }
 }
 // End of file Attendee_Importer_Admin_Page.core.php

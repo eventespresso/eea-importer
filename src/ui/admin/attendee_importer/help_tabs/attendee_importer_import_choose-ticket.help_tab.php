@@ -1,5 +1,5 @@
 <p>
-    <strong><?php esc_html_e('Choose the Ticket to Import To','event_espresso' );?></strong>
+    <strong><?php esc_html_e('Choose the Ticket to Import To', 'event_espresso');?></strong>
 </p>
 <p>
     <?php esc_html_e('Currently, you can only import to a single ticket at a time. To import registrations for multiple tickets, you will need to use multiple CSV files and import each one separately.', 'event_espresso'); ?>

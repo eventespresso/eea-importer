@@ -1,5 +1,5 @@
 <p>
-    <strong><?php esc_html_e('Upload the CSV File','event_espresso' );?></strong>
+    <strong><?php esc_html_e('Upload the CSV File', 'event_espresso');?></strong>
 </p>
 <p>
     <?php esc_html_e('Choose the CSV file from your computer. It will be temporarily uploaded to the server and its rows will be imported.', 'event_espresso'); ?>
