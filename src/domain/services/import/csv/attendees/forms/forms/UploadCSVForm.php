@@ -41,7 +41,9 @@ class UploadCSVForm extends EE_Form_Section_Proper
                     ),
                     'file' => new EE_File_Input(
                         [
-                            'required' => true
+                            'required' => true,
+                            'html_label_text' => esc_html__('CSV File', 'event_espresso'),
+                            'html_help_text' => esc_html__('The CSV file data will be imported from.', 'event_espresso')
                         ]
                     ),
                 )

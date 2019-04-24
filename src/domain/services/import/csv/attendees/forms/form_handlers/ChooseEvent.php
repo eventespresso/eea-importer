@@ -75,11 +75,15 @@ class ChooseEvent extends ImportCsvAttendeesStep
             [
                 'name' => 'event',
                 'subsections' => [
+                    'header' => new EE_Form_Section_HTML(
+                        EEH_HTML::h2(esc_html__('Select Event', 'event_espresso'))
+                    ),
                     'event' => new EE_Select_Ajax_Model_Rest_Input(
                         [
                             'model_name' => 'Event',
                             'required' => true,
-                            'help_text' => esc_html__('The Event data should be imported to.', 'event_espresso'),
+                            'html_label_text' => esc_html__('Event', 'event_espresso'),
+                            'html_help_text' => esc_html__('The event data should be imported to.', 'event_espresso'),
                             'default' => $this->config->getEventId(),
                             'query_params' => [
                                 'order_by' => ['EVT_ID' => 'DESC']

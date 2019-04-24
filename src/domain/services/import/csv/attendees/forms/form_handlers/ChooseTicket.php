@@ -82,11 +82,15 @@ class ChooseTicket extends ImportCsvAttendeesStep
             [
                 'name' => 'ticket',
                 'subsections' => [
+                    'header' => new EE_Form_Section_HTML(
+                        EEH_HTML::h2(esc_html__('Select Ticket', 'event_espresso'))
+                    ),
                     'ticket' => new EE_Select_Ajax_Model_Rest_Input(
                         [
                             'model_name' => 'Ticket',
                             'required' => true,
-                            'help_text' => esc_html__('The Ticket data should be imported to.', 'event_espresso'),
+                            'html_label_text' => esc_html__('Ticket', 'event_espresso'),
+                            'html_help_text' => esc_html__('The Ticket data should be imported to.', 'event_espresso'),
                             'query_params' => [
                                 [
                                     'Datetime.Event.EVT_ID' => $this->config->getEventId()

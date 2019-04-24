@@ -45,7 +45,6 @@ class MapCsvColumnsForm extends EE_Form_Section_Proper
                     ),
                     'columns' => LoaderFactory::getLoader()->getNew('EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\forms\MapCsvColumnsSubform'),
                 ],
-                'html_style' => 'display:flex'
             ],
             $options_array
         );
