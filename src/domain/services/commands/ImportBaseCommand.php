@@ -51,7 +51,7 @@ class ImportBaseCommand extends Command implements CommandRequiresCapCheckInterf
      * @since $VID:$
      * @return array
      */
-    public function csvRow()
+    public function inputData()
     {
         return $this->input_data;
     }
@@ -62,7 +62,7 @@ class ImportBaseCommand extends Command implements CommandRequiresCapCheckInterf
      * @param $column_name
      * @return string|null
      */
-    public function csvColumnValue($column_name)
+    public function valueFromInput($column_name)
     {
         return isset($this->input_data[ $column_name ]) ? $this->input_data[ $column_name ] : null;
     }
