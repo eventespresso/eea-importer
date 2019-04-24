@@ -1,6 +1,7 @@
 <?php
 
 use EventEspresso\AttendeeImporter\application\services\import\ImportManager;
+use EventEspresso\AttendeeImporter\application\services\import\ImportTypeUiManagerInterface;
 use EventEspresso\core\exceptions\ExceptionStackTraceDisplay;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
@@ -140,7 +141,7 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     protected function main()
     {
         $import_manager = $this->getImportManager();
-        $import_type_ui_managers = $import_manager->loadImportTypeUiManagers();
+        $import_type_ui_managers = $import_manager->getImportTypeUiManagers();
 
         // If there's only one importer, don't bother asking what they want to import.
         if (count($import_type_ui_managers) === 1) {
@@ -238,9 +239,14 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
      */
     public function getFormStepManager($import_type)
     {
-        return $this->getImportManager()
-            ->getUiManager($import_type)
-            ->getStepManager(EE_Admin_Page::add_query_args_and_nonce(
+        $manager = $this->getImportManager();
+        $ui_manager = $manager->getUiManager($import_type);
+        if (! $ui_manager instanceof ImportTypeUiManagerInterface){
+            $all_ui_managers = $manager->getImportTypeUiManagers();
+            $all_ui_managers->rewind();
+            $ui_manager = $all_ui_managers->current();
+        }
+        return $ui_manager->getStepManager(EE_Admin_Page::add_query_args_and_nonce(
                 ['action' => 'import',
                     'type' => $import_type
                 ],

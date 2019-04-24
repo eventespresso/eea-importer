@@ -22,6 +22,7 @@ use EventEspresso\core\services\loaders\Loader;
 class ImportManager
 {
     protected $loader;
+    protected $managers;
     public function __construct(Loader $loader)
     {
         $this->loader = $loader;
@@ -34,7 +35,7 @@ class ImportManager
      * @throws CollectionLoaderException
      * @throws CollectionDetailsException
      */
-    public function loadImportTypeUiManagers()
+    protected function loadImportTypeUiManagers()
     {
         $loader = new CollectionLoader(
             new CollectionDetails(
@@ -57,8 +58,22 @@ class ImportManager
                 'getSlug'
             )
         );
+        $this->managers = $loader->getCollection();
+    }
 
-        return $loader->getCollection();
+    /**
+     * Gets import type managers
+     * @since $VID:$
+     * @return CollectionInterface|ImportTypeManagerInterface[]
+     * @throws CollectionDetailsException
+     * @throws CollectionLoaderException
+     */
+    public function getImportTypeUiManagers()
+    {
+        if (! $this->managers instanceof CollectionInterface) {
+            $this->loadImportTypeUiManagers();
+        }
+        return $this->managers;
     }
 
     /**
@@ -69,7 +84,7 @@ class ImportManager
      */
     public function getUiManager($slug)
     {
-        $collection = $this->loadImportTypeUiManagers();
+        $collection = $this->getImportTypeUiManagers();
         return $collection->get($slug);
     }
 }
