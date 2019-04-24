@@ -52,6 +52,7 @@ class MapCsvColumns extends ImportCsvAttendeesStep
         JsonWpOptionManager $option_manager
     ) {
         $this->setDisplayable(true);
+        $this->has_help_tab = true;
         parent::__construct(
             4,
             esc_html__('Map CSV Columns To Event Espresso Data', 'event_espresso'),
@@ -76,7 +77,9 @@ class MapCsvColumns extends ImportCsvAttendeesStep
     {
         $this->option_manager->populateFromDb($this->config);
         return new MapCsvColumnsForm(
-            array()
+            [
+                'help_tab_link' => $this->getHelpTabLink()
+            ]
         );
     }
 

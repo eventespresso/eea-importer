@@ -52,6 +52,7 @@ class ChooseTicket extends ImportCsvAttendeesStep
         JsonWpOptionManager $option_manager
     ) {
         $this->setDisplayable(true);
+        $this->has_help_tab = true;
         parent::__construct(
             2,
             esc_html__('Choose Ticket', 'event_espresso'),
@@ -83,7 +84,10 @@ class ChooseTicket extends ImportCsvAttendeesStep
                 'name' => 'ticket',
                 'subsections' => [
                     'header' => new EE_Form_Section_HTML(
-                        EEH_HTML::h2(esc_html__('Select Ticket', 'event_espresso'))
+                        EEH_HTML::h2(
+                            esc_html__('Select Ticket', 'event_espresso')
+                            . $this->getHelpTabLink()
+                        )
                     ),
                     'ticket' => new EE_Select_Ajax_Model_Rest_Input(
                         [

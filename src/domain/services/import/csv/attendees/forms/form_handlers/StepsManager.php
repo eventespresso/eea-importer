@@ -8,10 +8,13 @@ use EventEspresso\core\exceptions\InvalidFilePathException;
 use EventEspresso\core\exceptions\InvalidIdentifierException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\libraries\form_sections\form_handlers\FormHandler;
+use EventEspresso\core\libraries\form_sections\form_handlers\InvalidFormHandlerException;
 use EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepFormManager;
 use EventEspresso\core\services\collections\Collection;
 use EventEspresso\core\services\collections\CollectionDetails;
+use EventEspresso\core\services\collections\CollectionInterface;
 use EventEspresso\core\services\collections\CollectionLoader;
+use InvalidArgumentException;
 
 /**
  * Class StesManager
@@ -64,7 +67,7 @@ class StepsManager extends SequentialStepFormManager
      */
     protected function getFormStepsCollection()
     {
-        if (! $this->form_steps instanceof Collection) {
+        if (! $this->form_steps instanceof CollectionInterface) {
             $loader = new CollectionLoader(
                 new CollectionDetails(
                     // collection name
@@ -98,6 +101,24 @@ class StepsManager extends SequentialStepFormManager
             $this->form_steps = $loader->getCollection();
         }
         return $this->form_steps;
+    }
+
+    /**
+     * @since $VID:$
+     * @return CollectionInterface|ImportCsvAttendeesStep[]
+     * @throws InvalidClassException
+     * @throws InvalidDataTypeException
+     * @throws InvalidEntityException
+     * @throws InvalidIdentifierException
+     * @throws InvalidInterfaceException
+     * @throws InvalidFormHandlerException
+     * @throws InvalidArgumentException
+     */
+    public function getSteps()
+    {
+        $this->getFormStepsCollection();
+        // Don't return the original steps collection as when we loop through it, it borks later logic.
+        return clone $this->form_steps;
     }
 }
 // End of file StesManager.php

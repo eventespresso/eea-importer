@@ -2,6 +2,7 @@
 
 use EventEspresso\AttendeeImporter\application\services\import\ImportManager;
 use EventEspresso\AttendeeImporter\application\services\import\ImportTypeUiManagerInterface;
+use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\StepsManager;
 use EventEspresso\core\exceptions\ExceptionStackTraceDisplay;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
@@ -80,23 +81,19 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
                 'title'    => __('Attendee Importer Overview', 'event_espresso'),
                 'filename' => 'attendee_importer_import_overview',
             ),
-            'attendee_importer_import_choose_event_help_tab' => array(
-                'title'    => __('Choose Event', 'event_espresso'),
-                'filename' => 'attendee_importer_import_choose_event',
-            ),
-            'attendee_importer_import_choose_ticket_help_tab' => array(
-                'title'    => __('Choose Ticket', 'event_espresso'),
-                'filename' => 'attendee_importer_import_choose_ticket',
-            ),
-            'attendee_importer_import_upload_help_tab' => array(
-                'title'    => __('Upload CSV File', 'event_espresso'),
-                'filename' => 'attendee_importer_import_upload',
-            ),
-            'attendee_importer_import_map_help_tab' => array(
-                'title'    => __('Map CSV Columns to Event Espresso Data', 'event_espresso'),
-                'filename' => 'attendee_importer_import_map',
-            ),
         );
+        $import_type = isset($this->_req_data['type']) ? $this->_req_data['type'] : '';
+        $step_manager = $this->getFormStepManager($import_type);
+        $steps = $step_manager->getSteps();
+        foreach($steps as $step){
+            if (! $step->hasHelpTab()) {
+                continue;
+            }
+            $help_tabs_data['attendee_importer_import_' . $step->slug()] = [
+                'title' => $step->formName(),
+                'filename' => 'attendee_importer_import_' . $step->slug()
+            ];
+        }
         $this->_page_config = array(
             'default' => array(
                 'require_nonce' => false,
@@ -254,11 +251,12 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     /**
      * Just grabs the form step manager, based on the import type provided.
      * @param string $import_type
-     * @return EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepFormManager
+     * @return StepsManager
+     * @throws CollectionDetailsException
+     * @throws CollectionLoaderException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidInterfaceException
-     * @throws CollectionLoaderException
      */
     public function getFormStepManager($import_type)
     {

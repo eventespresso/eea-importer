@@ -44,6 +44,7 @@ class UploadCsv extends ImportCsvAttendeesStep
     public function __construct(EE_Registry $registry, ImportCsvAttendeesConfig $config, JsonWpOptionManager $option_manager)
     {
         $this->setDisplayable(true);
+        $this->has_help_tab = true;
         parent::__construct(
             3,
             esc_html__('Upload', 'event_espresso'),
@@ -67,7 +68,11 @@ class UploadCsv extends ImportCsvAttendeesStep
     public function generate()
     {
         $this->option_manager->populateFromDb($this->config);
-        $form = new UploadCSVForm();
+        $form = new UploadCSVForm(
+            [
+                'help_tab_link' => $this->getHelpTabLink()
+            ]
+        );
         return $form;
     }
 

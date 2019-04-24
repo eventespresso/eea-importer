@@ -40,6 +40,12 @@ class MapCsvColumnsForm extends EE_Form_Section_Proper
         $options_array = array_replace_recursive(
             [
                 'subsections' => [
+                    'header' => new EE_Form_Section_HTML(
+                        EEH_HTML::h2(
+                            esc_html__('Map CSV Columns to Event Espresso Data', 'event_espresso')
+                            . $options_array['help_tab_link']
+                        )
+                    ),
                     'instructions' => new EE_Form_Section_HTML_From_Template(
                         wp_normalize_path(dirname(dirname(dirname(__FILE__))) . '/templates/ee_attendee_importer_mapping_instructions.template.php')
                     ),

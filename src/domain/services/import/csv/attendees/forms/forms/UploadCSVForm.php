@@ -32,7 +32,10 @@ class UploadCSVForm extends EE_Form_Section_Proper
             [
                 'subsections' => array(
                     'header' => new EE_Form_Section_HTML(
-                        EEH_HTML::h2(esc_html__('Upload CSV  File', 'event_espresso'))
+                        EEH_HTML::h2(
+                            esc_html__('Upload CSV  File', 'event_espresso')
+                            . $options_array['help_tab_link']
+                    )
                     ),
                     'instructions' => new EE_Form_Section_HTML(
                         EEH_HTML::p(
