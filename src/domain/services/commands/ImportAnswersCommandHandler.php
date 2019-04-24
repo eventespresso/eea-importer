@@ -52,7 +52,7 @@ class ImportAnswersCommandHandler extends CommandHandler
         $answers = [];
         foreach ($this->config->getQuestionMapping() as $question_id => $csv_column) {
             $question = EEM_Question::instance()->get_one_by_ID($question_id);
-            $answer = $command->csvColumnValue($csv_column);
+            $answer = $command->valueFromInput($csv_column);
             if (EEM_Question::instance()->question_type_is_in_category($question->type(), 'multi-answer-enum')) {
                 $answer = array_map(
                     'trim',

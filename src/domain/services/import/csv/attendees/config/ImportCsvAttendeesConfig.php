@@ -154,8 +154,8 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
     public function setQuestionMapping(array $question_mapping)
     {
         $this->question_mapping = [];
-        foreach($question_mapping as $question_id => $column) {
-            $this->question_mapping[intval( $question_id)] = $column;
+        foreach ($question_mapping as $question_id => $column) {
+            $this->question_mapping[ (int) $question_id ] = $column;
         }
     }
 

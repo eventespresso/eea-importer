@@ -54,12 +54,17 @@ class ImportSingleModelBase extends ImportBaseCommand
         $fields_mapped = $this->config->mapping();
         $fields = [];
         foreach ($fields_mapped as $field_mapped) {
-            /* @var $field_mapped ImportFieldMap */
-            $fields[ $field_mapped->destinationFieldName() ] = $field_mapped->applyMap(
-                $this->csvColumnValue(
-                    $field_mapped->sourceProperty()
-                )
+            $input_value = $this->valueFromInput(
+                $field_mapped->sourceProperty()
             );
+            if (is_null($input_value)) {
+                continue;
+            }
+            $input_datum = $field_mapped->applyMap(
+                $input_value
+            );
+            /* @var $field_mapped ImportFieldMap */
+            $fields[ $field_mapped->destinationFieldName() ] = $input_datum;
         }
         return $fields;
     }
