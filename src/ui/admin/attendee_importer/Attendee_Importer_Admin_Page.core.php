@@ -75,16 +75,39 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
 
     protected function _set_page_config()
     {
-
+        $help_tabs_data =  array(
+            'attendee_importer_import_overview_help_tab' => array(
+                'title'    => __('Attendee Importer Overview', 'event_espresso'),
+                'filename' => 'attendee_importer_import_overview',
+            ),
+            'attendee_importer_import_choose_event_help_tab' => array(
+                'title'    => __('Choose Event', 'event_espresso'),
+                'filename' => 'attendee_importer_import_choose_event',
+            ),
+            'attendee_importer_import_choose_ticket_help_tab' => array(
+                'title'    => __('Choose Ticket', 'event_espresso'),
+                'filename' => 'attendee_importer_import_choose_ticket',
+            ),
+            'attendee_importer_import_upload_help_tab' => array(
+                'title'    => __('Upload CSV File', 'event_espresso'),
+                'filename' => 'attendee_importer_import_upload',
+            ),
+            'attendee_importer_import_map_help_tab' => array(
+                'title'    => __('Map CSV Columns to Event Espresso Data', 'event_espresso'),
+                'filename' => 'attendee_importer_import_map',
+            ),
+        );
         $this->_page_config = array(
             'default' => array(
-                'require_nonce' => false
+                'require_nonce' => false,
+                'help_tabs'     => $help_tabs_data
             ),
             'show_import_step' => array(
                 'nav' => array(
                     'label' => __('Import', 'event_espresso'),
                     'order' => 10
                 ),
+                'help_tabs'     => $help_tabs_data,
                 'require_nonce' => false
             )
         );
