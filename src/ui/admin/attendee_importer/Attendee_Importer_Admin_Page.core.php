@@ -59,7 +59,12 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
         $this->_page_routes = array(
             'default' => array(
                 'func' => 'main',
+                'noheader' => true,
+                'headers_sent_route' => 'default_later'
             ),
+            'default_later' => [
+                'func' => 'main_later',
+            ],
             'import' => array(
                 'func' => 'import',
                 'noheader' => true,
@@ -96,14 +101,13 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
         }
         $this->_page_config = array(
             'default' => array(
+                'nav' => [
+                    'label' => esc_html__('Import', 'event_espresso'),
+                    'order' => 10
+                ],
                 'require_nonce' => false,
-                'help_tabs'     => $help_tabs_data
             ),
             'show_import_step' => array(
-                'nav' => array(
-                    'label' => __('Import', 'event_espresso'),
-                    'order' => 10
-                ),
                 'help_tabs'     => $help_tabs_data,
                 'require_nonce' => false
             )
@@ -166,10 +170,24 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
         // If there's only one importer, don't bother asking what they want to import.
         if (count($import_type_ui_managers) === 1) {
             $import_type = $import_type_ui_managers->current();
-            $this->show_import_step($import_type->getSlug());
-            return;
+            wp_redirect(
+                EE_Admin_Page::add_query_args_and_nonce(
+                    [
+                        'action' => 'import',
+                        'type' => $import_type->getSlug()
+                    ],
+                    EE_ATTENDEE_IMPORTER_ADMIN_URL
+                )
+            );
+            exit;
         }
-        
+    }
+
+    protected function main_later()
+    {
+        $import_manager = $this->getImportManager();
+        $import_type_ui_managers = $import_manager->getImportTypeUiManagers();
+
         $html = '';
         foreach ($import_type_ui_managers as $ui_manager) {
             $import_type = $ui_manager->getImportType();
@@ -182,7 +200,7 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
                     'image_url' => $ui_manager->getImage(),
                     'steps_url' => add_query_arg(
                         [
-                            'action' => 'show_import_step',
+                            'action' => 'import',
                             'type' => $import_type->getSlug()
                         ],
                         EE_ATTENDEE_IMPORTER_ADMIN_URL
