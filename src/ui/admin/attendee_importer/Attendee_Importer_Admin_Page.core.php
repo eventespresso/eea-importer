@@ -5,14 +5,13 @@ use EventEspresso\AttendeeImporter\application\services\import\ImportTypeUiManag
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\StepsManager;
 use EventEspresso\core\exceptions\ExceptionStackTraceDisplay;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
+use EventEspresso\core\exceptions\InvalidIdentifierException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\services\collections\CollectionDetailsException;
 use EventEspresso\core\services\collections\CollectionLoaderException;
 use EventEspresso\core\services\loaders\LoaderFactory;
 
-if (!defined('EVENT_ESPRESSO_VERSION')) {
-    exit('NO direct script access allowed');
-}
+
 
 /**
  *
@@ -79,6 +78,15 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     }
 
 
+    /**
+     * @throws CollectionDetailsException
+     * @throws CollectionLoaderException
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidInterfaceException
+     * @throws InvalidIdentifierException
+     * @since $VID:$
+     */
     protected function _set_page_config()
     {
         $help_tabs_data =  array(
@@ -99,6 +107,7 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
                 'filename' => 'attendee_importer_import_' . $step->slug()
             ];
         }
+        $step_manager->setCurrentStepFromRequest();
         $this->_page_config = array(
             'default' => array(
                 'nav' => [
