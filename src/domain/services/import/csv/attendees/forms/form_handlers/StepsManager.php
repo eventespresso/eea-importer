@@ -1,19 +1,17 @@
 <?php
 namespace EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers;
 
-use EventEspresso\core\exceptions\InvalidClassException;
+use EE_Request;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
-use EventEspresso\core\exceptions\InvalidEntityException;
-use EventEspresso\core\exceptions\InvalidFilePathException;
 use EventEspresso\core\exceptions\InvalidIdentifierException;
-use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\libraries\form_sections\form_handlers\FormHandler;
-use EventEspresso\core\libraries\form_sections\form_handlers\InvalidFormHandlerException;
 use EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepFormManager;
 use EventEspresso\core\services\collections\Collection;
 use EventEspresso\core\services\collections\CollectionDetails;
+use EventEspresso\core\services\collections\CollectionDetailsException;
 use EventEspresso\core\services\collections\CollectionInterface;
 use EventEspresso\core\services\collections\CollectionLoader;
+use EventEspresso\core\services\collections\CollectionLoaderException;
 use InvalidArgumentException;
 
 /**
@@ -37,7 +35,7 @@ class StepsManager extends SequentialStepFormManager
      * @param string      $form_action
      * @param string      $form_config
      * @param string      $progress_step_style
-     * @param \EE_Request $request
+     * @param EE_Request $request
      * @throws InvalidDataTypeException
      * @throws InvalidArgumentException
      */
@@ -47,7 +45,7 @@ class StepsManager extends SequentialStepFormManager
         $form_action = '',
         $form_config = FormHandler::ADD_FORM_TAGS_AND_SUBMIT,
         $progress_step_style = 'number_bubbles',
-        \EE_Request $request = null
+        EE_Request $request = null
     ) {
         parent::__construct(
             $base_url,
@@ -62,8 +60,8 @@ class StepsManager extends SequentialStepFormManager
 
     /**
      * @return Collection|null
-     * @throws \EventEspresso\core\services\collections\CollectionDetailsException
-     * @throws \EventEspresso\core\services\collections\CollectionLoaderException
+     * @throws CollectionDetailsException
+     * @throws CollectionLoaderException
      */
     protected function getFormStepsCollection()
     {
@@ -103,22 +101,29 @@ class StepsManager extends SequentialStepFormManager
         return $this->form_steps;
     }
 
+
     /**
-     * @since $VID:$
      * @return CollectionInterface|ImportCsvAttendeesStep[]
-     * @throws InvalidClassException
-     * @throws InvalidDataTypeException
-     * @throws InvalidEntityException
-     * @throws InvalidIdentifierException
-     * @throws InvalidInterfaceException
-     * @throws InvalidFormHandlerException
-     * @throws InvalidArgumentException
+     * @throws CollectionDetailsException
+     * @throws CollectionLoaderException
+     * @since $VID:$
      */
     public function getSteps()
     {
         $this->getFormStepsCollection();
         // Don't return the original steps collection as when we loop through it, it borks later logic.
-        return clone $this->form_steps;
+        return $this->form_steps;
+    }
+
+
+    /**
+     * @throws InvalidDataTypeException
+     * @throws InvalidIdentifierException
+     * @since $VID:$
+     */
+    public function setCurrentStepFromRequest()
+    {
+        parent::setCurrentStepFromRequest();
     }
 }
 // End of file StesManager.php
