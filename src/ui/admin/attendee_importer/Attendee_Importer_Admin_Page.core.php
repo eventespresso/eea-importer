@@ -1,16 +1,17 @@
 <?php
 
 use EventEspresso\AttendeeImporter\application\services\import\ImportManager;
+use EventEspresso\AttendeeImporter\application\services\import\ImportTypeUiManagerInterface;
+use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\StepsManager;
 use EventEspresso\core\exceptions\ExceptionStackTraceDisplay;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
+use EventEspresso\core\exceptions\InvalidIdentifierException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\services\collections\CollectionDetailsException;
 use EventEspresso\core\services\collections\CollectionLoaderException;
 use EventEspresso\core\services\loaders\LoaderFactory;
 
-if (!defined('EVENT_ESPRESSO_VERSION')) {
-    exit('NO direct script access allowed');
-}
+
 
 /**
  *
@@ -57,7 +58,12 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
         $this->_page_routes = array(
             'default' => array(
                 'func' => 'main',
+                'noheader' => true,
+                'headers_sent_route' => 'default_later'
             ),
+            'default_later' => [
+                'func' => 'main_later',
+            ],
             'import' => array(
                 'func' => 'import',
                 'noheader' => true,
@@ -72,18 +78,46 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     }
 
 
+    /**
+     * @throws CollectionDetailsException
+     * @throws CollectionLoaderException
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidInterfaceException
+     * @throws InvalidIdentifierException
+     * @since $VID:$
+     */
     protected function _set_page_config()
     {
-
+        $help_tabs_data =  array(
+            'attendee_importer_import_overview_help_tab' => array(
+                'title'    => __('Attendee Importer Overview', 'event_espresso'),
+                'filename' => 'attendee_importer_import_overview',
+            ),
+        );
+        $import_type = isset($this->_req_data['type']) ? $this->_req_data['type'] : '';
+        $step_manager = $this->getFormStepManager($import_type);
+        $steps = $step_manager->getSteps();
+        foreach ($steps as $step) {
+            if (! $step->hasHelpTab()) {
+                continue;
+            }
+            $help_tabs_data[ 'attendee_importer_import_' . $step->slug() ] = [
+                'title' => $step->formName(),
+                'filename' => 'attendee_importer_import_' . $step->slug()
+            ];
+        }
+        $step_manager->setCurrentStepFromRequest();
         $this->_page_config = array(
             'default' => array(
-                'require_nonce' => false
+                'nav' => [
+                    'label' => esc_html__('Import', 'event_espresso'),
+                    'order' => 10
+                ],
+                'require_nonce' => false,
             ),
             'show_import_step' => array(
-                'nav' => array(
-                    'label' => __('Import', 'event_espresso'),
-                    'order' => 10
-                ),
+                'help_tabs'     => $help_tabs_data,
                 'require_nonce' => false
             )
         );
@@ -140,15 +174,29 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     protected function main()
     {
         $import_manager = $this->getImportManager();
-        $import_type_ui_managers = $import_manager->loadImportTypeUiManagers();
+        $import_type_ui_managers = $import_manager->getImportTypeUiManagers();
 
         // If there's only one importer, don't bother asking what they want to import.
         if (count($import_type_ui_managers) === 1) {
             $import_type = $import_type_ui_managers->current();
-            $this->show_import_step($import_type->getSlug());
-            return;
+            wp_redirect(
+                EE_Admin_Page::add_query_args_and_nonce(
+                    [
+                        'action' => 'import',
+                        'type' => $import_type->getSlug()
+                    ],
+                    EE_ATTENDEE_IMPORTER_ADMIN_URL
+                )
+            );
+            exit;
         }
-        
+    }
+
+    protected function main_later()
+    {
+        $import_manager = $this->getImportManager();
+        $import_type_ui_managers = $import_manager->getImportTypeUiManagers();
+
         $html = '';
         foreach ($import_type_ui_managers as $ui_manager) {
             $import_type = $ui_manager->getImportType();
@@ -161,7 +209,7 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
                     'image_url' => $ui_manager->getImage(),
                     'steps_url' => add_query_arg(
                         [
-                            'action' => 'show_import_step',
+                            'action' => 'import',
                             'type' => $import_type->getSlug()
                         ],
                         EE_ATTENDEE_IMPORTER_ADMIN_URL
@@ -230,22 +278,28 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     /**
      * Just grabs the form step manager, based on the import type provided.
      * @param string $import_type
-     * @return EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepFormManager
+     * @return StepsManager
+     * @throws CollectionDetailsException
+     * @throws CollectionLoaderException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidInterfaceException
-     * @throws CollectionLoaderException
      */
     public function getFormStepManager($import_type)
     {
-        return $this->getImportManager()
-            ->getUiManager($import_type)
-            ->getStepManager(EE_Admin_Page::add_query_args_and_nonce(
-                ['action' => 'import',
+        $manager = $this->getImportManager();
+        $ui_manager = $manager->getUiManager($import_type);
+        if (! $ui_manager instanceof ImportTypeUiManagerInterface) {
+            $all_ui_managers = $manager->getImportTypeUiManagers();
+            $all_ui_managers->rewind();
+            $ui_manager = $all_ui_managers->current();
+        }
+        return $ui_manager->getStepManager(EE_Admin_Page::add_query_args_and_nonce(
+            ['action' => 'import',
                     'type' => $import_type
                 ],
-                EE_ATTENDEE_IMPORTER_ADMIN_URL
-            ));
+            EE_ATTENDEE_IMPORTER_ADMIN_URL
+        ));
     }
 }
 // End of file Attendee_Importer_Admin_Page.core.php

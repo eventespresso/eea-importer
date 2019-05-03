@@ -4,10 +4,13 @@ namespace EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\fo
 
 use DomainException;
 use EE_Error;
+use EE_Form_Section_HTML;
 use EE_Form_Section_Proper;
 use EE_Registry;
 use EE_Select_Ajax_Model_Rest_Input;
 use EED_Attendee_Importer;
+use EEH_HTML;
+use EEH_Template;
 use EEH_URL;
 use EEM_Ticket;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
@@ -49,6 +52,7 @@ class ChooseEvent extends ImportCsvAttendeesStep
         JsonWpOptionManager $option_manager
     ) {
         $this->setDisplayable(true);
+        $this->has_help_tab = true;
         parent::__construct(
             1,
             esc_html__('Choose Event', 'event_espresso'),
@@ -75,11 +79,18 @@ class ChooseEvent extends ImportCsvAttendeesStep
             [
                 'name' => 'event',
                 'subsections' => [
+                    'header' => new EE_Form_Section_HTML(
+                        EEH_HTML::h2(
+                            esc_html__('Select Event', 'event_espresso')
+                            . $this->getHelpTabLink()
+                        )
+                    ),
                     'event' => new EE_Select_Ajax_Model_Rest_Input(
                         [
                             'model_name' => 'Event',
                             'required' => true,
-                            'help_text' => esc_html__('The Event data should be imported to.', 'event_espresso'),
+                            'html_label_text' => esc_html__('Event', 'event_espresso'),
+                            'html_help_text' => esc_html__('The event data should be imported to.', 'event_espresso'),
                             'default' => $this->config->getEventId(),
                             'query_params' => [
                                 'order_by' => ['EVT_ID' => 'DESC']

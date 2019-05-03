@@ -4,6 +4,7 @@ namespace EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\fo
 
 use DomainException;
 use EE_Registry;
+use EEH_Template;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepForm;
@@ -31,6 +32,12 @@ abstract class ImportCsvAttendeesStep extends SequentialStepForm
      * @var JsonWpOptionManager
      */
     protected $option_manager;
+
+    /**
+     * Indicates whether there is a help tab for this step.
+     * @var bool
+     */
+    protected $has_help_tab = false;
 
     /**
      * UploadCsv constructor
@@ -69,6 +76,29 @@ abstract class ImportCsvAttendeesStep extends SequentialStepForm
             $form_action,
             $form_config,
             $registry
+        );
+    }
+
+    /**
+     * Indicates whether there is an admin help tab for this step or not.
+     * @since $VID:$
+     * @return bool
+     */
+    public function hasHelpTab()
+    {
+        return $this->has_help_tab;
+    }
+
+    /**
+     * @since $VID:$
+     * @return string
+     */
+    public function getHelpTabLink()
+    {
+        return EEH_Template::get_help_tab_link(
+            'attendee_importer_import_' . $this->slug(),
+            ATTENDEE_IMPORTER_PG_SLUG,
+            'show_import_step'
         );
     }
 }
