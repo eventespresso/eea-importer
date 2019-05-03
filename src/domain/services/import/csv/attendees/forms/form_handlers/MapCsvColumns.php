@@ -55,8 +55,8 @@ class MapCsvColumns extends ImportCsvAttendeesStep
         $this->has_help_tab = true;
         parent::__construct(
             4,
-            esc_html__('Map CSV Columns To Event Espresso Data', 'event_espresso'),
-            esc_html__('"Map CSV Columns to Event Espresso Data" Attendee Importer Step', 'event_espresso'),
+            esc_html__('Map CSV Columns', 'event_espresso'),
+            esc_html__('"Map CSV Columns to Database" Attendee Importer Step', 'event_espresso'),
             'map',
             '',
             FormHandler::ADD_FORM_TAGS_AND_SUBMIT,
