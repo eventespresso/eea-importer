@@ -105,7 +105,7 @@ function espresso_attendee_importer_activation_error()
     deactivate_plugins(plugin_basename(EE_ATTENDEE_IMPORTER_PLUGIN_FILE));
     ?>
   <div class="error">
-    <p><?php printf(__('Event Espresso Attendee Importer could not be activated. Please ensure that Event Espresso version %1$s and PHP version %2$s or higher is running', 'event_espresso'), EE_ATTENDEE_IMPORTER_CORE_VERSION_REQUIRED, '5.6'); ?></p>
+    <p><?php printf(esc_html__('Event Espresso Attendee Importer could not be activated. Please ensure that Event Espresso version %1$s and PHP version %2$s or higher is running', 'event_espresso'), EE_ATTENDEE_IMPORTER_CORE_VERSION_REQUIRED, '5.6'); ?></p>
   </div>
 <?php
 }
