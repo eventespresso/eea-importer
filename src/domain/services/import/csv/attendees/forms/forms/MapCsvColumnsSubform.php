@@ -11,6 +11,7 @@ use EEM_Event;
 use EEM_Question_Group;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFieldMap;
+use EventEspresso\core\domain\Domain;
 
 /**
  * Class MapCsvColumnsSubform
@@ -210,13 +211,14 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
                     $input2->add_validation_error(
                         sprintf(
                             esc_html__(
-                                // translators: %1$s CSV column name, %2$s Event Espresso Data name, %3$s CSV column name
+                                // translators: %1$s CSV column name, %2$s Event Espresso, %3$s Event Espresso Data name, %4$s CSV column name
                             // @codingStandardsIgnoreStart
-                                'CSV file column "%1$s" maps to the same Event Espresso data (%2$s) as "%3$s". This is not allowed.',
+                                'CSV file column "%1$s" maps to the same %2$s data (%3$s) as "%4$s". This is not allowed.',
                                 // @codingStandardsIgnoreEnd
                                 'event_espresso'
                             ),
                             $input1->html_label_text(),
+                            Domain::brandName(),
                             $input1->pretty_value(),
                             $input1->html_label_text()
                         )
