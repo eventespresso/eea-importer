@@ -269,9 +269,13 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     protected function show_import_step($import_type)
     {
         try {
+            $manager = $this->getImportManager();
+            $ui_manager = $manager->getUiManager($import_type);
             $form_steps_manager = $this->getFormStepManager($import_type);
-            $this->_template_args['admin_page_content'] = $form_steps_manager->displayProgressSteps()
-                . $form_steps_manager->displayCurrentStepForm();
+            $this->_template_args['admin_page_content'] =
+                EEH_HTML::h2($ui_manager->getImportType()->getName()) .
+                $form_steps_manager->displayProgressSteps() .
+                $form_steps_manager->displayCurrentStepForm();
         } catch (Exception $e) {
             new ExceptionStackTraceDisplay($e);
         }
