@@ -11,8 +11,6 @@ use EventEspresso\core\services\collections\CollectionDetailsException;
 use EventEspresso\core\services\collections\CollectionLoaderException;
 use EventEspresso\core\services\loaders\LoaderFactory;
 
-
-
 /**
  *
  * Attendee_Importer_Admin_Page

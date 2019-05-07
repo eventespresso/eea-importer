@@ -2,9 +2,9 @@
 use EventEspresso\core\domain\Domain;
 ?>
 <p>
-	<strong><?php printf(
-	esc_html__('Before Using the %s Attendee Importer', 'event_espresso'),
-	Domain::brandName()
+    <strong><?php printf(
+        esc_html__('Before Using the %s Attendee Importer', 'event_espresso'),
+        Domain::brandName()
 ); ?></strong>
 </p>
 <p>
@@ -13,8 +13,8 @@ use EventEspresso\core\domain\Domain;
 </p>
 <p>
     <strong><?php printf(
-    	esc_html__('Setup The Event in %s', 'event_espresso'),
-    	Domain::brandName()
+        esc_html__('Setup The Event in %s', 'event_espresso'),
+        Domain::brandName()
     );?></strong>
 </p>
 <p>
