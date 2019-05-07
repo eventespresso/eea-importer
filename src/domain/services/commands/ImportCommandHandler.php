@@ -132,7 +132,6 @@ class ImportCommandHandler extends CompositeCommandHandler
             )
         );
 
-        // @todo: Update that ticket and its datetime's ticket sales
         return null;
     }
 }
