@@ -43,7 +43,7 @@ class ImportBaseCommand extends Command implements CommandRequiresCapCheckInterf
      */
     public function getCapCheck()
     {
-        return new CapCheck('import', 'ee_attendee_import');
+        return new CapCheck('ee_edit_registrations', 'ee_attendee_import');
     }
 
     /**

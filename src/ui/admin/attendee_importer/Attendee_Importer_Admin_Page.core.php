@@ -59,20 +59,24 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
             'default' => array(
                 'func' => 'main',
                 'noheader' => true,
-                'headers_sent_route' => 'default_later'
+                'headers_sent_route' => 'default_later',
+                'capability' => 'import'
             ),
             'default_later' => [
                 'func' => 'main_later',
+                'capability' => 'import'
             ],
             'import' => array(
                 'func' => 'import',
                 'noheader' => true,
                 'headers_sent_route' => 'show_import_step',
-                'args' => ['type' => $import_type]
+                'args' => ['type' => $import_type],
+                'capability' => 'import'
             ),
             'show_import_step' => array(
                 'func' => 'show_import_step',
-                'args' => ['type' => $import_type]
+                'args' => ['type' => $import_type],
+                'capability' => 'import'
             )
         );
     }
