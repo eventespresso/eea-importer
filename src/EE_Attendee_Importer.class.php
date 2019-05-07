@@ -87,6 +87,11 @@ class EE_Attendee_Importer extends EE_Addon
                     'checkPeriod'     => '24',
                     'use_wp_update'   => false,
                 ),
+                'capabilities'          => array(
+                    'administrator' => array(
+                        'ee_import',
+                    ),
+                ),
             )
         );
     }
