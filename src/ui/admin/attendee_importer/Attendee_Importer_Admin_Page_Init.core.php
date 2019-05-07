@@ -28,7 +28,7 @@ class Attendee_Importer_Admin_Page_Init extends EE_Admin_Page_Init
         do_action('AHEE_log', __FILE__, __FUNCTION__, '');
 
         define('ATTENDEE_IMPORTER_PG_SLUG', 'espresso_attendee_importer');
-        define('ATTENDEE_IMPORTER_LABEL', __('Attendee Importer', 'event_espresso'));
+        define('ATTENDEE_IMPORTER_LABEL', __('Importer', 'event_espresso'));
         define('EE_ATTENDEE_IMPORTER_ADMIN_URL', admin_url('admin.php?page=' . ATTENDEE_IMPORTER_PG_SLUG));
         define('EE_ATTENDEE_IMPORTER_ADMIN_ASSETS_PATH', EE_ATTENDEE_IMPORTER_ADMIN . 'assets' . DS);
         define('EE_ATTENDEE_IMPORTER_ADMIN_ASSETS_URL', EE_ATTENDEE_IMPORTER_URL . 'admin' . DS . 'attendee_importer' . DS . 'assets' . DS);
