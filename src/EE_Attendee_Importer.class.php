@@ -59,6 +59,10 @@ class EE_Attendee_Importer extends EE_Addon
      */
     public static function register_addon()
     {
+        $new_caps = [
+            'ee_import',
+            'ee_import_attendees'
+        ];
         // register addon via Plugin API
         EE_Register_Addon::register(
             'Attendee_Importer',
@@ -88,9 +92,8 @@ class EE_Attendee_Importer extends EE_Addon
                     'use_wp_update'   => false,
                 ),
                 'capabilities'          => array(
-                    'administrator' => array(
-                        'ee_import',
-                    ),
+                    'administrator' => $new_caps,
+                    'ee_events_administrator' => $new_caps
                 ),
             )
         );
