@@ -19,6 +19,7 @@ use EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFie
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\services\loaders\LoaderFactory;
+use EventEspresso\core\domain\Domain;
 use InvalidArgumentException;
 use ReflectionException;
 
@@ -42,7 +43,10 @@ class MapCsvColumnsForm extends EE_Form_Section_Proper
                 'subsections' => [
                     'header' => new EE_Form_Section_HTML(
                         EEH_HTML::h2(
-                            esc_html__('Map CSV Columns to Event Espresso Data', 'event_espresso')
+                            sprintf(
+                                esc_html__('Map CSV Columns to %s Data', 'event_espresso'),
+                                Domain::brandName()
+                            )
                             . $options_array['help_tab_link']
                         )
                     ),
