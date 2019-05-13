@@ -65,7 +65,7 @@ class Importer_Admin_Page_Init extends EE_Admin_Page_Init
             'parent_slug' => 'espresso_events',
             'menu_slug' => ATTENDEE_IMPORTER_PG_SLUG,
             'menu_label' => ATTENDEE_IMPORTER_LABEL,
-            'capability' => 'administrator',
+            'capability' => 'ee_import',
             'admin_init_page' => $this
         ));
     }
