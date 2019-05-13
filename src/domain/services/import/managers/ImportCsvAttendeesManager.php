@@ -115,6 +115,11 @@ class ImportCsvAttendeesManager implements ImportTypeManagerInterface
         }
         return $this->extractor;
     }
+
+    public function cap()
+    {
+        return 'ee_import_attendees';
+    }
 }
 // End of file ImportCsvAttendeesManager.php
 // Location: EventEspresso\AttendeeImporter\domain\services\import\csv\attendees/ImportCsvAttendeesManager.php

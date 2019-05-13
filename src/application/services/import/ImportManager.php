@@ -22,6 +22,9 @@ use EventEspresso\core\services\loaders\Loader;
 class ImportManager
 {
     protected $loader;
+    /**
+     * @var CollectionInterface|ImportTypeUiManagerInterface[]
+     */
     protected $managers;
     public function __construct(Loader $loader)
     {
@@ -29,7 +32,7 @@ class ImportManager
     }
 
     /**
-     * Gets all the import type ui managers
+     * Gets all the import type ui managers that the current user can use.
      * @since $VID:$
      * @return CollectionInterface|ImportTypeUiManagerInterface[]
      * @throws CollectionLoaderException
@@ -59,6 +62,12 @@ class ImportManager
             )
         );
         $this->managers = $loader->getCollection();
+        foreach($this->managers as $manager){
+            if(! current_user_can($manager->getImportType()->cap())){
+                $this->managers->remove($manager);
+            }
+        }
+        return $this->managers;
     }
 
     /**

@@ -62,6 +62,13 @@ interface ImportTypeManagerInterface
      * @return mixed
      */
     public function getUrlToFiles();
+
+    /**
+     * Gets the name of the capability required to use this type of importer.
+     * @since $VID:$
+     * @return string
+     */
+    public function cap();
 }
 // End of file ImportTypeInterface.php
 // Location: EventEspresso\core\services\import/ImportTypeInterface.php
