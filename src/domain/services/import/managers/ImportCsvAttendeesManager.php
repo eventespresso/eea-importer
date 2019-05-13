@@ -52,7 +52,7 @@ class ImportCsvAttendeesManager implements ImportTypeManagerInterface
      */
     public function getName()
     {
-        return esc_html__('Import Contacts from CSV File', 'event_espresso');
+        return esc_html__('Attendee Importer', 'event_espresso');
     }
 
     /**
