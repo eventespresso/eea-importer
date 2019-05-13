@@ -7,36 +7,36 @@
 *
 * This is the init for the Attendee_Importer Addon Admin Pages.  See EE_Admin_Page_Init for method inline docs.
 *
-* @package          Event Espresso (attendee_importer addon)
+* @package          Event Espresso (importer addon)
 * @subpackage       admin/Attendee_Importer_Admin_Page_Init.core.php
 * @author               Michael Nelson
 *
 * ------------------------------------------------------------------------
 */
-class Attendee_Importer_Admin_Page_Init extends EE_Admin_Page_Init
+class Importer_Admin_Page_Init extends EE_Admin_Page_Init
 {
 
     /**
      *  constructor
      *
      * @access public
-     * @return \Attendee_Importer_Admin_Page_Init
+     * @return \Importer_Admin_Page_Init
      */
     public function __construct()
     {
 
         do_action('AHEE_log', __FILE__, __FUNCTION__, '');
 
-        define('ATTENDEE_IMPORTER_PG_SLUG', 'espresso_attendee_importer');
+        define('ATTENDEE_IMPORTER_PG_SLUG', 'espresso_importer');
         define('ATTENDEE_IMPORTER_LABEL', __('Importer', 'event_espresso'));
         define('EE_ATTENDEE_IMPORTER_ADMIN_URL', admin_url('admin.php?page=' . ATTENDEE_IMPORTER_PG_SLUG));
-        define('EE_ATTENDEE_IMPORTER_ADMIN_ASSETS_PATH', EE_ATTENDEE_IMPORTER_ADMIN . 'assets' . DS);
-        define('EE_ATTENDEE_IMPORTER_ADMIN_ASSETS_URL', EE_ATTENDEE_IMPORTER_URL . 'admin' . DS . 'attendee_importer' . DS . 'assets' . DS);
-        define('EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_PATH', EE_ATTENDEE_IMPORTER_ADMIN . 'templates' . DS);
-        define('EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_URL', EE_ATTENDEE_IMPORTER_URL . 'admin' . DS . 'attendee_importer' . DS . 'templates' . DS);
+        define('EE_ATTENDEE_IMPORTER_ADMIN_ASSETS_PATH', EE_IMPORTER_ADMIN . 'assets' . DS);
+        define('EE_ATTENDEE_IMPORTER_ADMIN_ASSETS_URL', EE_IMPORTER_URL . 'admin' . DS . 'importer' . DS . 'assets' . DS);
+        define('EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_PATH', EE_IMPORTER_ADMIN . 'templates' . DS);
+        define('EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_URL', EE_IMPORTER_URL . 'admin' . DS . 'importer' . DS . 'templates' . DS);
 
         parent::__construct();
-        $this->_folder_path = EE_ATTENDEE_IMPORTER_ADMIN;
+        $this->_folder_path = EE_IMPORTER_ADMIN;
     }
 
 
@@ -71,4 +71,4 @@ class Attendee_Importer_Admin_Page_Init extends EE_Admin_Page_Init
     }
 }
 // End of file Attendee_Importer_Admin_Page_Init.core.php
-// Location: /wp-content/plugins/eea-attendee-importer/admin/attendee_importer/Attendee_Importer_Admin_Page_Init.core.php
+// Location: /wp-content/plugins/eea-importer/admin/importer/Attendee_Importer_Admin_Page_Init.core.php

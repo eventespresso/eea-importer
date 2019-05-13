@@ -96,7 +96,7 @@ abstract class ImportCsvAttendeesStep extends SequentialStepForm
     public function getHelpTabLink()
     {
         return EEH_Template::get_help_tab_link(
-            'attendee_importer_import_' . $this->slug(),
+            'importer_import_' . $this->slug(),
             ATTENDEE_IMPORTER_PG_SLUG,
             'show_import_step'
         );

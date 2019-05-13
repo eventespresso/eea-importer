@@ -22,8 +22,8 @@ class espresso_promotions_tests extends EE_UnitTestCase {
 	 *
 	 * @since 0.0.1.dev.002
 	 */
-	function test_loading_attendee_importer() {
-		$this->assertEquals( has_action('AHEE__EE_System__load_espresso_addons', 'load_espresso_attendee_importer'), 10 );
+	function test_loading_importer() {
+		$this->assertEquals( has_action('AHEE__EE_System__load_espresso_addons', 'load_espresso_importer'), 10 );
 		$this->assertTrue( class_exists( 'EE_Attendee_Importer' ) );
 	}
 }

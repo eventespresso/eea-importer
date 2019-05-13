@@ -19,6 +19,6 @@ define('EE_ATTENDEE_IMPORTER_TEST_CSVS_DIR', EEADDON_TESTS_DIR . '/includes/csvs
 $addon_loader = new AddonLoader(
     EEADDON_TESTS_DIR,
     EEADDON_PLUGIN_DIR,
-    'eea-attendee-importer.php'
+    'eea-importer.php'
 );
 $addon_loader->init();

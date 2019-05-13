@@ -1,5 +1,5 @@
 {
-	"name": "eventespresso/eea-attendee-importer",
+	"name": "eventespresso/eea-importer",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
 	"description": "An add-on for Event Espresso 4.",
@@ -15,10 +15,10 @@
 		"event-espresso", "wordpress", "events", "event-management", "event-tickets", "event-registration", "ticketing-system"
 	],
 	"support": {
-		"issues": "https://github.com/eventespresso/eea-attendee-importer/issues",
+		"issues": "https://github.com/eventespresso/eea-importer/issues",
 		"forum": "https://eventespresso/support/forums",
-		"source": "https://github.com/eventespresso/eea-attendee-importer",
-		"docs": "https://github.com/eventespresso/eea-attendee-importer/tree/master/docs"
+		"source": "https://github.com/eventespresso/eea-importer",
+		"docs": "https://github.com/eventespresso/eea-importer/tree/master/docs"
 	},
 	"repositories": [
 		{

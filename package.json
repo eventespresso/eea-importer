@@ -1,9 +1,9 @@
 {
-  "name": "@eventespresso/eea-attendee-importer",
+  "name": "@eventespresso/eea-importer",
   "version": "1.0.0",
   "description": "An add-on for Event Espresso 4.",
   "main": "webpack.dev.js",
-  "repository": "git+https://github.com/eventespresso/eea-attendee-importer.git",
+  "repository": "git+https://github.com/eventespresso/eea-importer.git",
   "scripts": {
     "watch": "webpack --watch --config webpack.dev.js",
     "build": "cross-env NODE_ENV=production webpack --config webpack.prod.js",
