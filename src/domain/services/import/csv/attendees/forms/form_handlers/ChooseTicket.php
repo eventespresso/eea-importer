@@ -12,6 +12,7 @@ use EE_Select_Ajax_Model_Rest_Input;
 use EED_Attendee_Importer;
 use EEH_HTML;
 use EEH_URL;
+use EEM_Ticket;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\AttendeeImporter\domain\services\import\managers\ui\ImportCsvAttendeesUiManager;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
@@ -36,6 +37,11 @@ use LogicException;
 class ChooseTicket extends ImportCsvAttendeesStep
 {
     /**
+     * @var EEM_Ticket
+     */
+    private $ticket_model;
+
+    /**
      * ChooseTicket constructor
      *
      * @param EE_Registry $registry
@@ -49,7 +55,8 @@ class ChooseTicket extends ImportCsvAttendeesStep
     public function __construct(
         EE_Registry $registry,
         ImportCsvAttendeesConfig $config,
-        JsonWpOptionManager $option_manager
+        JsonWpOptionManager $option_manager,
+        EEM_Ticket $ticket_model
     ) {
         $this->setDisplayable(true);
         $this->has_help_tab = true;
@@ -64,6 +71,7 @@ class ChooseTicket extends ImportCsvAttendeesStep
             $config,
             $option_manager
         );
+        $this->ticket_model = $ticket_model;
     }
 
 
@@ -79,6 +87,20 @@ class ChooseTicket extends ImportCsvAttendeesStep
     public function generate()
     {
         $this->option_manager->populateFromDb($this->config);
+        $last_selected_ticket_id = $this->config->getTicketId();
+        // Ok we remember what they chose last time. But let's verify they were importing to the same event,
+        // because if they're now importing to a different event, we obviously don't want to reuse the ticket!
+        if($last_selected_ticket_id &&
+            ! $this->ticket_model->exists(
+                [
+                    [
+                        'TKT_ID' => $last_selected_ticket_id,
+                        'Datetime.EVT_ID' => $this->config->getEventId()
+                    ]
+                ]
+            )){
+            $last_selected_ticket_id = null;
+        }
         return new EE_Form_Section_Proper(
             [
                 'name' => 'ticket',
@@ -100,7 +122,7 @@ class ChooseTicket extends ImportCsvAttendeesStep
                                     'Datetime.Event.EVT_ID' => $this->config->getEventId()
                                 ]
                             ],
-                            'default' => $this->config->getTicketId()
+                            'default' => $last_selected_ticket_id
                         ]
                     ),
                 ]
