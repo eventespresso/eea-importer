@@ -90,7 +90,7 @@ class ChooseTicket extends ImportCsvAttendeesStep
         $last_selected_ticket_id = $this->config->getTicketId();
         // Ok we remember what they chose last time. But let's verify they were importing to the same event,
         // because if they're now importing to a different event, we obviously don't want to reuse the ticket!
-        if($last_selected_ticket_id &&
+        if ($last_selected_ticket_id &&
             ! $this->ticket_model->exists(
                 [
                     [
@@ -98,7 +98,7 @@ class ChooseTicket extends ImportCsvAttendeesStep
                         'Datetime.EVT_ID' => $this->config->getEventId()
                     ]
                 ]
-            )){
+            )) {
             $last_selected_ticket_id = null;
         }
         return new EE_Form_Section_Proper(
