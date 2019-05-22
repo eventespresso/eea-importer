@@ -51,7 +51,7 @@ class MapCsvColumnsForm extends EE_Form_Section_Proper
                         )
                     ),
                     'instructions' => new EE_Form_Section_HTML_From_Template(
-                        wp_normalize_path(dirname(dirname(dirname(__FILE__))) . '/templates/ee_attendee_importer_mapping_instructions.template.php')
+                        wp_normalize_path(dirname(dirname(dirname(__FILE__))) . '/templates/ee_importer_mapping_instructions.template.php')
                     ),
                     'columns' => LoaderFactory::getLoader()->getNew('EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\forms\MapCsvColumnsSubform'),
                 ],

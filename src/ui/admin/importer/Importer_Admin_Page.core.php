@@ -21,13 +21,13 @@ use EventEspresso\core\services\loaders\LoaderFactory;
  * comments have inline docs with parent class.
  *
  *
- * @package            Attendee_Importer_Admin_Page (attendee_importer addon)
+ * @package            Attendee_Importer_Admin_Page (importer addon)
  * @subpackage    admin/Attendee_Importer_Admin_Page.core.php
  * @author                Michael Nelson, Brent Christensen
  *
  * ------------------------------------------------------------------------
  */
-class Attendee_Importer_Admin_Page extends EE_Admin_Page
+class Importer_Admin_Page extends EE_Admin_Page
 {
 
 
@@ -36,7 +36,7 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
         $this->page_slug = ATTENDEE_IMPORTER_PG_SLUG;
         $this->page_label = ATTENDEE_IMPORTER_LABEL;
         $this->_admin_base_url = EE_ATTENDEE_IMPORTER_ADMIN_URL;
-        $this->_admin_base_path = EE_ATTENDEE_IMPORTER_ADMIN;
+        $this->_admin_base_path = EE_IMPORTER_ADMIN;
     }
 
 
@@ -94,9 +94,9 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     protected function _set_page_config()
     {
         $help_tabs_data =  array(
-            'attendee_importer_import_overview_help_tab' => array(
-                'title'    => __('Attendee Importer Overview', 'event_espresso'),
-                'filename' => 'attendee_importer_import_overview',
+            'importer_import_overview_help_tab' => array(
+                'title'    => __('Importer Overview', 'event_espresso'),
+                'filename' => 'importer_import_overview',
             ),
         );
         try {
@@ -107,9 +107,9 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
                 if (!$step->hasHelpTab()) {
                     continue;
                 }
-                $help_tabs_data[ 'attendee_importer_import_' . $step->slug() ] = [
+                $help_tabs_data[ 'importer_import_' . $step->slug() ] = [
                     'title' => $step->formName(),
-                    'filename' => 'attendee_importer_import_' . $step->slug()
+                    'filename' => 'importer_import_' . $step->slug()
                 ];
             }
             $step_manager->setCurrentStepFromRequest();
@@ -150,13 +150,13 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     public function load_scripts_styles()
     {
         wp_register_script(
-            'espresso_attendee_importer_admin',
-            EE_ATTENDEE_IMPORTER_ADMIN_ASSETS_URL . 'espresso_attendee_importer_admin.js',
+            'espresso_importer_admin',
+            EE_ATTENDEE_IMPORTER_ADMIN_ASSETS_URL . 'espresso_importer_admin.js',
             array('espresso_core'),
-            EE_ATTENDEE_IMPORTER_VERSION,
+            EE_IMPORTER_VERSION,
             true
         );
-        wp_enqueue_script('espresso_attendee_importer_admin');
+        wp_enqueue_script('espresso_importer_admin');
     }
 
     public function admin_init()
@@ -215,7 +215,7 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
         foreach ($import_type_ui_managers as $ui_manager) {
             $import_type = $ui_manager->getImportType();
             $html .= EEH_Template::display_template(
-                EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_PATH . 'attendee_importer_manager_type.template.php',
+                EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_PATH . 'importer_manager_type.template.php',
                 [
                     'slug' => $import_type->getSlug(),
                     'name' => $import_type->getName(),
@@ -280,9 +280,13 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     protected function show_import_step($import_type)
     {
         try {
+            $manager = $this->getImportManager();
+            $ui_manager = $manager->getUiManager($import_type);
             $form_steps_manager = $this->getFormStepManager($import_type);
-            $this->_template_args['admin_page_content'] = $form_steps_manager->displayProgressSteps()
-                . $form_steps_manager->displayCurrentStepForm();
+            $this->_template_args['admin_page_content'] =
+                EEH_HTML::h2($ui_manager->getImportType()->getName()) .
+                $form_steps_manager->displayProgressSteps() .
+                $form_steps_manager->displayCurrentStepForm();
         } catch (Exception $e) {
             new ExceptionStackTraceDisplay($e);
         }
@@ -343,4 +347,4 @@ class Attendee_Importer_Admin_Page extends EE_Admin_Page
     }
 }
 // End of file Attendee_Importer_Admin_Page.core.php
-// Location: /wp-content/plugins/eea-attendee-importer/admin/attendee_importer/Attendee_Importer_Admin_Page.core.php
+// Location: /wp-content/plugins/eea-importer/admin/importer/Attendee_Importer_Admin_Page.core.php

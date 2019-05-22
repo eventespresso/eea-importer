@@ -52,7 +52,7 @@ class ImportCsvAttendeesManager implements ImportTypeManagerInterface
      */
     public function getName()
     {
-        return esc_html__('Import Contacts from CSV File', 'event_espresso');
+        return esc_html__('Attendee Importer', 'event_espresso');
     }
 
     /**
@@ -82,12 +82,12 @@ class ImportCsvAttendeesManager implements ImportTypeManagerInterface
 
     public function getPathToFiles()
     {
-        return EE_ATTENDEE_IMPORTER_PATH . 'domain/services/import/csv/attendees';
+        return EE_IMPORTER_PATH . 'domain/services/import/csv/attendees';
     }
 
     public function getUrlToFiles()
     {
-        return EE_ATTENDEE_IMPORTER_URL . 'domain/services/import/csv/attendees';
+        return EE_IMPORTER_URL . 'domain/services/import/csv/attendees';
     }
 
 

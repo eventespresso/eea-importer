@@ -2,22 +2,22 @@
     exit();
 }
 // define the plugin directory path and URL
-define('EE_ATTENDEE_IMPORTER_BASENAME', plugin_basename(EE_ATTENDEE_IMPORTER_PLUGIN_FILE));
-define('EE_ATTENDEE_IMPORTER_PATH', plugin_dir_path(__FILE__));
-define('EE_ATTENDEE_IMPORTER_URL', plugin_dir_url(__FILE__));
+define('EE_IMPORTER_BASENAME', plugin_basename(EE_IMPORTER_PLUGIN_FILE));
+define('EE_IMPORTER_PATH', plugin_dir_path(__FILE__));
+define('EE_IMPORTER_URL', plugin_dir_url(__FILE__));
 define(
-    'EE_ATTENDEE_IMPORTER_ADMIN',
-    EE_ATTENDEE_IMPORTER_PATH . 'ui' . DS . 'admin' . DS . 'attendee_importer' . DS
+    'EE_IMPORTER_ADMIN',
+    EE_IMPORTER_PATH . 'ui' . DS . 'admin' . DS . 'importer' . DS
 );
 
 /**
  * Class  EE_Attendee_Importer
  *
  * @package     Event Espresso
- * @subpackage  eea-attendee-importer
+ * @subpackage  eea-importer
  * @author      Brent Christensen
  */
-class EE_Attendee_Importer extends EE_Addon
+class EE_Importer extends EE_Addon
 {
 
     /**
@@ -65,29 +65,26 @@ class EE_Attendee_Importer extends EE_Addon
         ];
         // register addon via Plugin API
         EE_Register_Addon::register(
-            'Attendee_Importer',
+            'Importer',
             array(
-                'version'               => EE_ATTENDEE_IMPORTER_VERSION,
-                'plugin_slug'           => 'espresso_attendee_importer',
-                'min_core_version'      => EE_ATTENDEE_IMPORTER_CORE_VERSION_REQUIRED,
-                'main_file_path'        => EE_ATTENDEE_IMPORTER_PLUGIN_FILE,
+                'version'               => EE_IMPORTER_VERSION,
+                'plugin_slug'           => 'espresso_importer',
+                'min_core_version'      => EE_IMPORTER_CORE_VERSION_REQUIRED,
+                'main_file_path'        => EE_IMPORTER_PLUGIN_FILE,
                 'namespace'             => array(
                     'FQNS' => 'EventEspresso\AttendeeImporter',
                     'DIR'  => __DIR__,
                 ),
-                'admin_path'            => EE_ATTENDEE_IMPORTER_ADMIN,
+                'admin_path'            => EE_IMPORTER_ADMIN,
                 'admin_callback'        => '',
                 'autoloader_paths'      => array(
-                    'Attendee_Importer_Admin_Page'      => EE_ATTENDEE_IMPORTER_ADMIN . 'Attendee_Importer_Admin_Page.core.php',
-                    'Attendee_Importer_Admin_Page_Init' => EE_ATTENDEE_IMPORTER_ADMIN . 'Attendee_Importer_Admin_Page_Init.core.php',
+                    'Importer_Admin_Page'      => EE_IMPORTER_ADMIN . 'Importer_Admin_Page.core.php',
+                    'Importer_Admin_Page_Init' => EE_IMPORTER_ADMIN . 'Importer_Admin_Page_Init.core.php',
                 ),
-                'module_paths'          => [
-                    EE_ATTENDEE_IMPORTER_PATH . 'domain' . DS . 'services' . DS . 'modules' . DS . 'EED_Attendee_Importer.module.php'
-                ],
                 // if plugin update engine is being used for auto-updates. not needed if PUE is not being used.
                 'pue_options'           => array(
-                    'pue_plugin_slug' => 'eea-attendee-importer',
-                    'plugin_basename' => EE_ATTENDEE_IMPORTER_BASENAME,
+                    'pue_plugin_slug' => 'eea-importer',
+                    'plugin_basename' => EE_IMPORTER_BASENAME,
                     'checkPeriod'     => '24',
                     'use_wp_update'   => false,
                 ),
@@ -106,7 +103,7 @@ class EE_Attendee_Importer extends EE_Addon
      */
     public function after_registration()
     {
-        $attendee_importer_dependencies = array(
+        $importer_dependencies = array(
             'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\StepsManager'                            => array(
                 null,
                 null,
@@ -223,7 +220,7 @@ class EE_Attendee_Importer extends EE_Addon
                 'EEM_Ticket' => EE_Dependency_Map::load_from_cache
             ]
         );
-        foreach ($attendee_importer_dependencies as $class => $dependencies) {
+        foreach ($importer_dependencies as $class => $dependencies) {
             if (! EE_Dependency_Map::register_dependencies($class, $dependencies)) {
                 EE_Error::add_error(
                     sprintf(
@@ -239,4 +236,4 @@ class EE_Attendee_Importer extends EE_Addon
     }
 }
 // End of file EE_Attendee_Importer.class.php
-// Location: wp-content/plugins/eea-attendee-importer/EE_Attendee_Importer.class.php
+// Location: wp-content/plugins/eea-importer/EE_Attendee_Importer.class.php

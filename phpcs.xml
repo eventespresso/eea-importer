@@ -12,7 +12,7 @@
 
     <!-- specific rule exclusions per file -->
     <rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
-        <exclude-pattern>eea-attendee-importer.php</exclude-pattern>
+        <exclude-pattern>eea-importer.php</exclude-pattern>
     </rule>
 
     <rule ref="WordPress.WP.I18n.SingleUnderscoreGetTextFunction">

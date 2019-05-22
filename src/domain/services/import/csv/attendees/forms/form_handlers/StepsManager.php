@@ -69,7 +69,7 @@ class StepsManager extends SequentialStepFormManager
             $loader = new CollectionLoader(
                 new CollectionDetails(
                     // collection name
-                    'attendee_importer_form_steps',
+                    'importer_form_steps',
                     // collection interface
                     'EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepForm',
                     // FQCNs for classes to add
