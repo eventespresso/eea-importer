@@ -36,10 +36,6 @@ use LogicException;
  */
 class ChooseTicket extends ImportCsvAttendeesStep
 {
-    /**
-     * @var EEM_Ticket
-     */
-    private $ticket_model;
 
     /**
      * ChooseTicket constructor
@@ -47,7 +43,6 @@ class ChooseTicket extends ImportCsvAttendeesStep
      * @param EE_Registry $registry
      * @param ImportCsvAttendeesConfig $config
      * @param JsonWpOptionManager $option_manager
-     * @param ImportCsvAttendeesUiManager $attendeesUiManager
      * @throws DomainException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
@@ -55,8 +50,7 @@ class ChooseTicket extends ImportCsvAttendeesStep
     public function __construct(
         EE_Registry $registry,
         ImportCsvAttendeesConfig $config,
-        JsonWpOptionManager $option_manager,
-        EEM_Ticket $ticket_model
+        JsonWpOptionManager $option_manager
     ) {
         $this->setDisplayable(true);
         $this->has_help_tab = true;
@@ -71,7 +65,6 @@ class ChooseTicket extends ImportCsvAttendeesStep
             $config,
             $option_manager
         );
-        $this->ticket_model = $ticket_model;
     }
 
 
@@ -87,20 +80,6 @@ class ChooseTicket extends ImportCsvAttendeesStep
     public function generate()
     {
         $this->option_manager->populateFromDb($this->config);
-        $last_selected_ticket_id = $this->config->getTicketId();
-        // Ok we remember what they chose last time. But let's verify they were importing to the same event,
-        // because if they're now importing to a different event, we obviously don't want to reuse the ticket!
-        if ($last_selected_ticket_id &&
-            ! $this->ticket_model->exists(
-                [
-                    [
-                        'TKT_ID' => $last_selected_ticket_id,
-                        'Datetime.EVT_ID' => $this->config->getEventId()
-                    ]
-                ]
-            )) {
-            $last_selected_ticket_id = null;
-        }
         return new EE_Form_Section_Proper(
             [
                 'name' => 'ticket',
@@ -116,13 +95,12 @@ class ChooseTicket extends ImportCsvAttendeesStep
                             'model_name' => 'Ticket',
                             'required' => true,
                             'html_label_text' => esc_html__('Ticket', 'event_espresso'),
-                            'html_help_text' => esc_html__('The Ticket data should be imported to.', 'event_espresso'),
+                            'html_help_text' => esc_html__('The ticket data should be imported to.', 'event_espresso'),
                             'query_params' => [
                                 [
                                     'Datetime.Event.EVT_ID' => $this->config->getEventId()
                                 ]
                             ],
-                            'default' => $last_selected_ticket_id
                         ]
                     ),
                 ]
