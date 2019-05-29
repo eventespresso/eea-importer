@@ -8,7 +8,8 @@ use EventEspresso\core\domain\Domain;
     <thead>
     <tr>
     <th><?php printf(
-        esc_html__('%s Data', 'event_espresso'), Domain::brandName()
+        esc_html__('%s Data', 'event_espresso'),
+        Domain::brandName()
     );?></th>
     <th><?php esc_html_e('CSV Data', 'event_espresso');?></th>
     <th><?php esc_html_e('Sample #1', 'event_espresso');?></th>

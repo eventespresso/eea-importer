@@ -62,8 +62,8 @@ class ImportManager
             )
         );
         $this->managers = $loader->getCollection();
-        foreach($this->managers as $manager){
-            if(! current_user_can($manager->getImportType()->cap())){
+        foreach ($this->managers as $manager) {
+            if (! current_user_can($manager->getImportType()->cap())) {
                 $this->managers->remove($manager);
             }
         }
