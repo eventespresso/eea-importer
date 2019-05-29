@@ -4,6 +4,7 @@ namespace EventEspresso\AttendeeImporter\domain\services\commands;
 
 use EE_Attendee;
 
+use EE_Payment;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidEntityException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
