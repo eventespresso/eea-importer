@@ -4,6 +4,7 @@ namespace EventEspresso\AttendeeImporter\domain\services\commands;
 
 use EE_Attendee;
 
+use EE_Payment;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidEntityException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
@@ -97,6 +98,20 @@ class ImportCommandHandler extends CompositeCommandHandler
                 ]
             )
         );
+
+        $this->commandBus()->execute(
+            $this->commandFactory()->getNew(
+                'EventEspresso\AttendeeImporter\domain\services\commands\ImportAttendeeCommand',
+                [
+                    $registration,
+                    $command->inputData(),
+                    $command->getConfig()->getModelConfigs()->get('Attendee')
+                ]
+            )
+        );
+
+        // Import registration payments AFTER the attendees because there may be queries that join to the attendee
+        // table, and if the attendee doesn't yet exist, no registrations will be found.
         if ($payment instanceof EE_Payment) {
             $this->commandBus()->execute(
                 $this->commandFactory()->getNew(
@@ -110,17 +125,6 @@ class ImportCommandHandler extends CompositeCommandHandler
                 )
             );
         }
-
-        $this->commandBus()->execute(
-            $this->commandFactory()->getNew(
-                'EventEspresso\AttendeeImporter\domain\services\commands\ImportAttendeeCommand',
-                [
-                    $registration,
-                    $command->inputData(),
-                    $command->getConfig()->getModelConfigs()->get('Attendee')
-                ]
-            )
-        );
 
         $this->commandBus()->execute(
             $this->commandFactory()->getNew(

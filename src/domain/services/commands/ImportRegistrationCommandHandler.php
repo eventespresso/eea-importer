@@ -77,7 +77,7 @@ class ImportRegistrationCommandHandler extends CompositeCommandHandler
         );
         $this->registration_processor->toggle_registration_status_for_default_approved_events(
             $registration,
-            false
+            true
         );
         return $registration;
     }
