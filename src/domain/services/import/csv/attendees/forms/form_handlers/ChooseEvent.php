@@ -8,10 +8,7 @@ use EE_Form_Section_HTML;
 use EE_Form_Section_Proper;
 use EE_Registry;
 use EE_Select_Ajax_Model_Rest_Input;
-use EED_Attendee_Importer;
 use EEH_HTML;
-use EEH_Template;
-use EEH_URL;
 use EEM_Ticket;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
@@ -22,6 +19,7 @@ use EventEspresso\core\libraries\form_sections\form_handlers\SequentialStepForm;
 use EventEspresso\core\services\options\JsonWpOptionManager;
 use InvalidArgumentException;
 use LogicException;
+use ReflectionException;
 
 /**
  * Class ChooseEvent
@@ -71,6 +69,10 @@ class ChooseEvent extends ImportCsvAttendeesStep
      * creates and returns the actual form
      *
      * @return EE_Form_Section_Proper
+     * @throws EE_Error
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidInterfaceException
      */
     public function generate()
     {
@@ -91,7 +93,6 @@ class ChooseEvent extends ImportCsvAttendeesStep
                             'required' => true,
                             'html_label_text' => esc_html__('Event', 'event_espresso'),
                             'html_help_text' => esc_html__('The event data should be imported to.', 'event_espresso'),
-                            'default' => $this->config->getEventId(),
                             'query_params' => [
                                 'order_by' => ['EVT_ID' => 'DESC']
                             ]
@@ -111,9 +112,9 @@ class ChooseEvent extends ImportCsvAttendeesStep
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws EE_Error
-     * @throws InvalidFormSubmissionException
      * @throws InvalidInterfaceException
      * @throws LogicException
+     * @throws ReflectionException
      */
     public function process($form_data = array())
     {
@@ -121,7 +122,7 @@ class ChooseEvent extends ImportCsvAttendeesStep
             $valid_data = (array) parent::process($form_data);
         } catch (InvalidFormSubmissionException $e) {
             // Don't die. Admin code knows how to handle invalid forms...
-            return;
+            return false;
         }
         $this->config->setEventId($valid_data['event']);
 

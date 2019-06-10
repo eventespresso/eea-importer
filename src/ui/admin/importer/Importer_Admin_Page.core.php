@@ -209,7 +209,7 @@ class Importer_Admin_Page extends EE_Admin_Page
         $import_type_ui_managers = $import_manager->getImportTypeUiManagers();
 
         $html = EEH_HTML::h2(esc_html__('Available Importers', 'event_espresso'));
-        if ($import_type_ui_managers->count() === 0){
+        if ($import_type_ui_managers->count() === 0) {
             $html .= EEH_HTMl::p(esc_html__('You do not have permission to use any of the installed importers.', 'event_espresso'));
         }
         foreach ($import_type_ui_managers as $ui_manager) {

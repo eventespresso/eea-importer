@@ -12,6 +12,7 @@ use EE_Select_Ajax_Model_Rest_Input;
 use EED_Attendee_Importer;
 use EEH_HTML;
 use EEH_URL;
+use EEM_Ticket;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\AttendeeImporter\domain\services\import\managers\ui\ImportCsvAttendeesUiManager;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
@@ -35,13 +36,13 @@ use LogicException;
  */
 class ChooseTicket extends ImportCsvAttendeesStep
 {
+
     /**
      * ChooseTicket constructor
      *
      * @param EE_Registry $registry
      * @param ImportCsvAttendeesConfig $config
      * @param JsonWpOptionManager $option_manager
-     * @param ImportCsvAttendeesUiManager $attendeesUiManager
      * @throws DomainException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
@@ -94,13 +95,12 @@ class ChooseTicket extends ImportCsvAttendeesStep
                             'model_name' => 'Ticket',
                             'required' => true,
                             'html_label_text' => esc_html__('Ticket', 'event_espresso'),
-                            'html_help_text' => esc_html__('The Ticket data should be imported to.', 'event_espresso'),
+                            'html_help_text' => esc_html__('The ticket data should be imported to.', 'event_espresso'),
                             'query_params' => [
                                 [
                                     'Datetime.Event.EVT_ID' => $this->config->getEventId()
                                 ]
                             ],
-                            'default' => $this->config->getTicketId()
                         ]
                     ),
                 ]
