@@ -24,7 +24,7 @@ use SplFileObject;
  * @since         $VID:$
  *
  */
-class UploadCSVForm extends EE_Form_Section_Proper
+class UploadCsvForm extends EE_Form_Section_Proper
 {
     public function __construct($options_array = array())
     {
