@@ -8,7 +8,7 @@ use EE_Registry;
 use EED_Attendee_Importer;
 use EEH_File;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
-use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\forms\UploadCSVForm;
+use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\forms\UploadCsvForm;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFormSubmissionException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
@@ -68,7 +68,7 @@ class UploadCsv extends ImportCsvAttendeesStep
     public function generate()
     {
         $this->option_manager->populateFromDb($this->config);
-        $form = new UploadCSVForm(
+        $form = new UploadCsvForm(
             [
                 'help_tab_link' => $this->getHelpTabLink()
             ]
