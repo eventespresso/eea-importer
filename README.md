@@ -1,4 +1,4 @@
-New EE4 Add-on Starter Template
+Event Espresso 4 Importer
 =========
 
 [![Latest Release](https://img.shields.io/github/tag/eventespresso/eea-importer.svg?style=flat&label=Latest%20Release)](https://github.com/eventespresso/eea-importer/releases)
@@ -7,7 +7,7 @@ New EE4 Add-on Starter Template
 [![Event Espresso Addon](https://img.shields.io/badge/Addon%20For-Event%20Espresso-blue.svg)](https://github.com/eventespresso/event-espresso-core)
 [![Minimum EE Core Version:](https://img.shields.io/badge/Minimum%20EE%20core%20ver-4.9.37.p-red.svg)](https://github.com/eventespresso/event-espresso-core/releases/tag/4.9.37.p)
 
-This add-on adds some extra groovy features to [Event Espresso](https://eventespresso.com).
+This allows you to import to [Event Espresso](https://eventespresso.com) from a CSV file.
 
 > Note, there is **no usage support** provided here.  Please read the entire contents of this document before posting any issues.  If we encounter issues that give evidence of this document not having been read the issue _will be closed_.
 
