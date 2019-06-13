@@ -364,7 +364,6 @@ class Verify extends ImportCsvAttendeesStep
                 array(
                     'page' => 'espresso_batch',
                     'batch' => 'job',
-                    'label' => esc_html__('Applying Offset', 'event_espresso'),
                     'job_handler' => urlencode(get_class($this->attendeesUiManager->getBatchJobHandler())),
                     'return_url' => urlencode(
                         add_query_arg(
@@ -379,8 +378,7 @@ class Verify extends ImportCsvAttendeesStep
                             )
                         )
                     ),
-                ),
-                admin_url()
+                )
             )
         );
 
