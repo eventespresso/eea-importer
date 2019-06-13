@@ -23,7 +23,7 @@
     <li><?php esc_html_e('The payment amount, if the registrations are for a paid ticket.', 'event_espresso'); ?></li>
 </ul>
 <p>
-    <a href="<?php echo EE_IMPORTER_URL;?>../samples/simple-with-custom-questions.csv">
+    <a href="<?php echo EE_IMPORTER_URL;?>../samples/attendee-with-custom-questions.csv">
     <?php esc_html_e('Click here to see a sample CSV file.', 'event_espresso');?>
     </a>
 </p>
