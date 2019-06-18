@@ -50,7 +50,7 @@ class ImportCommandHandler extends CompositeCommandHandler
             '__return_false',
             999
         );
-        remove_all_filters('AHEE__EE_Payment_Processor__update_txn_based_on_payment__successful');
+        remove_all_filters('AHEE__EE_Payment_Processor__update_txn_based_on_payment');
 
         $transaction = $attendee = $this->commandBus()->execute(
             $this->commandFactory()->getNew(
