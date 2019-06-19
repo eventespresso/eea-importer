@@ -52,6 +52,14 @@ class ImportCommandHandler extends CompositeCommandHandler
         );
         remove_all_filters('AHEE__EE_Payment_Processor__update_txn_based_on_payment__successful');
 
+        // WP User Add-on: please don't try to sync imported users to the current user
+        if(method_exists('EED_WP_Users_SPCO','maybe_sync_existing_attendee')) {
+            remove_filter(
+                'FHEE_EE_Single_Page_Checkout__save_registration_items__find_existing_attendee',
+                ['EED_WP_Users_SPCO','maybe_sync_existing_attendee']
+            );
+        }
+
         $transaction = $attendee = $this->commandBus()->execute(
             $this->commandFactory()->getNew(
                 'EventEspresso\AttendeeImporter\domain\services\commands\ImportTransactionCommand',
