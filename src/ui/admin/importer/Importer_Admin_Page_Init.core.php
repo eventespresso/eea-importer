@@ -31,9 +31,9 @@ class Importer_Admin_Page_Init extends EE_Admin_Page_Init
         define('ATTENDEE_IMPORTER_LABEL', __('Importer', 'event_espresso'));
         define('EE_ATTENDEE_IMPORTER_ADMIN_URL', admin_url('admin.php?page=' . ATTENDEE_IMPORTER_PG_SLUG));
         define('EE_ATTENDEE_IMPORTER_ADMIN_ASSETS_PATH', EE_IMPORTER_ADMIN . 'assets' . DS);
-        define('EE_ATTENDEE_IMPORTER_ADMIN_ASSETS_URL', EE_IMPORTER_URL . 'admin' . DS . 'importer' . DS . 'assets' . DS);
+        define('EE_ATTENDEE_IMPORTER_ADMIN_ASSETS_URL', EE_IMPORTER_URL . 'ui' . DS . 'admin' . DS . 'importer' . DS . 'assets' . DS);
         define('EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_PATH', EE_IMPORTER_ADMIN . 'templates' . DS);
-        define('EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_URL', EE_IMPORTER_URL . 'admin' . DS . 'importer' . DS . 'templates' . DS);
+        define('EE_ATTENDEE_IMPORTER_ADMIN_TEMPLATE_URL', EE_IMPORTER_URL . 'ui' . DS . 'admin' . DS . 'importer' . DS . 'templates' . DS);
 
         parent::__construct();
         $this->_folder_path = EE_IMPORTER_ADMIN;
