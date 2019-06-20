@@ -149,14 +149,6 @@ class Importer_Admin_Page extends EE_Admin_Page
 
     public function load_scripts_styles()
     {
-        wp_register_script(
-            'espresso_importer_admin',
-            EE_ATTENDEE_IMPORTER_ADMIN_ASSETS_URL . 'espresso_importer_admin.js',
-            array('espresso_core'),
-            EE_IMPORTER_VERSION,
-            true
-        );
-        wp_enqueue_script('espresso_importer_admin');
     }
 
     public function admin_init()
