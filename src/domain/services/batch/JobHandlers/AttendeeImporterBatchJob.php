@@ -2,6 +2,7 @@
 
 namespace EventEspresso\AttendeeImporter\domain\services\batch\JobHandlers;
 
+use Dompdf\Exception;
 use EE_Error;
 use EventEspresso\AttendeeImporter\domain\services\commands\ImportCommand;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
@@ -113,8 +114,24 @@ class AttendeeImporterBatchJob extends JobHandler
         // grab the line from the file
         $processed_this_batch = 0;
         $column_headers = $job_parameters->extra_datum('headers');
+        // Importing can be pretty expensive, so let's slow it down a bit.
+        $batch_size /= 2;
+
+        // Importing with Infusionsoft is more expensive yet, so let's slow it down some more.
+        try {
+            if (defined('EE_INFUSIONSOFT_VERSION') && \EED_Infusionsoft::infusionsoft_connection()) {
+                $batch_size /= 4;
+            }
+        } catch (\Exception $e) {
+            // Infusionsoft connection didn't work. No need to slow it down any more then.
+        }
+
+        // At least try to import one at a time.
+        $batch_size = max($batch_size, 1);
         while ($processed_this_batch < $batch_size) {
-            $csv_row = $this->manager->getExtractor()->getItemAt($job_parameters->units_processed() + 1 + $processed_this_batch);
+            $csv_row = $this->manager->getExtractor()->getItemAt($job_parameters->units_processed()
+                + 1
+                + $processed_this_batch);
             if (! $csv_row) {
                 break;
             }
