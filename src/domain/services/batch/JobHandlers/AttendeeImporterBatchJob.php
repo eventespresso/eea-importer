@@ -2,7 +2,7 @@
 
 namespace EventEspresso\AttendeeImporter\domain\services\batch\JobHandlers;
 
-use Dompdf\Exception;
+use Exception;
 use EE_Error;
 // Import Infusionsoft. We'll check the add-on is active before trying to use it.
 use EED_Infusionsoft;
