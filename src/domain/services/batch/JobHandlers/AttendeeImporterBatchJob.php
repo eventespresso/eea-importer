@@ -119,7 +119,8 @@ class AttendeeImporterBatchJob extends JobHandler
 
         // Importing with Infusionsoft is more expensive yet, so let's slow it down some more.
         try {
-            if (defined('EE_INFUSIONSOFT_VERSION') && EED_Infusionsoft::infusionsoft_connection()) {
+            if (class_exists('EED_Infusionsoft')
+                && EED_Infusionsoft::infusionsoft_connection()) {
                 $batch_size /= 4;
             }
         } catch (Exception $e) {
