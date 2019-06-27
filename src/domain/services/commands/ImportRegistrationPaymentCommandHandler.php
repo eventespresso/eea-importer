@@ -76,7 +76,7 @@ class ImportRegistrationPaymentCommandHandler extends CompositeCommandHandler
 
         $this->registration_processor->toggle_registration_status_if_no_monies_owing(
             $command->getRegistration(),
-            false,
+            true,
             [
                 'payment_updates' => $command->getPayment() instanceof EE_Payment,
                 'last_payment' => $command->getPayment(),
