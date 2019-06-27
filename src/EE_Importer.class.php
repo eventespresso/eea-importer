@@ -183,6 +183,7 @@ class EE_Importer extends EE_Addon
                 'EE_Registration_Processor' => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\commands\CommandBusInterface'     => EE_Dependency_Map::load_from_cache,
                 'EventEspresso\core\services\commands\CommandFactoryInterface' => EE_Dependency_Map::load_from_cache,
+                'EEM_Registration' => EE_Dependency_Map::load_from_cache
             ],
             'EventEspresso\AttendeeImporter\domain\services\commands\ImportAnswersCommandHandler' => [
                 'EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig' => EE_Dependency_Map::load_from_cache,

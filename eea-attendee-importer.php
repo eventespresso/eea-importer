@@ -38,7 +38,7 @@
  * ------------------------------------------------------------------------
  */
 // define versions and this file
-define('EE_IMPORTER_CORE_VERSION_REQUIRED', '4.9.81.rc.009');
+define('EE_IMPORTER_CORE_VERSION_REQUIRED', '4.9.83.rc.003');
 define('EE_IMPORTER_VERSION', '1.0.0.dev.000');
 define('EE_IMPORTER_PLUGIN_FILE', __FILE__);
 

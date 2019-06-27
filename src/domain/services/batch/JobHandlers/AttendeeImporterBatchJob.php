@@ -2,11 +2,12 @@
 
 namespace EventEspresso\AttendeeImporter\domain\services\batch\JobHandlers;
 
+use Exception;
 use EE_Error;
-use EventEspresso\AttendeeImporter\domain\services\commands\ImportCommand;
+// Import Infusionsoft. We'll check the add-on is active before trying to use it.
+use EED_Infusionsoft;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\AttendeeImporter\domain\services\import\managers\ImportCsvAttendeesManager;
-use EventEspresso\AttendeeImporter\application\services\import\extractors\ImportExtractorCsv;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFilePathException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
@@ -113,8 +114,25 @@ class AttendeeImporterBatchJob extends JobHandler
         // grab the line from the file
         $processed_this_batch = 0;
         $column_headers = $job_parameters->extra_datum('headers');
+        // Importing can be pretty expensive, so let's slow it down a bit.
+        $batch_size /= 2;
+
+        // Importing with Infusionsoft is more expensive yet, so let's slow it down some more.
+        try {
+            if (class_exists('EED_Infusionsoft')
+                && EED_Infusionsoft::infusionsoft_connection()) {
+                $batch_size /= 4;
+            }
+        } catch (Exception $e) {
+            // Infusionsoft connection didn't work. No need to slow it down any more then.
+        }
+
+        // At least try to import one at a time.
+        $batch_size = max($batch_size, 1);
         while ($processed_this_batch < $batch_size) {
-            $csv_row = $this->manager->getExtractor()->getItemAt($job_parameters->units_processed() + 1 + $processed_this_batch);
+            $csv_row = $this->manager->getExtractor()->getItemAt(
+                $job_parameters->units_processed() + 1 + $processed_this_batch
+            );
             if (! $csv_row) {
                 break;
             }
