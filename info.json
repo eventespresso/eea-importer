@@ -1,5 +1,5 @@
 {
-	"versionFile" : "eea-importer.php",
+	"versionFile" : "eea-attendee-importer.php",
 	"slug" : "eea-importer",
 	"name" : "Event Espresso 4 Importer",
 	"archiveBaseUrl" : "http://build.eventespresso.com/",
