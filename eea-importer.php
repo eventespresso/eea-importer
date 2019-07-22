@@ -1,6 +1,6 @@
 <?php
 /*
-  Plugin Name: Event Espresso - Importer (EE 4.x+)
+  Plugin Name: Event Espresso - Importer (EE 4.10.0+)
   Plugin URI: http://www.eventespresso.com
   Description: The Event Espresso Importer imports registrations from a CSV file into Event Espresso.
   Version: 1.0.0.dev.002
@@ -38,7 +38,7 @@
  * ------------------------------------------------------------------------
  */
 // define versions and this file
-define('EE_IMPORTER_CORE_VERSION_REQUIRED', '4.9.83.rc.003');
+define('EE_IMPORTER_CORE_VERSION_REQUIRED', '4.10.0.p');
 define('EE_IMPORTER_VERSION', '1.0.0.dev.002');
 define('EE_IMPORTER_PLUGIN_FILE', __FILE__);
 
