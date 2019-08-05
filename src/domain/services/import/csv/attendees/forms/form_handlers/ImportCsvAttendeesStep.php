@@ -18,7 +18,7 @@ use InvalidArgumentException;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 abstract class ImportCsvAttendeesStep extends SequentialStepForm
@@ -81,7 +81,7 @@ abstract class ImportCsvAttendeesStep extends SequentialStepForm
 
     /**
      * Indicates whether there is an admin help tab for this step or not.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return bool
      */
     public function hasHelpTab()
@@ -90,7 +90,7 @@ abstract class ImportCsvAttendeesStep extends SequentialStepForm
     }
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return string
      */
     public function getHelpTabLink()

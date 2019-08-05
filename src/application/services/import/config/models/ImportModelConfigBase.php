@@ -21,7 +21,7 @@ use stdClass;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 abstract class ImportModelConfigBase implements ImportModelConfigInterface
@@ -47,7 +47,7 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
 
     /**
      * Clears the mapping collection.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @throws InvalidInterfaceException
      */
     protected function setNewMap()
@@ -56,7 +56,7 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
     }
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @throws CollectionDetailsException
      * @throws CollectionLoaderException
      * @throws EE_Error
@@ -69,7 +69,7 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
     }
     /**
      * Returns the list of model fields that can be imported for this model.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return void
      * @throws EE_Error
      * @throws CollectionDetailsException
@@ -95,7 +95,7 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
 
     /**
      * Gets a collection that states how this import fields should be mapped to EE model fields for this model.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return CollectionInterface|ImportFieldMap[]
      * @throws CollectionDetailsException
      * @throws CollectionLoaderException
@@ -110,7 +110,7 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
 
     /**
      * Shortcut to get the name of the model this affects.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return string
      */
     public function getModelName()
@@ -126,7 +126,7 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
 
     /**
      * Clears all the previously mapped fields. Useful if there is new mapping information.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @throws CollectionDetailsException
      * @throws CollectionLoaderException
      * @throws EE_Error
@@ -141,7 +141,7 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
     /**
      * Gets the mapping info for the specified input (eg a CSV column name),
      * or null if the input source property isn't mapped.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param string $input
      * @return ImportFieldMap|null
      * @throws CollectionDetailsException
@@ -161,7 +161,7 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
     /**
      * Gets the mapping info for the specified model field (eg EEM_Attendee's `ATT_fname` field).
      * Or null if the field wasn't mapped.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param $field_name
      * @return ImportFieldMap|null
      * @throws CollectionDetailsException
@@ -179,7 +179,7 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
     }
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return mixed|void
      */
     public function toJsonSerializableData()

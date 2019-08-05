@@ -12,7 +12,7 @@ use EEM_State;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class ImportFieldCoerceState implements ImportFieldCoercionInterface
@@ -30,7 +30,7 @@ class ImportFieldCoerceState implements ImportFieldCoercionInterface
 
     /**
      * Takes the input and converts
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param $inputProperty
      * @return int
      * @throws EE_Error
@@ -56,7 +56,7 @@ class ImportFieldCoerceState implements ImportFieldCoercionInterface
     /**
      * Creates a simple PHP array or stdClass from this object's properties, which can be easily serialized using
      * wp_json_serialize().
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return mixed
      */
     public function toJsonSerializableData()
@@ -66,7 +66,7 @@ class ImportFieldCoerceState implements ImportFieldCoercionInterface
 
     /**
      * Initializes this object from data
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param mixed $data
      * @return boolean success
      */

@@ -37,7 +37,7 @@ class ImportCommand extends ImportBaseCommand
 
     /**
      * Takes care of always populating it from the DB on first call.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return ImportCsvAttendeesConfig
      */
     public function getConfig()
@@ -51,7 +51,7 @@ class ImportCommand extends ImportBaseCommand
 
     /**
      * Checks if absolutely all datapoints are blank. If so, returns true. Otherwise, returns false.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return bool
      */
     public function rowIsOnlyBlanks()

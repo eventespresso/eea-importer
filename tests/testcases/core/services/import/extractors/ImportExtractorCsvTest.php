@@ -13,13 +13,13 @@ use RuntimeException;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class ImportExtractorCsvTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @throws InvalidFilePathException
      * @throws LogicException
      * @throws \RuntimeException
@@ -95,7 +95,7 @@ class ImportExtractorCsvTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param string $test_csv_filename name of the file in attendee importer test csvs folder.
      * @return ImportExtractorCsv
      * @throws RuntimeException

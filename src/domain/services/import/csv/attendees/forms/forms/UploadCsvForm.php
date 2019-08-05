@@ -21,7 +21,7 @@ use SplFileObject;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class UploadCsvForm extends EE_Form_Section_Proper
@@ -57,7 +57,7 @@ class UploadCsvForm extends EE_Form_Section_Proper
     }
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return bool|void
      * @throws EE_Validation_Error
      * @throws EE_Error
@@ -89,7 +89,7 @@ class UploadCsvForm extends EE_Form_Section_Proper
     }
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param $url
      * @return int
      */

@@ -12,14 +12,14 @@ use EventEspresso\core\services\json\JsonSerializableAndUnserializable;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 interface ImportFieldCoercionInterface extends JsonSerializableAndUnserializable
 {
     /**
      * Takes the input and converts to the appropriate type.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param string $inputProperty
      * @return mixed
      */

@@ -15,7 +15,7 @@ use EventEspresso\AttendeeImporter\application\services\import\mapping\ImportMap
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class ImportAttendeeConfig extends ImportModelConfigBase
@@ -24,7 +24,7 @@ class ImportAttendeeConfig extends ImportModelConfigBase
 
     /**
      * Gets the model this configuration is for
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return EEM_Base
      */
     public function getModel()
@@ -35,7 +35,7 @@ class ImportAttendeeConfig extends ImportModelConfigBase
 
     /**
      * Gets the names of the fields on this model that are mapped.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return string[]
      */
     public function fieldNamesMapped()

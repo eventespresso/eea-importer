@@ -28,7 +28,7 @@ use ReflectionException;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class ChooseEvent extends ImportCsvAttendeesStep

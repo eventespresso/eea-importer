@@ -40,7 +40,7 @@ use ReflectionException;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class Verify extends ImportCsvAttendeesStep
@@ -181,7 +181,7 @@ class Verify extends ImportCsvAttendeesStep
     /**
      * Gets the data to put into the HTML table when displaying this step.
      * This includes both data from the model configs and the custom questions config.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return array
      * @throws EE_Error
      * @throws InvalidArgumentException
@@ -205,7 +205,7 @@ class Verify extends ImportCsvAttendeesStep
     }
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param $csv_headers
      * @param $row1
      * @param $row2
@@ -254,7 +254,7 @@ class Verify extends ImportCsvAttendeesStep
     }
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param $csv_headers
      * @param $row1
      * @param $row2

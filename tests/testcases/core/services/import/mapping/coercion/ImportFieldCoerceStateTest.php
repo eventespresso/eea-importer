@@ -12,7 +12,7 @@ use PHPUnit_Framework_TestCase;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class ImportFieldCoerceStateTest extends PHPUnit_Framework_TestCase
@@ -44,7 +44,7 @@ class ImportFieldCoerceStateTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider states
-     * @since $VID:$
+     * @since 1.0.0.p
      */
     public function testCoerce($input, $exists)
     {

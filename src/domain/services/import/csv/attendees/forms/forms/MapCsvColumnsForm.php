@@ -30,7 +30,7 @@ use ReflectionException;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class MapCsvColumnsForm extends EE_Form_Section_Proper

@@ -27,7 +27,7 @@ use stdClass;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class ImportCsvAttendeesConfig extends ImportConfigBase
@@ -60,7 +60,7 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
 
     /**
      * Gets the filepath to read.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return string
      */
     public function getFile()
@@ -70,7 +70,7 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
 
     /**
      * Sets the filepath of the CSV file.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param $file_path
      */
     public function setFile($file_path)
@@ -79,7 +79,7 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
     }
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return SplFileObject
      * @throws LogicException
      * @throws RuntimeException
@@ -91,7 +91,7 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
 
     /**
      * Gets the name of the WordPress option where this JSON data will be stored.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return string
      */
     public function getWpOptionName()
@@ -124,7 +124,7 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
     }
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return EE_Ticket
      */
     public function getTicket()
@@ -168,7 +168,7 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
     }
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return CollectionInterface|ImportModelConfigInterface[]
      * @throws CollectionDetailsException
      * @throws CollectionLoaderException
@@ -204,7 +204,7 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
     /**
      * Creates a simple PHP array or stdClass from this object's properties, which can be easily serialized using
      * wp_json_serialize().
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return mixed
      */
     public function toJsonSerializableData()
@@ -219,7 +219,7 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
 
     /**
      * Initializes this object from data
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param mixed $data
      * @return boolean success
      */

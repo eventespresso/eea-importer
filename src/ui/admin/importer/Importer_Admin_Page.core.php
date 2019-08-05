@@ -89,7 +89,7 @@ class Importer_Admin_Page extends EE_Admin_Page
      * @throws InvalidDataTypeException
      * @throws InvalidInterfaceException
      * @throws InvalidIdentifierException
-     * @since $VID:$
+     * @since 1.0.0.p
      */
     protected function _set_page_config()
     {
@@ -165,7 +165,7 @@ class Importer_Admin_Page extends EE_Admin_Page
 
     /**
      * Shows the list of importers available. If there's only one though, just send the user to that one.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return void
      * @throws DomainException
      * @throws InvalidArgumentException
@@ -230,7 +230,7 @@ class Importer_Admin_Page extends EE_Admin_Page
 
     /**
      * Gets the import manager.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return ImportManager
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
@@ -246,7 +246,7 @@ class Importer_Admin_Page extends EE_Admin_Page
     /**
      * Handles import step requests. If it's a post, processes the form. Otherwise, does nothing and lets
      * `show_import_step()` take care of the request.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param $import_type
      * @throws Exception
      */
@@ -264,7 +264,7 @@ class Importer_Admin_Page extends EE_Admin_Page
 
     /**
      * Handles GET requests to show an import step.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param $import_type
      * @throws DomainException
      * @throws EE_Error
@@ -313,7 +313,7 @@ class Importer_Admin_Page extends EE_Admin_Page
 
     /**
      * Gets the Import Type UI manager specified.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param $import_type
      * @return ImportTypeUiManagerInterface
      * @throws CollectionDetailsException

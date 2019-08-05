@@ -13,7 +13,7 @@ use PHPUnit_Framework_TestCase;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class MapCsvColumnsSubformTest extends PHPUnit_Framework_TestCase
@@ -87,7 +87,7 @@ class MapCsvColumnsSubformTest extends PHPUnit_Framework_TestCase
 
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return MapCsvColumnsForm
      * @throws EE_Error
      */

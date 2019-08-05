@@ -11,7 +11,7 @@ use EE_Base_Class;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class ImportFieldCoerceInt implements ImportFieldCoercionInterface
@@ -20,7 +20,7 @@ class ImportFieldCoerceInt implements ImportFieldCoercionInterface
 
     /**
      * Takes the input and converts
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param $inputProperty
      * @param EE_Base_Class $destinationObject only used when the value of one field affects the value of another.
      * @return mixed
@@ -33,7 +33,7 @@ class ImportFieldCoerceInt implements ImportFieldCoercionInterface
     /**
      * Creates a simple PHP array or stdClass from this object's properties, which can be easily serialized using
      * wp_json_serialize().
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return mixed
      */
     public function toJsonSerializableData()
@@ -43,7 +43,7 @@ class ImportFieldCoerceInt implements ImportFieldCoercionInterface
 
     /**
      * Initializes this object from data
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param mixed $data
      * @return boolean success
      */

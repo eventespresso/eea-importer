@@ -9,7 +9,7 @@ namespace EventEspresso\AttendeeImporter\application\services\import\extractors;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 abstract class ImportExtractorBase implements ImportExtractorInterface

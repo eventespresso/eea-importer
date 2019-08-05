@@ -20,7 +20,7 @@ use EventEspresso\core\domain\Domain;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class MapCsvColumnsSubform extends EE_Form_Section_Proper
@@ -58,7 +58,7 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
 
     /**
      * Reads the current CSV file and finds its header columns
-     * @since $VID:$
+     * @since 1.0.0.p
      */
     protected function getColumnHeadersFromFile()
     {
@@ -68,7 +68,7 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
 
     /**
      * Gets the options to map columns to (eg attendee firstname, registration code, payment amount, etc).
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return array
      * @throws EE_Error
      * @throws InvalidDataTypeException
@@ -127,7 +127,7 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
 
     /**
      * Gets the default form value for the CSV column from the config.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param $column_name
      * @return string
      * @throws EE_Error
@@ -149,7 +149,7 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
 
     /**
      * Gets the form option value for the field.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param EE_Model_Field_Base $field
      * @return string
      * @throws EE_Error
@@ -161,7 +161,7 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
 
 //    /**
 //     * Generates the input options from the model and its list of fields to include.
-//     * @since $VID:$
+//     * @since 1.0.0.p
 //     * @param EEM_Base $model
 //     * @param $fields_to_include
 //     * @return array
@@ -181,7 +181,7 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
 
     /**
      * When validating the form, make sure no two columns have the same value.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return bool|void
      * @throws EE_Error
      */

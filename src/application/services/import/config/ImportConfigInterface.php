@@ -13,13 +13,13 @@ use EventEspresso\core\services\options\JsonWpOptionSerializableInterface;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 interface ImportConfigInterface extends JsonWpOptionSerializableInterface
 {
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return CollectionInterface|ImportModelConfigInterface[]
      */
     public function getModelConfigs();

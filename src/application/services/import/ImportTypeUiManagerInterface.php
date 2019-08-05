@@ -12,7 +12,7 @@ use EventEspressoBatchRequest\JobHandlerBaseClasses\JobHandler;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 interface ImportTypeUiManagerInterface
@@ -24,7 +24,7 @@ interface ImportTypeUiManagerInterface
      * @param string $base_url base URL where these steps will be shown
      *                         (used for generating links to subsequent steps)
      * @return SequentialStepFormManager
-     * @since $VID:$
+     * @since 1.0.0.p
      */
     public function getStepManager($base_url = null);
 
@@ -33,14 +33,14 @@ interface ImportTypeUiManagerInterface
      * (but if it's a CLI import, this doesn't apply)
      *
      * @return JobHandler
-     * @since $VID:$
+     * @since 1.0.0.p
      */
     public function getBatchJobHandler();
 
     /**
      * Gets the ImportType that this UI is for. That's stuff relating more to the actual import rather than UI.
      *
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return ImportTypeManagerInterface
      */
     public function getImportType();
@@ -48,7 +48,7 @@ interface ImportTypeUiManagerInterface
     /**
      * Gets URL of an image that describes the import type.
      *
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return string
      */
     public function getImage();

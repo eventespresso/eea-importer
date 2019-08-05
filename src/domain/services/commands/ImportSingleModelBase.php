@@ -19,7 +19,7 @@ use ReflectionException;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class ImportSingleModelBase extends ImportBaseCommand
@@ -39,7 +39,7 @@ class ImportSingleModelBase extends ImportBaseCommand
 
     /**
      * Gets an array where keys are model field names, and values are their coerced values fromthe input data.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return array
      * @throws CollectionDetailsException
      * @throws CollectionLoaderException

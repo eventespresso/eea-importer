@@ -9,7 +9,7 @@ namespace EventEspresso\AttendeeImporter\application\services\import;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 abstract class ImportTypeUiManagerBase implements ImportTypeUiManagerInterface
@@ -17,7 +17,7 @@ abstract class ImportTypeUiManagerBase implements ImportTypeUiManagerInterface
     /**
      * In order to use the slug as an identifier when putting this into a collection, we need a method ON THIS object
      * to get its slug. So this wraps just getting the import type and then the slug.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return string
      */
     public function getSlug()

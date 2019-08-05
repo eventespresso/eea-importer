@@ -15,7 +15,7 @@ use stdClass;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 abstract class ImportConfigBase implements ImportConfigInterface
@@ -35,7 +35,7 @@ abstract class ImportConfigBase implements ImportConfigInterface
     }
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return CollectionInterface|ImportModelConfigInterface[]
      */
     public function getModelConfigs()
@@ -45,7 +45,7 @@ abstract class ImportConfigBase implements ImportConfigInterface
     }
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @throws InvalidEntityException
      */
     protected function checkModelConfigsInitialized()
@@ -64,7 +64,7 @@ abstract class ImportConfigBase implements ImportConfigInterface
 
     /**
      * Gets the collection of model configs for this import configuration.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return CollectionInterface|ImportModelConfigInterface[]
      */
     abstract protected function initializeModelConfigCollection();
@@ -73,7 +73,7 @@ abstract class ImportConfigBase implements ImportConfigInterface
     /**
      * Creates a simple PHP array or stdClass from this object's properties, which can be easily serialized using
      * wp_json_serialize().
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return mixed
      */
     public function toJsonSerializableData()
@@ -88,7 +88,7 @@ abstract class ImportConfigBase implements ImportConfigInterface
 
     /**
      * Initializes this object from data
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param mixed $data
      * @return boolean success
      */

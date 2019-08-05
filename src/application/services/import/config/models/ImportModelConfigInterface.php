@@ -16,35 +16,35 @@ use EventEspresso\core\services\json\JsonSerializableAndUnserializable;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 interface ImportModelConfigInterface extends JsonSerializableAndUnserializable
 {
     /**
      * Gets the model this configuration is for
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return EEM_Base
      */
     public function getModel();
 
     /**
      * Gets the names of the fields on this model that are mapped.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return string[]
      */
     public function fieldNamesMapped();
 
     /**
      * Gets a collection that states how this import fields should be mapped to EE model fields for this model.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return CollectionInterface|ImportFieldMap[]
      */
     public function mapping();
 
     /**
      * Gets the mapping info for the specified input (eg a CSV column name)
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param string $input
      * @return ImportFieldMap
      */

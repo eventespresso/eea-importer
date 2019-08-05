@@ -15,7 +15,7 @@ use EventEspresso\core\services\commands\CommandRequiresCapCheckInterface;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class ImportBaseCommand extends Command implements CommandRequiresCapCheckInterface
@@ -48,7 +48,7 @@ class ImportBaseCommand extends Command implements CommandRequiresCapCheckInterf
 
     /**
      * Returns the array from the CSV row, where keys are CSV columns names, values are their values.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return array
      */
     public function inputData()
@@ -58,7 +58,7 @@ class ImportBaseCommand extends Command implements CommandRequiresCapCheckInterf
 
     /**
      * Gets the raw value from the CSV file at the given column
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param $column_name
      * @return string|null
      */

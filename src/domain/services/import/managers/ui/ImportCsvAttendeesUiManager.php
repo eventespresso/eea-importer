@@ -17,7 +17,7 @@ use EventEspresso\core\services\loaders\LoaderInterface;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class ImportCsvAttendeesUiManager extends ImportTypeUiManagerBase
@@ -38,7 +38,7 @@ class ImportCsvAttendeesUiManager extends ImportTypeUiManagerBase
 
     /**
      * Gets the steps manager that corresponds to the import type.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param string $base_url base URL where these steps will be shown (used for generating links to subsequent steps)
      * @return SequentialStepFormManager
      */
@@ -61,7 +61,7 @@ class ImportCsvAttendeesUiManager extends ImportTypeUiManagerBase
 
     /**
      * Gets the batch system job handler that will take care of managing the import (but if it's a CLI import, this doesn't apply)
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return JobHandler
      */
     public function getBatchJobHandler()
@@ -71,7 +71,7 @@ class ImportCsvAttendeesUiManager extends ImportTypeUiManagerBase
 
     /**
      * Gets the ImportType that this UI is for. That's stuff relating more to the actual import rather than UI.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return ImportTypeManagerInterface
      */
     public function getImportType()
@@ -81,7 +81,7 @@ class ImportCsvAttendeesUiManager extends ImportTypeUiManagerBase
 
     /**
      * Gets URL of an image that describes the import type.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return string
      */
     public function getImage()

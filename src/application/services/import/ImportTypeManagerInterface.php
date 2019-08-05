@@ -13,59 +13,59 @@ use EventEspresso\AttendeeImporter\application\services\import\extractors\Import
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 interface ImportTypeManagerInterface
 {
     /**
      * Gets the name of this import type (translated).
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return string
      */
     public function getName();
 
     /**
      * Gets the slug for this import type.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return string
      */
     public function getSlug();
 
     /**
      * Gets a string of HTML describing this import type.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return string
      */
     public function getDescription();
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return ImportBaseCommand
      */
     public function getImportCommand($args);
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return ImportExtractorBase
      */
     public function getExtractor();
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return string
      */
     public function getPathToFiles();
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return mixed
      */
     public function getUrlToFiles();
 
     /**
      * Gets the name of the capability required to use this type of importer.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return string
      */
     public function cap();

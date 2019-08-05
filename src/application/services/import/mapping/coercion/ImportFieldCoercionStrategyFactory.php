@@ -12,7 +12,7 @@ use EventEspresso\core\services\loaders\LoaderInterface;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class ImportFieldCoercionStrategyFactory

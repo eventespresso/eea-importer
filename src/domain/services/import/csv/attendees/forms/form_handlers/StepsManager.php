@@ -21,7 +21,7 @@ use InvalidArgumentException;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class StepsManager extends SequentialStepFormManager
@@ -106,7 +106,7 @@ class StepsManager extends SequentialStepFormManager
      * @return CollectionInterface|ImportCsvAttendeesStep[]
      * @throws CollectionDetailsException
      * @throws CollectionLoaderException
-     * @since $VID:$
+     * @since 1.0.0.p
      */
     public function getSteps()
     {
@@ -119,7 +119,7 @@ class StepsManager extends SequentialStepFormManager
     /**
      * @throws InvalidDataTypeException
      * @throws InvalidIdentifierException
-     * @since $VID:$
+     * @since 1.0.0.p
      */
     public function setCurrentStepFromRequest()
     {

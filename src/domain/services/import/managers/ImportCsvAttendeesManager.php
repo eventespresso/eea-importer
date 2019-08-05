@@ -17,7 +17,7 @@ use EventEspresso\core\services\loaders\LoaderInterface;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class ImportCsvAttendeesManager implements ImportTypeManagerInterface
@@ -47,7 +47,7 @@ class ImportCsvAttendeesManager implements ImportTypeManagerInterface
 
     /**
      * Gets the name of this import type (translated).
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return string
      */
     public function getName()
@@ -57,7 +57,7 @@ class ImportCsvAttendeesManager implements ImportTypeManagerInterface
 
     /**
      * Gets a string of HTML describing this import type.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return string
      */
     public function getDescription()
@@ -72,7 +72,7 @@ class ImportCsvAttendeesManager implements ImportTypeManagerInterface
 
     /**
      * Gets the slug for this import type.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return string
      */
     public function getSlug()
@@ -94,7 +94,7 @@ class ImportCsvAttendeesManager implements ImportTypeManagerInterface
     /**
      * @param array $args
      * @return ImportBaseCommand
-     * @since $VID:$
+     * @since 1.0.0.p
      */
     public function getImportCommand($args)
     {
@@ -105,7 +105,7 @@ class ImportCsvAttendeesManager implements ImportTypeManagerInterface
     }
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return ImportExtractorBase
      */
     public function getExtractor()

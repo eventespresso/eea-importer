@@ -20,7 +20,7 @@ use stdClass;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class ImportFieldMap implements JsonSerializableAndUnserializable
@@ -72,7 +72,7 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
 
     /**
      * Gets the name of the model field that is mapped.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return string
      * @throws EE_Error
      */
@@ -83,7 +83,7 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
 
     /**
      * Gets the field the source property input maps to.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return EE_Model_Field_Base
      */
     public function destinationField()
@@ -92,7 +92,7 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
     }
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param $column
      */
     public function map($column)
@@ -102,7 +102,7 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
 
     /**
      * Applies the established mapping to the input to get the value to set on the model object.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param $input
      * @param EE_Base_Class $destinationObject
      * @throws EE_Error
@@ -118,7 +118,7 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
 
     /**
      * Gets the name of the source's input property.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return string
      */
     public function sourceProperty()
@@ -129,7 +129,7 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
     /**
      * Creates a simple PHP array or stdClass from this object's properties, which can be easily serialized using
      * wp_json_serialize().
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return mixed
      */
     public function toJsonSerializableData()
@@ -141,7 +141,7 @@ class ImportFieldMap implements JsonSerializableAndUnserializable
 
     /**
      * Initializes this object from data
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param mixed $data
      * @return boolean success
      */

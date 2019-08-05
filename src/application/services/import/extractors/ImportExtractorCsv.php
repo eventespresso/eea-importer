@@ -14,7 +14,7 @@ use SplFileObject;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class ImportExtractorCsv extends ImportExtractorBase
@@ -37,7 +37,7 @@ class ImportExtractorCsv extends ImportExtractorBase
     /**
      * Sets what source to extract data from. Eg filepath of uploaded CSV, database table names, request parameter, etc.
      * It's up to the extractor to interpret what was provided in order to get items.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param string $source
      * @return void
      * @throws InvalidFilePathException
@@ -60,7 +60,7 @@ class ImportExtractorCsv extends ImportExtractorBase
 
     /**
      * Gets an array of the raw data from the source (eg a row from the CSV, a JSON object,
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return array
      */
     public function getItemAt($offset)
@@ -74,7 +74,7 @@ class ImportExtractorCsv extends ImportExtractorBase
 
     /**
      * Gets the next row.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return array|null if all done.
      */
     public function getNextItem()
@@ -87,7 +87,7 @@ class ImportExtractorCsv extends ImportExtractorBase
 
     /**
      * Counts the number of items to import
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return int
      */
     public function countItems()

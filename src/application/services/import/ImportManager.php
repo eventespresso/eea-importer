@@ -16,7 +16,7 @@ use EventEspresso\core\services\loaders\Loader;
  *
  * @package     Event Espresso
  * @author         Mike Nelson
- * @since         $VID:$
+ * @since         1.0.0.p
  *
  */
 class ImportManager
@@ -33,7 +33,7 @@ class ImportManager
 
     /**
      * Gets all the import type ui managers that the current user can use.
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return CollectionInterface|ImportTypeUiManagerInterface[]
      * @throws CollectionLoaderException
      * @throws CollectionDetailsException
@@ -72,7 +72,7 @@ class ImportManager
 
     /**
      * Gets import type managers
-     * @since $VID:$
+     * @since 1.0.0.p
      * @return CollectionInterface|ImportTypeManagerInterface[]
      * @throws CollectionDetailsException
      * @throws CollectionLoaderException
@@ -86,7 +86,7 @@ class ImportManager
     }
 
     /**
-     * @since $VID:$
+     * @since 1.0.0.p
      * @param $slug
      * @return ImportTypeUiManagerInterface
      * @throws CollectionLoaderException
