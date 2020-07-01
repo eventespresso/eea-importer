@@ -60,7 +60,7 @@ class ImportCommandHandler extends CompositeCommandHandler
             );
         }
 
-        $transaction = $attendee = $this->commandBus()->execute(
+        $transaction = $this->commandBus()->execute(
             $this->commandFactory()->getNew(
                 'EventEspresso\AttendeeImporter\domain\services\commands\ImportTransactionCommand',
                 [
@@ -107,7 +107,7 @@ class ImportCommandHandler extends CompositeCommandHandler
             )
         );
 
-        $this->commandBus()->execute(
+        $attendee = $this->commandBus()->execute(
             $this->commandFactory()->getNew(
                 'EventEspresso\AttendeeImporter\domain\services\commands\ImportAttendeeCommand',
                 [
