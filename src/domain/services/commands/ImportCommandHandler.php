@@ -144,6 +144,8 @@ class ImportCommandHandler extends CompositeCommandHandler
             )
         );
 
+        do_action('AHEE__EventEspresso_AttendeeImporter_domain_services_commands_ImportCommandHandler__handle__end', $this, $command, $registration, $transaction, $attendee );
+
         return null;
     }
 }
