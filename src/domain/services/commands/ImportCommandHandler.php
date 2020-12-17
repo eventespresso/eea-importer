@@ -60,7 +60,7 @@ class ImportCommandHandler extends CompositeCommandHandler
             );
         }
 
-        $transaction = $attendee = $this->commandBus()->execute(
+        $transaction = $this->commandBus()->execute(
             $this->commandFactory()->getNew(
                 'EventEspresso\AttendeeImporter\domain\services\commands\ImportTransactionCommand',
                 [
@@ -107,7 +107,7 @@ class ImportCommandHandler extends CompositeCommandHandler
             )
         );
 
-        $this->commandBus()->execute(
+        $attendee = $this->commandBus()->execute(
             $this->commandFactory()->getNew(
                 'EventEspresso\AttendeeImporter\domain\services\commands\ImportAttendeeCommand',
                 [
@@ -143,6 +143,8 @@ class ImportCommandHandler extends CompositeCommandHandler
                 ]
             )
         );
+
+        do_action('AHEE__EventEspresso_AttendeeImporter_domain_services_commands_ImportCommandHandler__handle__end', $this, $command, $registration, $transaction, $attendee );
 
         return null;
     }
