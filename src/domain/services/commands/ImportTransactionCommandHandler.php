@@ -42,6 +42,14 @@ class ImportTransactionCommandHandler extends CompositeCommandHandler
             )
         );
         // Mark the transaction as complete eh.
+        $transaction->set_reg_steps(
+            array(
+                'attendee_information'  => true,
+                'payment_options'       => true,
+                'finalize_registration' => current_time( 'timestamp' ),
+            )
+        );
+        // Save the transaction to the DB.
         $transaction->save();
         return $transaction;
     }
