@@ -107,7 +107,10 @@ class MapCsvColumnsSubform extends EE_Form_Section_Proper
         foreach ($question_groups_for_event as $question_group) {
             foreach ($question_group->questions() as $question) {
                 if ($question->is_system_question()) {
-                    if ($question->system_ID() === 'state') {
+                    if ($question->system_ID() === 'email_confirm') {
+                        // Skip mapping the 'Confirm Email Address' system question.
+                        continue;
+                    } elseif ($question->system_ID() === 'state') {
                         $append = 'STA_ID';
                     } elseif ($question->system_ID() === 'country') {
                         $append = 'CNT_ISO';
