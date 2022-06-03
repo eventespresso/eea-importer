@@ -7,51 +7,62 @@ use EventEspresso\core\services\collections\CollectionDetailsException;
 use EventEspresso\core\services\collections\CollectionInterface;
 use EventEspresso\core\services\collections\CollectionLoader;
 use EventEspresso\core\services\collections\CollectionLoaderException;
-use EventEspresso\core\services\loaders\Loader;
+use EventEspresso\core\services\loaders\LoaderInterface;
 
 /**
  * Class ImportManager
  *
  * Is aware of what different Event Espresso importers are available.
  *
- * @package     Event Espresso
+ * @package        Event Espresso
  * @author         Mike Nelson
- * @since         1.0.0.p
+ * @since          1.0.0.p
  *
  */
 class ImportManager
 {
+    /**
+     * @var LoaderInterface
+     */
     protected $loader;
+
     /**
      * @var CollectionInterface|ImportTypeUiManagerInterface[]
      */
     protected $managers;
-    public function __construct(Loader $loader)
+
+
+    /**
+     * @param LoaderInterface $loader
+     */
+    public function __construct(LoaderInterface $loader)
     {
         $this->loader = $loader;
     }
 
+
     /**
      * Gets all the import type ui managers that the current user can use.
-     * @since 1.0.0.p
+     *
      * @return CollectionInterface|ImportTypeUiManagerInterface[]
      * @throws CollectionLoaderException
      * @throws CollectionDetailsException
+     * @since 1.0.0.p
      */
     protected function loadImportTypeUiManagers()
     {
-        $loader = new CollectionLoader(
+        $loader         = new CollectionLoader(
             new CollectionDetails(
-                // collection name
+            // collection name
                 'import_type_ui_managers',
                 // collection interface
                 'EventEspresso\AttendeeImporter\application\services\import\ImportTypeUiManagerInterface',
                 // FQCNs for classes to add (all classes within that namespace will be loaded)
 
-                array('EventEspresso\AttendeeImporter\domain\services\import\managers\ui'),
+                ['EventEspresso\AttendeeImporter\domain\services\import\managers\ui'],
                 // filepaths to classes to add
                 //                $import_source_types,
-                array(),
+                [],
                 // file mask to use if parsing folder for files to add
                 //                '*UiManager.php',
                 '',
@@ -70,12 +81,14 @@ class ImportManager
         return $this->managers;
     }
 
+
     /**
      * Gets import type managers
-     * @since 1.0.0.p
-     * @return CollectionInterface|ImportTypeManagerInterface[]
+     *
+     * @return CollectionInterface|ImportTypeUiManagerInterface[]
      * @throws CollectionDetailsException
      * @throws CollectionLoaderException
+     * @since 1.0.0.p
      */
     public function getImportTypeUiManagers()
     {
@@ -85,13 +98,14 @@ class ImportManager
         return $this->managers;
     }
 
+
     /**
-     * @since 1.0.0.p
-     * @param $slug
-     * @return ImportTypeUiManagerInterface
+     * @param string $slug
+     * @return ImportTypeUiManagerInterface|null
      * @throws CollectionLoaderException
+     * @since 1.0.0.p
      */
-    public function getUiManager($slug)
+    public function getUiManager(string $slug): ?ImportTypeUiManagerInterface
     {
         $collection = $this->getImportTypeUiManagers();
         return $collection->get($slug);

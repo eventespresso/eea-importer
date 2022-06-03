@@ -2,12 +2,10 @@
 
 namespace EventEspresso\AttendeeImporter\application\services\import\config\models;
 
-use EE_Model_Field_Base;
-use EEM_Attendee;
+use EE_Error;
 use EEM_Base;
 use EEM_Payment;
-use EventEspresso\AttendeeImporter\application\services\import\config\ImportModelConfigInterface;
-use EventEspresso\AttendeeImporter\application\services\import\mapping\ImportMappingCollection;
+use ReflectionException;
 
 /**
  * Class ImportPaymentConfig
@@ -21,14 +19,15 @@ use EventEspresso\AttendeeImporter\application\services\import\mapping\ImportMap
  */
 class ImportPaymentConfig extends ImportModelConfigBase
 {
-
-
     /**
      * Gets the model this configuration is for
+     *
+     * @return EEM_Payment|EEM_Base
+     * @throws EE_Error
+     * @throws ReflectionException
      * @since 1.0.0.p
-     * @return EEM_Base
      */
-    public function getModel()
+    public function getModel(): EEM_Base
     {
         return EEM_Payment::instance();
     }
@@ -39,7 +38,7 @@ class ImportPaymentConfig extends ImportModelConfigBase
      * @since 1.0.0.p
      * @return string[]
      */
-    public function fieldNamesMapped()
+    public function fieldNamesMapped(): array
     {
         return [
             'PAY_amount',

@@ -14,13 +14,13 @@ use EventEspresso\AttendeeImporter\application\services\import\config\models\Imp
  */
 class ImportPaymentCommand extends ImportSingleModelBase
 {
-
     /**
      * an existing registration to associate this attendee with
      *
      * @var EE_Transaction $transaction
      */
     protected $transaction;
+
 
     public function __construct(
         EE_Transaction $transaction,
@@ -31,10 +31,11 @@ class ImportPaymentCommand extends ImportSingleModelBase
         $this->transaction = $transaction;
     }
 
+
     /**
      * @return EE_Transaction
      */
-    public function getTransaction()
+    public function getTransaction(): EE_Transaction
     {
         return $this->transaction;
     }

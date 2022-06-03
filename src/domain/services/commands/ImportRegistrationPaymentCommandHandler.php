@@ -56,8 +56,8 @@ class ImportRegistrationPaymentCommandHandler extends CompositeCommandHandler
 
 
     /**
-     * @param CommandInterface|ImportRegistrationPaymentCommand $command
-     * @return EE_Attendee
+     * @param ImportRegistrationPaymentCommand $command
+     * @return void
      * @throws EE_Error
      * @throws EntityNotFoundException
      * @throws InvalidDataTypeException
@@ -68,7 +68,7 @@ class ImportRegistrationPaymentCommandHandler extends CompositeCommandHandler
      */
     public function handle(CommandInterface $command)
     {
-
+        $this->verify($command);
         $this->payment_processor->update_txn_based_on_payment(
             $command->getPayment()->transaction(),
             $command->getPayment()
@@ -82,7 +82,5 @@ class ImportRegistrationPaymentCommandHandler extends CompositeCommandHandler
                 'last_payment' => $command->getPayment(),
             ]
         );
-
-        return null;
     }
 }

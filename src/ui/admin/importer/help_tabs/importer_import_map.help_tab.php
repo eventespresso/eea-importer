@@ -1,5 +1,7 @@
 <?php
+
 use EventEspresso\core\domain\Domain;
+
 ?>
 <p>
     <strong>
@@ -42,5 +44,5 @@ use EventEspresso\core\domain\Domain;
             // @codingStandardsIgnoreEnd
             'event_espresso'
         );
-    ?>
+        ?>
 </p>

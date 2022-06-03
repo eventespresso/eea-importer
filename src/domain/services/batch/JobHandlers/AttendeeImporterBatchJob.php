@@ -2,10 +2,8 @@
 
 namespace EventEspresso\AttendeeImporter\domain\services\batch\JobHandlers;
 
-use Exception;
-use EE_Error;
-// Import Infusionsoft. We'll check the add-on is active before trying to use it.
 use EED_Infusionsoft;
+use EEH_File;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\AttendeeImporter\domain\services\import\managers\ImportCsvAttendeesManager;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
@@ -13,14 +11,15 @@ use EventEspresso\core\exceptions\InvalidFilePathException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\services\loaders\LoaderFactory;
 use EventEspresso\core\services\options\JsonWpOptionManager;
-use EventEspressoBatchRequest\Helpers\BatchRequestException;
 use EventEspressoBatchRequest\Helpers\JobParameters;
 use EventEspressoBatchRequest\Helpers\JobStepResponse;
 use EventEspressoBatchRequest\JobHandlerBaseClasses\JobHandler;
+use Exception;
 use InvalidArgumentException;
 use LogicException;
 use RuntimeException;
-use EEH_File;
+
+// Import Infusionsoft. We'll check the add-on is active before trying to use it.
 
 /**
  * Class AttendeeImporterBatchJob
@@ -28,33 +27,35 @@ use EEH_File;
  * Takes care of breaking up the often big job of importing a CSV file into the DB into smaller steps.
  * Offloads the actual work though to command objects.
  *
- * @package     Event Espresso
+ * @package        Event Espresso
  * @author         Mike Nelson
- * @since         1.0.0.p
+ * @since          1.0.0.p
  *
  */
 class AttendeeImporterBatchJob extends JobHandler
 {
-
     /**
      * @var ImportCsvAttendeesConfig
      */
     private $config;
+
     /**
      * @var JsonWpOptionManager
      */
     private $option_manager;
+
     /**
      * @var ImportCsvAttendeesManager
      */
     private $manager;
+
 
     public function __construct(
         ImportCsvAttendeesConfig $config,
         JsonWpOptionManager $option_manager,
         ImportCsvAttendeesManager $manager
     ) {
-        $this->config = $config;
+        $this->config         = $config;
         $this->option_manager = $option_manager;
         $this->option_manager->populateFromDb($config);
         $this->manager = $manager;
@@ -65,6 +66,7 @@ class AttendeeImporterBatchJob extends JobHandler
      * Performs any necessary setup for starting the job. This is also a good
      * place to setup the $job_arguments which will be used for subsequent HTTP requests
      * when continue_job will be called
+     *
      * @param JobParameters $job_parameters
      * @return JobStepResponse
      * @throws LogicException
@@ -86,7 +88,7 @@ class AttendeeImporterBatchJob extends JobHandler
         }
         $job_parameters->set_extra_data(
             [
-                'headers' => $csv_row
+                'headers' => $csv_row,
             ]
         );
         $job_parameters->set_job_size($this->manager->getExtractor()->countItems() - 1);
@@ -96,10 +98,12 @@ class AttendeeImporterBatchJob extends JobHandler
         );
     }
 
+
     /**
      * Performs another step of the job
+     *
      * @param JobParameters $job_parameters
-     * @param int $batch_size
+     * @param int           $batch_size
      * @return JobStepResponse
      * @throws InvalidDataTypeException
      * @throws InvalidFilePathException
@@ -113,14 +117,16 @@ class AttendeeImporterBatchJob extends JobHandler
         $command_bus = LoaderFactory::getLoader()->getShared('EventEspresso\core\services\commands\CommandBus');
         // grab the line from the file
         $processed_this_batch = 0;
-        $column_headers = $job_parameters->extra_datum('headers');
+        $column_headers       = $job_parameters->extra_datum('headers');
         // Importing can be pretty expensive, so let's slow it down a bit.
         $batch_size /= 2;
 
         // Importing with Infusionsoft is more expensive yet, so let's slow it down some more.
         try {
-            if (class_exists('EED_Infusionsoft')
-                && EED_Infusionsoft::infusionsoft_connection()) {
+            if (
+                class_exists('EED_Infusionsoft')
+                && EED_Infusionsoft::infusionsoft_connection()
+            ) {
                 $batch_size /= 4;
             }
         } catch (Exception $e) {
@@ -147,7 +153,7 @@ class AttendeeImporterBatchJob extends JobHandler
                 );
             }
             $processed_this_batch++;
-        };
+        }
         $job_parameters->mark_processed($processed_this_batch);
         if ($job_parameters->units_processed() >= $job_parameters->job_size()) {
             $job_parameters->set_status(JobParameters::status_complete);
@@ -162,12 +168,12 @@ class AttendeeImporterBatchJob extends JobHandler
         );
     }
 
+
     /**
      * Performs any clean-up logic when we know the job is completed
+     *
      * @param JobParameters $job_parameters
      * @return JobStepResponse
-     * @throws BatchRequestException
-     * @throws EE_Error
      */
     public function cleanup_job(JobParameters $job_parameters)
     {

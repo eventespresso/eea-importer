@@ -2,7 +2,7 @@
 
 namespace EventEspresso\AttendeeImporter\domain\services\commands;
 
-use EE_Attendee;
+use EE_Transaction;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\services\commands\CommandInterface;
@@ -18,36 +18,34 @@ use InvalidArgumentException;
  */
 class ImportTransactionCommandHandler extends CompositeCommandHandler
 {
-
     /**
-     * @param CommandInterface $command
-     * @return EE_Attendee
+     * @param ImportTransactionCommand $command
+     * @return EE_Transaction
      * @throws InvalidDataTypeException
      * @throws InvalidInterfaceException
      * @throws InvalidArgumentException
+     * @var EE_Transaction             $transaction
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): EE_Transaction
     {
+        $this->verify($command);
         // Create a transaction
-        /*
-         * @var $transaction EE_Transaction
-         */
         $transaction = $this->commandBus()->execute(
             $this->commandFactory()->getNew(
                 'EventEspresso\core\services\commands\transaction\CreateTransactionCommand',
                 [
                     null,
-                    []
+                    [],
                 ]
             )
         );
         // Mark the transaction as complete eh.
         $transaction->set_reg_steps(
-            array(
-                'attendee_information'  => true,
-                'payment_options'       => true,
-                'finalize_registration' => current_time( 'timestamp' ),
-            )
+            [
+                'attendee_information' => true,
+                'payment_options' => true,
+                'finalize_registration' => current_time('timestamp'),
+            ]
         );
         // Save the transaction to the DB.
         $transaction->save();

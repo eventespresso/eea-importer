@@ -19,11 +19,16 @@ class ImportCommand extends ImportBaseCommand
      */
     private $config;
 
+    /**
+     * @var bool
+     */
     private $config_populated_from_db = false;
+
     /**
      * @var JsonWpOptionManager
      */
     private $option_manager;
+
 
     public function __construct(
         array $input_data,
@@ -31,16 +36,18 @@ class ImportCommand extends ImportBaseCommand
         JsonWpOptionManager $option_manager
     ) {
         parent::__construct($input_data);
-        $this->config = $config;
+        $this->config         = $config;
         $this->option_manager = $option_manager;
     }
 
+
     /**
      * Takes care of always populating it from the DB on first call.
-     * @since 1.0.0.p
+     *
      * @return ImportCsvAttendeesConfig
+     * @since 1.0.0.p
      */
-    public function getConfig()
+    public function getConfig(): ImportCsvAttendeesConfig
     {
         if (! $this->config_populated_from_db) {
             $this->option_manager->populateFromDb($this->config);
@@ -49,14 +56,16 @@ class ImportCommand extends ImportBaseCommand
         return $this->config;
     }
 
+
     /**
-     * Checks if absolutely all datapoints are blank. If so, returns true. Otherwise, returns false.
-     * @since 1.0.0.p
+     * Checks if absolutely all data-points are blank. If so, returns true. Otherwise, returns false.
+     *
      * @return bool
+     * @since 1.0.0.p
      */
-    public function rowIsOnlyBlanks()
+    public function rowIsOnlyBlanks(): bool
     {
-        foreach ($this->inputData() as $column => $value) {
+        foreach ($this->inputData() as $value) {
             if (is_string($value)) {
                 $value = trim($value);
             }

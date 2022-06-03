@@ -3,14 +3,12 @@
 namespace EventEspresso\AttendeeImporter\application\services\import\config\models;
 
 use EE_Error;
-use EE_Money_Field;
 use EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFieldMap;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\services\collections\Collection;
 use EventEspresso\core\services\collections\CollectionDetailsException;
 use EventEspresso\core\services\collections\CollectionInterface;
 use EventEspresso\core\services\collections\CollectionLoaderException;
-use EventEspresso\core\services\loaders\Loader;
 use EventEspresso\core\services\loaders\LoaderFactory;
 use stdClass;
 
@@ -19,9 +17,9 @@ use stdClass;
  *
  * Description
  *
- * @package     Event Espresso
+ * @package        Event Espresso
  * @author         Mike Nelson
- * @since         1.0.0.p
+ * @since          1.0.0.p
  *
  */
 abstract class ImportModelConfigBase implements ImportModelConfigInterface
@@ -36,8 +34,10 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
      */
     protected $initialized = false;
 
+
     /**
      * ImportModelConfigBase constructor.
+     *
      * @throws InvalidInterfaceException
      */
     public function __construct()
@@ -45,21 +45,25 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
         $this->setNewMap();
     }
 
+
     /**
      * Clears the mapping collection.
-     * @since 1.0.0.p
+     *
      * @throws InvalidInterfaceException
+     * @since 1.0.0.p
      */
     protected function setNewMap()
     {
-        $this->mapping = new Collection('EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFieldMap');
+        $this->mapping =
+            new Collection('EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFieldMap');
     }
 
+
     /**
-     * @since 1.0.0.p
      * @throws CollectionDetailsException
      * @throws CollectionLoaderException
      * @throws EE_Error
+     * @since 1.0.0.p
      */
     protected function checkInitialized()
     {
@@ -67,13 +71,16 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
             $this->init();
         }
     }
+
+
     /**
      * Returns the list of model fields that can be imported for this model.
-     * @since 1.0.0.p
+     *
      * @return void
      * @throws EE_Error
      * @throws CollectionDetailsException
      * @throws CollectionLoaderException
+     * @since 1.0.0.p
      */
     public function init()
     {
@@ -84,7 +91,7 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
                     'EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFieldMap',
                     [
                         null,
-                        $field
+                        $field,
                     ]
                 ),
                 $field_name
@@ -93,13 +100,15 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
         $this->initialized = true;
     }
 
+
     /**
      * Gets a collection that states how this import fields should be mapped to EE model fields for this model.
-     * @since 1.0.0.p
+     *
      * @return CollectionInterface|ImportFieldMap[]
      * @throws CollectionDetailsException
      * @throws CollectionLoaderException
      * @throws EE_Error
+     * @since 1.0.0.p
      */
     public function mapping()
     {
@@ -110,13 +119,15 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
 
     /**
      * Shortcut to get the name of the model this affects.
-     * @since 1.0.0.p
+     *
      * @return string
+     * @since 1.0.0.p
      */
-    public function getModelName()
+    public function getModelName(): string
     {
         return $this->getModel()->get_this_model_name();
     }
+
 
     public function map($input_column, $field_name)
     {
@@ -124,13 +135,15 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
         $map_obj->map($input_column);
     }
 
+
     /**
      * Clears all the previously mapped fields. Useful if there is new mapping information.
-     * @since 1.0.0.p
+     *
      * @throws CollectionDetailsException
      * @throws CollectionLoaderException
      * @throws EE_Error
      * @throws InvalidInterfaceException
+     * @since 1.0.0.p
      */
     public function clearMapping()
     {
@@ -138,17 +151,19 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
         $this->init();
     }
 
+
     /**
      * Gets the mapping info for the specified input (eg a CSV column name),
      * or null if the input source property isn't mapped.
-     * @since 1.0.0.p
+     *
      * @param string $input
      * @return ImportFieldMap|null
      * @throws CollectionDetailsException
      * @throws CollectionLoaderException
      * @throws EE_Error
+     * @since 1.0.0.p
      */
-    public function getMappingInfoForInput($input)
+    public function getMappingInfoForInput(string $input): ?ImportFieldMap
     {
         foreach ($this->mapping() as $mapped_field) {
             if ($mapped_field->sourceProperty() === $input) {
@@ -158,17 +173,19 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
         return null;
     }
 
+
     /**
      * Gets the mapping info for the specified model field (eg EEM_Attendee's `ATT_fname` field).
      * Or null if the field wasn't mapped.
-     * @since 1.0.0.p
+     *
      * @param $field_name
      * @return ImportFieldMap|null
      * @throws CollectionDetailsException
      * @throws CollectionLoaderException
      * @throws EE_Error
+     * @since 1.0.0.p
      */
-    public function getMappingInfoForField($field_name)
+    public function getMappingInfoForField($field_name): ?ImportFieldMap
     {
         foreach ($this->mapping() as $mapped_field) {
             if ($mapped_field->destinationFieldName() === $field_name) {
@@ -178,36 +195,47 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
         return null;
     }
 
+
     /**
+     * @return stdClass
+     * @throws EE_Error
+     * @throws EE_Error
      * @since 1.0.0.p
-     * @return mixed|void
      */
-    public function toJsonSerializableData()
+    public function toJsonSerializableData(): stdClass
     {
-        $simple_obj = new stdClass();
+        $simple_obj             = new stdClass();
         $simple_obj->model_name = $this->getModelName();
         $simple_obj->class_name = get_class($this);
-        $simple_obj->mapping = [];
+        $simple_obj->mapping    = [];
         foreach ($this->mapping() as $mapping_obj) {
             $simple_obj->mapping[ $mapping_obj->destinationFieldName() ] = $mapping_obj->toJsonSerializableData();
         }
         return $simple_obj;
     }
 
+
+    /**
+     * @param $data
+     * @return void
+     * @throws EE_Error
+     */
     public function fromJsonSerializedData($data)
     {
         if ($data instanceof stdClass) {
-            if (property_exists($data, 'mapping')
-            && $data->mapping instanceof stdClass) {
+            if (
+                property_exists($data, 'mapping')
+                && $data->mapping instanceof stdClass
+            ) {
                 foreach ($this->fieldNamesMapped() as $field_name) {
                     $field_map = $this->mapping->get($field_name);
                     if (! $field_map instanceof ImportFieldMap) {
-                        $field = $this->getModel()->field_settings_for($field_name);
+                        $field     = $this->getModel()->field_settings_for($field_name);
                         $field_map = LoaderFactory::getLoader()->getNew(
                             'EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFieldMap',
                             [
                                 null,
-                                $field
+                                $field,
                             ]
                         );
                         $this->mapping->add(

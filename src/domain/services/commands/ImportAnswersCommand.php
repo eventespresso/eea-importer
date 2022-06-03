@@ -13,7 +13,6 @@ use EE_Registration;
  */
 class ImportAnswersCommand extends ImportBaseCommand
 {
-
     /**
      * an existing registration to associate this attendee with
      *
@@ -26,7 +25,7 @@ class ImportAnswersCommand extends ImportBaseCommand
      * CreateAttendeeCommand constructor.
      *
      * @param EE_Registration $registration
-     * @param array $input_data
+     * @param array           $input_data
      */
     public function __construct(EE_Registration $registration, array $input_data)
     {
@@ -34,10 +33,11 @@ class ImportAnswersCommand extends ImportBaseCommand
         parent::__construct($input_data);
     }
 
+
     /**
      * @return EE_Registration
      */
-    public function getRegistration()
+    public function getRegistration(): EE_Registration
     {
         return $this->registration;
     }

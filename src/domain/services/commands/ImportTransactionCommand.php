@@ -19,19 +19,23 @@ class ImportTransactionCommand extends ImportSingleModelBase
      */
     private $ticket;
 
-    public function __construct(
-        EE_Ticket $ticket,
-        array $input_data,
-        ImportModelConfigBase $config
-    ) {
+
+    /**
+     * @param EE_Ticket             $ticket
+     * @param array                 $input_data
+     * @param ImportModelConfigBase $config
+     */
+    public function __construct(EE_Ticket $ticket, array $input_data, ImportModelConfigBase $config)
+    {
         parent::__construct($input_data, $config);
         $this->ticket = $ticket;
     }
 
+
     /**
      * @return EE_Ticket
      */
-    public function getTicket()
+    public function getTicket(): EE_Ticket
     {
         return $this->ticket;
     }

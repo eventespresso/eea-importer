@@ -2,10 +2,10 @@
 
 namespace EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers;
 
+use DomainException;
 use EE_Error;
 use EE_Form_Section_Proper;
 use EE_Registry;
-use EED_Attendee_Importer;
 use EEH_File;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\forms\UploadCsvForm;
@@ -30,7 +30,6 @@ use LogicException;
  */
 class UploadCsv extends ImportCsvAttendeesStep
 {
-
     /**
      * UploadCsv constructor
      *
@@ -39,7 +38,7 @@ class UploadCsv extends ImportCsvAttendeesStep
      * @param JsonWpOptionManager $option_manager
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
-     * @throws \DomainException
+     * @throws DomainException
      */
     public function __construct(EE_Registry $registry, ImportCsvAttendeesConfig $config, JsonWpOptionManager $option_manager)
     {
@@ -68,12 +67,11 @@ class UploadCsv extends ImportCsvAttendeesStep
     public function generate()
     {
         $this->option_manager->populateFromDb($this->config);
-        $form = new UploadCsvForm(
+        return new UploadCsvForm(
             [
                 'help_tab_link' => $this->getHelpTabLink()
             ]
         );
-        return $form;
     }
 
     /**
@@ -92,7 +90,7 @@ class UploadCsv extends ImportCsvAttendeesStep
     public function process($form_data = array())
     {
         try {
-            $valid_data = (array) parent::process($form_data);
+            $valid_data = parent::process($form_data);
         } catch (InvalidFormSubmissionException $e) {
             return false;
         }

@@ -2,40 +2,44 @@
 
 namespace EventEspresso\AttendeeImporter\application\services\import\config\models;
 
-use EE_Model_Field_Base;
+use EE_Error;
 use EEM_Base;
 use EEM_Registration;
+use ReflectionException;
 
 /**
  * Class ImportRegistrationConfig
  *
  * Description
  *
- * @package     Event Espresso
+ * @package        Event Espresso
  * @author         Mike Nelson
- * @since         1.0.0.p
+ * @since          1.0.0.p
  *
  */
 class ImportRegistrationConfig extends ImportModelConfigBase
 {
-
-
     /**
      * Gets the model this configuration is for
+     *
+     * @return EEM_Registration|EEM_Base
+     * @throws EE_Error
+     * @throws ReflectionException
      * @since 1.0.0.p
-     * @return EEM_Base
      */
-    public function getModel()
+    public function getModel(): EEM_Base
     {
         return EEM_Registration::instance();
     }
 
+
     /**
      * Gets the names of the fields on this model that are mapped.
-     * @since 1.0.0.p
+     *
      * @return string[]
+     * @since 1.0.0.p
      */
-    public function fieldNamesMapped()
+    public function fieldNamesMapped(): array
     {
         return [];
     }

@@ -31,9 +31,9 @@ class ImportRegistrationPaymentCommand extends ImportSingleModelBase
     /**
      * CreateAttendeeCommand constructor.
      *
-     * @param EE_Registration $registration
-     * @param EE_Payment $payment
-     * @param array $csv_row
+     * @param EE_Registration       $registration
+     * @param EE_Payment            $payment
+     * @param array                 $csv_row
      * @param ImportModelConfigBase $config
      */
     public function __construct(
@@ -44,21 +44,23 @@ class ImportRegistrationPaymentCommand extends ImportSingleModelBase
     ) {
         parent::__construct($csv_row, $config);
         $this->registration = $registration;
-        $this->payment = $payment;
+        $this->payment      = $payment;
     }
+
 
     /**
      * @return EE_Registration
      */
-    public function getRegistration()
+    public function getRegistration(): EE_Registration
     {
         return $this->registration;
     }
 
+
     /**
      * @return EE_Payment
      */
-    public function getPayment()
+    public function getPayment(): EE_Payment
     {
         return $this->payment;
     }

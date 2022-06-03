@@ -35,7 +35,7 @@ class ImportPaymentCommandHandler extends CommandHandler
     }
 
     /**
-     * @param CommandInterface|ImportPaymentCommand $command
+     * @param ImportPaymentCommand $command
      * @return EE_Payment|null
      * @throws EE_Error
      * @throws InvalidDataTypeException
@@ -45,8 +45,9 @@ class ImportPaymentCommandHandler extends CommandHandler
      * @throws InvalidArgumentException
      * @throws ReflectionException
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): ?EE_Payment
     {
+        $this->verify($command);
         $payment_data = $command->getFieldsFromMappedData();
         // Don't make a payment if they didn't specify an amount.
         if (empty($payment_data)) {

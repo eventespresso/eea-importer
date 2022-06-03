@@ -2,8 +2,8 @@
 
 namespace EventEspresso\AttendeeImporter\application\services\import;
 
-use EventEspresso\AttendeeImporter\domain\services\commands\ImportBaseCommand;
 use EventEspresso\AttendeeImporter\application\services\import\extractors\ImportExtractorBase;
+use EventEspresso\AttendeeImporter\domain\services\commands\ImportBaseCommand;
 
 /**
  * Class ImportTypeInterface
@@ -11,64 +11,76 @@ use EventEspresso\AttendeeImporter\application\services\import\extractors\Import
  * Interface for classes that describe a particular job type. These are properties shared between a web UI and CLI
  * command.
  *
- * @package     Event Espresso
+ * @package        Event Espresso
  * @author         Mike Nelson
- * @since         1.0.0.p
+ * @since          1.0.0.p
  *
  */
 interface ImportTypeManagerInterface
 {
     /**
      * Gets the name of this import type (translated).
-     * @since 1.0.0.p
+     *
      * @return string
+     * @since 1.0.0.p
      */
-    public function getName();
+    public function getName(): string;
+
 
     /**
      * Gets the slug for this import type.
-     * @since 1.0.0.p
+     *
      * @return string
+     * @since 1.0.0.p
      */
-    public function getSlug();
+    public function getSlug(): string;
+
 
     /**
      * Gets a string of HTML describing this import type.
-     * @since 1.0.0.p
+     *
      * @return string
+     * @since 1.0.0.p
      */
-    public function getDescription();
+    public function getDescription(): string;
+
 
     /**
-     * @since 1.0.0.p
+     * @param $args
      * @return ImportBaseCommand
+     * @since 1.0.0.p
      */
-    public function getImportCommand($args);
+    public function getImportCommand($args): ImportBaseCommand;
+
 
     /**
-     * @since 1.0.0.p
      * @return ImportExtractorBase
+     * @since 1.0.0.p
      */
-    public function getExtractor();
+    public function getExtractor(): ImportExtractorBase;
+
 
     /**
-     * @since 1.0.0.p
      * @return string
+     * @since 1.0.0.p
      */
-    public function getPathToFiles();
+    public function getPathToFiles(): string;
+
 
     /**
+     * @return string
      * @since 1.0.0.p
-     * @return mixed
      */
-    public function getUrlToFiles();
+    public function getUrlToFiles(): string;
+
 
     /**
      * Gets the name of the capability required to use this type of importer.
-     * @since 1.0.0.p
+     *
      * @return string
+     * @since 1.0.0.p
      */
-    public function cap();
+    public function cap(): string;
 }
 // End of file ImportTypeInterface.php
 // Location: EventEspresso\core\services\import/ImportTypeInterface.php

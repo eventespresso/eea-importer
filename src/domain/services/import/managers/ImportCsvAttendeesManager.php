@@ -4,9 +4,9 @@ namespace EventEspresso\AttendeeImporter\domain\services\import\managers;
 
 use EE_Error;
 use EEH_Autoloader;
-use EventEspresso\AttendeeImporter\domain\services\commands\ImportBaseCommand;
 use EventEspresso\AttendeeImporter\application\services\import\extractors\ImportExtractorBase;
 use EventEspresso\AttendeeImporter\application\services\import\ImportTypeManagerInterface;
+use EventEspresso\AttendeeImporter\domain\services\commands\ImportBaseCommand;
 use EventEspresso\core\services\loaders\LoaderInterface;
 
 /**
@@ -15,9 +15,9 @@ use EventEspresso\core\services\loaders\LoaderInterface;
  * Knows about importing attendees from a CSV. UI agnostic, this class is all about getting the info and getting the
  * job done.
  *
- * @package     Event Espresso
+ * @package        Event Espresso
  * @author         Mike Nelson
- * @since         1.0.0.p
+ * @since          1.0.0.p
  *
  */
 class ImportCsvAttendeesManager implements ImportTypeManagerInterface
@@ -45,47 +45,63 @@ class ImportCsvAttendeesManager implements ImportTypeManagerInterface
         EEH_Autoloader::register_business_classes();
     }
 
+
     /**
      * Gets the name of this import type (translated).
-     * @since 1.0.0.p
+     *
      * @return string
+     * @since 1.0.0.p
      */
-    public function getName()
+    public function getName(): string
     {
         return esc_html__('Attendee Importer', 'event_espresso');
     }
 
+
     /**
      * Gets a string of HTML describing this import type.
-     * @since 1.0.0.p
+     *
      * @return string
+     * @since 1.0.0.p
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return esc_html__(
-            // @codingStandardsIgnoreStart
+        // @codingStandardsIgnoreStart
             'Upload a CSV file, where each row contains contact, registrations, transaction and payment information.',
             // @codingStandardsIgnoreEnd
             'event_espresso'
         );
     }
 
+
     /**
      * Gets the slug for this import type.
-     * @since 1.0.0.p
+     *
      * @return string
+     * @since 1.0.0.p
      */
-    public function getSlug()
+    public function getSlug(): string
     {
         return 'csv-attendee';
     }
 
-    public function getPathToFiles()
+
+    /**
+     * @return string
+     * @since 1.0.0.p
+     */
+    public function getPathToFiles(): string
     {
         return EE_IMPORTER_PATH . 'domain/services/import/csv/attendees';
     }
 
-    public function getUrlToFiles()
+
+    /**
+     * @return string
+     * @since 1.0.0.p
+     */
+    public function getUrlToFiles(): string
     {
         return EE_IMPORTER_URL . 'domain/services/import/csv/attendees';
     }
@@ -96,7 +112,7 @@ class ImportCsvAttendeesManager implements ImportTypeManagerInterface
      * @return ImportBaseCommand
      * @since 1.0.0.p
      */
-    public function getImportCommand($args)
+    public function getImportCommand($args): ImportBaseCommand
     {
         return $this->loader->getNew(
             'EventEspresso\AttendeeImporter\domain\services\commands\ImportCommand',
@@ -104,19 +120,27 @@ class ImportCsvAttendeesManager implements ImportTypeManagerInterface
         );
     }
 
+
     /**
-     * @since 1.0.0.p
      * @return ImportExtractorBase
+     * @since 1.0.0.p
      */
-    public function getExtractor()
+    public function getExtractor(): ImportExtractorBase
     {
         if (! $this->extractor instanceof ImportExtractorBase) {
-            $this->extractor = $this->loader->getShared('EventEspresso\AttendeeImporter\application\services\import\extractors\ImportExtractorCsv');
+            $this->extractor = $this->loader->getShared(
+                'EventEspresso\AttendeeImporter\application\services\import\extractors\ImportExtractorCsv'
+            );
         }
         return $this->extractor;
     }
 
-    public function cap()
+
+    /**
+     * @return string
+     * @since 1.0.0.p
+     */
+    public function cap(): string
     {
         return 'ee_import_attendees';
     }

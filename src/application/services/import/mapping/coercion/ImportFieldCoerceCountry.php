@@ -4,75 +4,81 @@ namespace EventEspresso\AttendeeImporter\application\services\import\mapping\coe
 
 use EE_Error;
 use EEM_Country;
-use EEM_State;
 
 /**
  * Class ImportFieldString
  *
  * Description
  *
- * @package     Event Espresso
+ * @package        Event Espresso
  * @author         Mike Nelson
- * @since         1.0.0.p
+ * @since          1.0.0.p
  *
  */
 class ImportFieldCoerceCountry implements ImportFieldCoercionInterface
 {
-
     /**
      * @var EEM_Country
      */
     private $country_model;
+
 
     public function __construct(EEM_Country $state_model)
     {
         $this->country_model = $state_model;
     }
 
+
     /**
      * Takes the input and converts
-     * @since 1.0.0.p
-     * @param $inputProperty
-     * @return int
+     *
+     * @param mixed $inputProperty
+     * @return string
      * @throws EE_Error
+     * @since 1.0.0.p
      */
-    public function coerce($inputProperty)
+    public function coerce($inputProperty): string
     {
-        $inputProperty = (string) $inputProperty;
         return $this->country_model->get_var(
             [
                 [
                     'OR' => [
-                        'CNT_ISO' => $inputProperty,
+                        'CNT_ISO'  => $inputProperty,
                         'CNT_ISO3' => $inputProperty,
-                        'CNT_name' => $inputProperty
-                    ]
+                        'CNT_name' => $inputProperty,
+                    ],
                 ],
-                'limit' => 1
+                'limit' => 1,
             ],
             'CNT_ISO'
         );
     }
 
+
     /**
      * Creates a simple PHP array or stdClass from this object's properties, which can be easily serialized using
      * wp_json_serialize().
+     *
+     * @return string
      * @since 1.0.0.p
-     * @return mixed
      */
-    public function toJsonSerializableData()
+    public function toJsonSerializableData(): string
     {
         return 'country';
     }
 
+
     /**
      * Initializes this object from data
-     * @since 1.0.0.p
+     *
      * @param mixed $data
      * @return boolean success
+     * @since 1.0.0.p
      */
-    public function fromJsonSerializedData($data)
+    public function fromJsonSerializedData($data): bool
     {
+        // TODO: Implement fromJsonSerializedData() method.
+        return true;
     }
 }
 // End of file ImportFieldString.php

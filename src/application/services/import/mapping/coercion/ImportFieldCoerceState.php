@@ -17,7 +17,6 @@ use EEM_State;
  */
 class ImportFieldCoerceState implements ImportFieldCoercionInterface
 {
-
     /**
      * @var EEM_State
      */
@@ -28,16 +27,17 @@ class ImportFieldCoerceState implements ImportFieldCoercionInterface
         $this->state_model = $state_model;
     }
 
+
     /**
      * Takes the input and converts
-     * @since 1.0.0.p
-     * @param $inputProperty
+     *
+     * @param mixed $inputProperty
      * @return int
      * @throws EE_Error
+     * @since 1.0.0.p
      */
-    public function coerce($inputProperty)
+    public function coerce($inputProperty): int
     {
-        $inputProperty = (string) $inputProperty;
         return (int) $this->state_model->get_var(
             [
                 [
@@ -56,10 +56,11 @@ class ImportFieldCoerceState implements ImportFieldCoercionInterface
     /**
      * Creates a simple PHP array or stdClass from this object's properties, which can be easily serialized using
      * wp_json_serialize().
-     * @since 1.0.0.p
-     * @return mixed
+     *
+     * @return string
+     *@since 1.0.0.p
      */
-    public function toJsonSerializableData()
+    public function toJsonSerializableData(): string
     {
         return 'state';
     }
@@ -68,10 +69,12 @@ class ImportFieldCoerceState implements ImportFieldCoercionInterface
      * Initializes this object from data
      * @since 1.0.0.p
      * @param mixed $data
-     * @return boolean success
+     * @return bool
      */
-    public function fromJsonSerializedData($data)
+    public function fromJsonSerializedData($data): bool
     {
+        // TODO: Implement fromJsonSerializedData() method.
+        return true;
     }
 }
 // End of file ImportFieldString.php

@@ -2,20 +2,17 @@
 
 namespace EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config;
 
-use EE_Base_Class;
+use EE_Error;
+use EE_Ticket;
 use EEM_Ticket;
 use EventEspresso\AttendeeImporter\application\services\import\config\ImportConfigBase;
-use EventEspresso\AttendeeImporter\application\services\import\config\ImportModelConfigInterface;
-use EventEspresso\core\exceptions\InvalidDataTypeException;
-use EventEspresso\core\exceptions\InvalidInterfaceException;
+use EventEspresso\AttendeeImporter\application\services\import\config\models\ImportModelConfigInterface;
 use EventEspresso\core\services\collections\CollectionDetails;
 use EventEspresso\core\services\collections\CollectionDetailsException;
 use EventEspresso\core\services\collections\CollectionInterface;
 use EventEspresso\core\services\collections\CollectionLoader;
 use EventEspresso\core\services\collections\CollectionLoaderException;
-use InvalidArgumentException;
 use LogicException;
-use ReflectionException;
 use RuntimeException;
 use SplFileObject;
 use stdClass;
@@ -25,9 +22,9 @@ use stdClass;
  *
  * Stores all the input from the user about how to perform the import.
  *
- * @package     Event Espresso
+ * @package        Event Espresso
  * @author         Mike Nelson
- * @since         1.0.0.p
+ * @since          1.0.0.p
  *
  */
 class ImportCsvAttendeesConfig extends ImportConfigBase
@@ -37,116 +34,140 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
      */
     protected $file;
 
-
+    /**
+     * @var int
+     */
     protected $event_id;
 
+    /**
+     * @var int
+     */
     protected $ticket_id;
 
     /**
      * @var array keys are question IDs, values are the CSV columns they map to.
      * Maybe we'll think of a more elegant solution than this, but this at least works.
      */
-    protected $question_mapping = array();
+    protected $question_mapping = [];
 
     /**
      * @var EEM_Ticket
      */
     private $ticket_model;
 
+
+    /**
+     * @param EEM_Ticket $ticket_model
+     */
     public function __construct(EEM_Ticket $ticket_model)
     {
         $this->ticket_model = $ticket_model;
     }
 
+
     /**
      * Gets the filepath to read.
-     * @since 1.0.0.p
+     *
      * @return string
+     * @since 1.0.0.p
      */
-    public function getFile()
+    public function getFile(): string
     {
         return $this->file;
     }
 
+
     /**
      * Sets the filepath of the CSV file.
-     * @since 1.0.0.p
+     *
      * @param $file_path
+     * @since 1.0.0.p
      */
     public function setFile($file_path)
     {
         $this->file = $file_path;
     }
 
+
     /**
-     * @since 1.0.0.p
      * @return SplFileObject
      * @throws LogicException
      * @throws RuntimeException
+     * @since 1.0.0.p
      */
-    public function getFileHandle()
+    public function getFileHandle(): SplFileObject
     {
         return new SplFileObject($this->file, 'r');
     }
 
+
     /**
      * Gets the name of the WordPress option where this JSON data will be stored.
-     * @since 1.0.0.p
+     *
      * @return string
+     * @since 1.0.0.p
      */
-    public function getWpOptionName()
+    public function getWpOptionName(): string
     {
         return 'ee_import_csv_attendees_config';
     }
 
+
     /**
      * @return int
      */
-    public function getEventId()
+    public function getEventId(): int
     {
         return $this->event_id;
     }
 
+
     /**
      * @param int $event_id
      */
-    public function setEventId($event_id)
+    public function setEventId(int $event_id)
     {
         $this->event_id = $event_id;
     }
 
+
     /**
      * @return int
      */
-    public function getTicketId()
+    public function getTicketId(): int
     {
         return $this->ticket_id;
     }
 
+
     /**
+     * @return EE_Ticket|null
+     * @throws EE_Error
      * @since 1.0.0.p
-     * @return EE_Ticket
      */
-    public function getTicket()
+    public function getTicket(): ?EE_Ticket
     {
         return $this->ticket_model->get_one_by_ID($this->ticket_id);
     }
 
+
     /**
      * @param int $ticket_id
      */
-    public function setTicketId($ticket_id)
+    public function setTicketId(int $ticket_id)
     {
         $this->ticket_id = $ticket_id;
     }
 
+
     /**
      * @return array keys are question IDs, values are CSV column names
      */
-    public function getQuestionMapping()
+    public function getQuestionMapping(): array
     {
         return $this->question_mapping;
     }
+
 
     /**
      * @param array $question_mapping keys are question IDs, values are CSV column names
@@ -159,6 +180,7 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
         }
     }
 
+
     public function clearMapping()
     {
         foreach ($this->model_configs as $model_config) {
@@ -167,17 +189,18 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
         $this->question_mapping = [];
     }
 
+
     /**
-     * @since 1.0.0.p
      * @return CollectionInterface|ImportModelConfigInterface[]
      * @throws CollectionDetailsException
      * @throws CollectionLoaderException
+     * @since 1.0.0.p
      */
     protected function initializeModelConfigCollection()
     {
         $loader = new CollectionLoader(
             new CollectionDetails(
-                // collection name
+            // collection name
                 'import_csv_attendees_config_model_configs',
                 // collection interface
                 'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportModelConfigBase',
@@ -188,7 +211,7 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
                     'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportRegistrationConfig',
                     'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportRegistrationPaymentConfig',
                     'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportTransactionConfig',
-                    'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportLineItemConfig'
+                    'EventEspresso\AttendeeImporter\application\services\import\config\models\ImportLineItemConfig',
                 ],
                 [],
                 '',
@@ -200,36 +223,38 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
     }
 
 
-
     /**
      * Creates a simple PHP array or stdClass from this object's properties, which can be easily serialized using
      * wp_json_serialize().
-     * @since 1.0.0.p
+     *
      * @return mixed
+     * @since 1.0.0.p
      */
     public function toJsonSerializableData()
     {
-        $simple_obj = parent::toJsonSerializableData();
-        $simple_obj->file = $this->getFile();
-        $simple_obj->event_id = $this->getEventId();
-        $simple_obj->ticket_id = $this->getTicketId();
+        $simple_obj                   = parent::toJsonSerializableData();
+        $simple_obj->file             = $this->getFile();
+        $simple_obj->event_id         = $this->getEventId();
+        $simple_obj->ticket_id        = $this->getTicketId();
         $simple_obj->question_mapping = $this->question_mapping;
         return $simple_obj;
     }
 
+
     /**
      * Initializes this object from data
-     * @since 1.0.0.p
+     *
      * @param mixed $data
      * @return boolean success
+     * @since 1.0.0.p
      */
-    public function fromJsonSerializedData($data)
+    public function fromJsonSerializedData($data): bool
     {
         parent::fromJsonSerializedData($data);
         if ($data instanceof stdClass) {
-            $filepath = isset($data->file) ? $data->file : '';
-            $event_id = isset($data->event_id) ? $data->event_id : 0;
-            $ticket_id = isset($data->ticket_id) ? $data->ticket_id : 0;
+            $filepath  = $data->file ?? '';
+            $event_id  = $data->event_id ?? 0;
+            $ticket_id = $data->ticket_id ?? 0;
             $this->setFile($filepath);
             $this->setEventId($event_id);
             $this->setTicketId($ticket_id);
