@@ -14,25 +14,23 @@ use EventEspresso\AttendeeImporter\application\services\import\config\models\Imp
  */
 class ImportAttendeeCommand extends ImportSingleModelBase
 {
-
     /**
      * @var EE_Registration
      */
     private $registration;
 
-    public function __construct(
-        EE_Registration $reg,
-        array $input_data,
-        ImportAttendeeConfig $config
-    ) {
+
+    public function __construct(EE_Registration $reg, array $input_data, ImportAttendeeConfig $config)
+    {
         parent::__construct($input_data, $config);
         $this->registration = $reg;
     }
 
+
     /**
      * @return EE_Registration
      */
-    public function getRegistration()
+    public function getRegistration(): EE_Registration
     {
         return $this->registration;
     }

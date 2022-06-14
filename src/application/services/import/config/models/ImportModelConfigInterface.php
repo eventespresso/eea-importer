@@ -2,10 +2,8 @@
 
 namespace EventEspresso\AttendeeImporter\application\services\import\config\models;
 
-use EE_Model_Field_Base;
 use EEM_Base;
 use EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFieldMap;
-use EventEspresso\AttendeeImporter\application\services\import\mapping\ImportMappingCollection;
 use EventEspresso\core\services\collections\CollectionInterface;
 use EventEspresso\core\services\json\JsonSerializableAndUnserializable;
 
@@ -14,41 +12,48 @@ use EventEspresso\core\services\json\JsonSerializableAndUnserializable;
  *
  * Configuration details on how to map a model from source data to EE model fields.
  *
- * @package     Event Espresso
+ * @package        Event Espresso
  * @author         Mike Nelson
- * @since         1.0.0.p
+ * @since          1.0.0.p
  *
  */
 interface ImportModelConfigInterface extends JsonSerializableAndUnserializable
 {
     /**
      * Gets the model this configuration is for
-     * @since 1.0.0.p
+     *
      * @return EEM_Base
+     * @since 1.0.0.p
      */
-    public function getModel();
+    public function getModel(): EEM_Base;
+
 
     /**
      * Gets the names of the fields on this model that are mapped.
-     * @since 1.0.0.p
+     *
      * @return string[]
+     * @since 1.0.0.p
      */
-    public function fieldNamesMapped();
+    public function fieldNamesMapped(): array;
+
 
     /**
      * Gets a collection that states how this import fields should be mapped to EE model fields for this model.
-     * @since 1.0.0.p
+     *
      * @return CollectionInterface|ImportFieldMap[]
+     * @since 1.0.0.p
      */
     public function mapping();
 
+
     /**
      * Gets the mapping info for the specified input (eg a CSV column name)
-     * @since 1.0.0.p
+     *
      * @param string $input
-     * @return ImportFieldMap
+     * @return ImportFieldMap|null
+     * @since 1.0.0.p
      */
-    public function getMappingInfoForInput($input);
+    public function getMappingInfoForInput(string $input): ?ImportFieldMap;
 }
 // End of file ImportModelConfigInterface.php
 // Location: EventEspresso\core\services\import/ImportModelConfigInterface.php

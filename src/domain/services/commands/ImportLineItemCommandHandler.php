@@ -22,9 +22,8 @@ use RuntimeException;
  */
 class ImportLineItemCommandHandler extends CommandHandler
 {
-
     /**
-     * @param CommandInterface|ImportLineItemCommand $command
+     * @param ImportLineItemCommand $command
      * @return EE_Line_Item
      * @throws EE_Error
      * @throws InvalidArgumentException
@@ -33,8 +32,9 @@ class ImportLineItemCommandHandler extends CommandHandler
      * @throws ReflectionException
      * @throws RuntimeException
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): EE_Line_Item
     {
+        $this->verify($command);
         $total_line_item = $command->getTransaction()->total_line_item();
         $line_item = EEH_Line_Item::create_ticket_line_item($total_line_item, $command->getTicket());
         $total_line_item->recalculate_total_including_taxes();

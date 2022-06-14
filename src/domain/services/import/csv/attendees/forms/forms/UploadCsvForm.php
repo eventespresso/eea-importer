@@ -2,12 +2,10 @@
 
 namespace EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\forms;
 
-use EE_Admin_File_Uploader_Input;
 use EE_Error;
 use EE_File_Input;
 use EE_Form_Section_HTML;
 use EE_Form_Section_Proper;
-use EE_Validation_Error;
 use EEH_HTML;
 use EventEspresso\core\services\request\files\FileSubmissionInterface;
 use LogicException;
@@ -19,19 +17,23 @@ use SplFileObject;
  *
  * Description
  *
- * @package     Event Espresso
+ * @package        Event Espresso
  * @author         Mike Nelson
- * @since         1.0.0.p
+ * @since          1.0.0.p
  *
  */
 class UploadCsvForm extends EE_Form_Section_Proper
 {
-    public function __construct($options_array = array())
+    /**
+     * @param array $options_array
+     * @throws EE_Error
+     */
+    public function __construct(array $options_array = [])
     {
         $options_array = array_merge_recursive(
             [
-                'subsections' => array(
-                    'header' => new EE_Form_Section_HTML(
+                'subsections' => [
+                    'header'       => new EE_Form_Section_HTML(
                         EEH_HTML::h2(
                             esc_html__('Upload CSV  File', 'event_espresso')
                             . $options_array['help_tab_link']
@@ -42,25 +44,28 @@ class UploadCsvForm extends EE_Form_Section_Proper
                             esc_html__('Upload a CSV (comma-separated-value) file.', 'event_espresso')
                         )
                     ),
-                    'file' => new EE_File_Input(
+                    'file'         => new EE_File_Input(
                         [
-                            'required' => true,
+                            'required'        => true,
                             'html_label_text' => esc_html__('CSV File', 'event_espresso'),
-                            'html_help_text' => esc_html__('The CSV file data will be imported from.', 'event_espresso')
+                            'html_help_text'  => esc_html__(
+                                'The CSV file data will be imported from.',
+                                'event_espresso'
+                            ),
                         ]
                     ),
-                )
+                ],
             ],
             $options_array
         );
         parent::__construct($options_array);
     }
 
+
     /**
-     * @since 1.0.0.p
-     * @return bool|void
-     * @throws EE_Validation_Error
+     * @return void
      * @throws EE_Error
+     * @since 1.0.0.p
      */
     protected function _validate()
     {
@@ -79,25 +84,22 @@ class UploadCsvForm extends EE_Form_Section_Proper
 
         try {
             $file_obj = new SplFileObject($file->getTmpFile(), 'r');
-        } catch (LogicException $e) {
-            $this->add_validation_error($e);
-            return;
-        } catch (RuntimeException $e) {
+        } catch (LogicException | RuntimeException $e) {
             $this->add_validation_error($e);
             return;
         }
     }
 
+
     /**
-     * @since 1.0.0.p
      * @param $url
      * @return int
+     * @since 1.0.0.p
      */
-    protected function getAttachmentId($url)
+    protected function getAttachmentId($url): int
     {
         global $wpdb;
-        $attachment_id = $wpdb->get_var($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE guid=%s LIMIT 1", $url));
-        return $attachment_id;
+        return $wpdb->get_var($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE guid=%s LIMIT 1", $url));
     }
 }
 // End of file UploadCSVForm.php

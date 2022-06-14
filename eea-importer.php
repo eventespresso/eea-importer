@@ -34,15 +34,12 @@
  * @ license		http://eventespresso.com/support/terms-conditions/   * see Plugin Licensing *
  * @ link				http://www.eventespresso.com
  * @ version	 	EE4
- *
- * ------------------------------------------------------------------------
  */
+
 // define versions and this file
 define('EE_IMPORTER_CORE_VERSION_REQUIRED', '4.10.0.p');
 define('EE_IMPORTER_VERSION', '1.0.1.rc.003');
 define('EE_IMPORTER_PLUGIN_FILE', __FILE__);
-
-
 
 
 /**
@@ -50,33 +47,37 @@ define('EE_IMPORTER_PLUGIN_FILE', __FILE__);
  */
 function espresso_importer_plugin_activation_errors()
 {
-
     if (WP_DEBUG) {
         $activation_errors = ob_get_contents();
-        file_put_contents(EVENT_ESPRESSO_UPLOAD_DIR . 'logs' . DS . 'espresso_importer_plugin_activation_errors.html', $activation_errors);
+        file_put_contents(
+            EVENT_ESPRESSO_UPLOAD_DIR . 'logs' . DS . 'espresso_importer_plugin_activation_errors.html',
+            $activation_errors
+        );
     }
 }
 add_action('activated_plugin', 'espresso_importer_plugin_activation_errors');
 
 
-
 /**
- *    registers addon with EE core
+ *  registers addon with EE core
+ *
+ * @throws EE_Error
  */
 function load_espresso_importer()
 {
-    if (defined('PHP_VERSION_ID')
-        && PHP_VERSION_ID > 50600
-        && class_exists('EE_Addon')) {
+    if (
+        defined('PHP_VERSION_ID')
+        && PHP_VERSION_ID > 70100
+        && class_exists('EE_Addon')
+    ) {
         // importer version
-        require_once(plugin_dir_path(__FILE__) . '/src/EE_Importer.class.php');
+        require_once(__DIR__ . '/src/EE_Importer.class.php');
         EE_Importer::register_addon();
     } else {
         add_action('admin_notices', 'espresso_importer_activation_error');
     }
 }
 add_action('AHEE__EE_System__load_espresso_addons', 'load_espresso_importer');
-
 
 
 /**
@@ -91,23 +92,30 @@ function espresso_importer_activation_check()
 add_action('init', 'espresso_importer_activation_check', 1);
 
 
-
 /**
  *    displays activation error admin notice
  */
 function espresso_importer_activation_error()
 {
-    unset($_GET['activate']);
-    unset($_REQUEST['activate']);
+    unset($_GET['activate'], $_REQUEST['activate']);
     if (! function_exists('deactivate_plugins')) {
         require_once(ABSPATH . 'wp-admin/includes/plugin.php');
     }
     deactivate_plugins(plugin_basename(EE_IMPORTER_PLUGIN_FILE));
     ?>
-  <div class="error">
-    <p><?php printf(esc_html__('Event Espresso Importer could not be activated. Please ensure that Event Espresso version %1$s and PHP version %2$s or higher is running', 'event_espresso'), EE_IMPORTER_CORE_VERSION_REQUIRED, '5.6'); ?></p>
-  </div>
-<?php
+    <div class="error">
+        <p>
+            <?php printf(
+                esc_html__(
+                    'Event Espresso Importer could not be activated. Please ensure that Event Espresso version %1$s and PHP version %2$s or higher is running',
+                    'event_espresso'
+                ),
+                EE_IMPORTER_CORE_VERSION_REQUIRED,
+                '7.1'
+            ); ?>
+        </p>
+    </div>
+    <?php
 }
 
 

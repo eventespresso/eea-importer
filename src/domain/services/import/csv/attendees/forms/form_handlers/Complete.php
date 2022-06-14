@@ -20,7 +20,6 @@ use EventEspresso\core\services\options\JsonWpOptionManager;
 use InvalidArgumentException;
 use LogicException;
 use OutOfRangeException;
-use ReflectionException;
 use RuntimeException;
 use EEH_HTML;
 
@@ -34,8 +33,6 @@ use EEH_HTML;
  */
 class Complete extends ImportCsvAttendeesStep
 {
-
-
     /**
      * SelectTicket constructor
      *
@@ -109,14 +106,12 @@ class Complete extends ImportCsvAttendeesStep
      * @param array $form_data
      * @return bool
      * @throws InvalidEntityException
-     * @throws ReflectionException
      * @throws InvalidDataTypeException
      * @throws OutOfRangeException
      * @throws RuntimeException
      * @throws UnexpectedEntityException
      * @throws LogicException
      * @throws InvalidFormSubmissionException
-     * @throws EE_Error
      * @throws EntityNotFoundException
      * @throws InvalidArgumentException
      */

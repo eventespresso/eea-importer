@@ -1,4 +1,5 @@
 <?php
+
 namespace EventEspresso\AttendeeImporter\application\services\import\extractors;
 
 /**
@@ -6,9 +7,9 @@ namespace EventEspresso\AttendeeImporter\application\services\import\extractors;
  *
  * Interface for extractors. Extractors grab and count data from source.
  *
- * @package     Event Espresso
+ * @package        Event Espresso
  * @author         Mike Nelson
- * @since         1.0.0.p
+ * @since          1.0.0.p
  *
  */
 interface ImportExtractorInterface
@@ -16,31 +17,40 @@ interface ImportExtractorInterface
     /**
      * Sets what source to extract data from. Eg filepath of uploaded CSV, database table names, request parameter, etc.
      * It's up to the extractor to interpret what was provided in order to get items.
-     * @since 1.0.0.p
-     * @param mixed $source
+     *
+     * @param string $source
      * @return void
+     * @since 1.0.0.p
      */
-    public function setSource($source);
+    public function setSource(string $source);
+
+
     /**
      * Gets an array of the raw data from the source (eg a row from the CSV, a JSON object) at the specified index.
+     *
+     * @param $offset
+     * @return array|null
      * @since 1.0.0.p
-     * @return array
      */
-    public function getItemAt($offset);
+    public function getItemAt($offset): ?array;
+
 
     /**
      * Gets the next item after the previously returned item.
-     * @since 1.0.0.p
+     *
      * @return array
+     * @since 1.0.0.p
      */
-    public function getNextItem();
+    public function getNextItem(): array;
+
 
     /**
      * Counts the number of items to import
-     * @since 1.0.0.p
+     *
      * @return int
+     * @since 1.0.0.p
      */
-    public function countItems();
+    public function countItems(): int;
 }
 // End of file Extractor.php
 // Location: ${NAMESPACE}/Extractor.php

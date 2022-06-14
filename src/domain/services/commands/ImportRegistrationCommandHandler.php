@@ -2,8 +2,8 @@
 
 namespace EventEspresso\AttendeeImporter\domain\services\commands;
 
-use EE_Attendee;
 use EE_Error;
+use EE_Registration;
 use EE_Registration_Processor;
 use EEM_Registration;
 use EventEspresso\core\exceptions\EntityNotFoundException;
@@ -26,8 +26,6 @@ use RuntimeException;
  */
 class ImportRegistrationCommandHandler extends CompositeCommandHandler
 {
-
-
     /**
      * @type EE_Registration_Processor $registration_processor
      */
@@ -51,8 +49,8 @@ class ImportRegistrationCommandHandler extends CompositeCommandHandler
 
 
     /**
-     * @param CommandInterface|ImportRegistrationCommand $command
-     * @return EE_Attendee
+     * @param ImportRegistrationCommand $command
+     * @return EE_Registration
      * @throws EE_Error
      * @throws EntityNotFoundException
      * @throws InvalidDataTypeException
@@ -60,9 +58,11 @@ class ImportRegistrationCommandHandler extends CompositeCommandHandler
      * @throws InvalidArgumentException
      * @throws ReflectionException
      * @throws RuntimeException
+     * @var EE_Registration $registration
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): EE_Registration
     {
+        $this->verify($command);
         $transaction = $command->getTransaction();
 
         // Create a registration

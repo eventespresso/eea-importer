@@ -12,9 +12,9 @@ use SplFileObject;
  *
  * Description
  *
- * @package     Event Espresso
+ * @package        Event Espresso
  * @author         Mike Nelson
- * @since         1.0.0.p
+ * @since          1.0.0.p
  *
  */
 class ImportExtractorCsv extends ImportExtractorBase
@@ -34,20 +34,21 @@ class ImportExtractorCsv extends ImportExtractorBase
      */
     protected $size = null;
 
+
     /**
      * Sets what source to extract data from. Eg filepath of uploaded CSV, database table names, request parameter, etc.
      * It's up to the extractor to interpret what was provided in order to get items.
-     * @since 1.0.0.p
+     *
      * @param string $source
      * @return void
      * @throws InvalidFilePathException
      * @throws LogicException
      * @throws RuntimeException
+     * @since 1.0.0.p
      */
-    public function setSource($source)
+    public function setSource(string $source)
     {
-        $this->filepath = (string) $source;
-
+        $this->filepath   = $source;
         $this->fileObject = new SplFileObject($this->filepath, 'r');
         $this->fileObject->setFlags(SplFileObject::READ_CSV);
         if ($this->fileObject->eof()) {
@@ -58,12 +59,15 @@ class ImportExtractorCsv extends ImportExtractorBase
         }
     }
 
+
     /**
      * Gets an array of the raw data from the source (eg a row from the CSV, a JSON object,
+     *
+     * @param $offset
+     * @return array|null
      * @since 1.0.0.p
-     * @return array
      */
-    public function getItemAt($offset)
+    public function getItemAt($offset): ?array
     {
         if ($offset >= $this->countItems()) {
             return null;
@@ -72,12 +76,14 @@ class ImportExtractorCsv extends ImportExtractorBase
         return $this->fileObject->current();
     }
 
+
     /**
      * Gets the next row.
-     * @since 1.0.0.p
+     *
      * @return array|null if all done.
+     * @since 1.0.0.p
      */
-    public function getNextItem()
+    public function getNextItem(): ?array
     {
         if ($this->fileObject->eof()) {
             return null;
@@ -85,12 +91,14 @@ class ImportExtractorCsv extends ImportExtractorBase
         return $this->fileObject->fgetcsv();
     }
 
+
     /**
      * Counts the number of items to import
-     * @since 1.0.0.p
+     *
      * @return int
+     * @since 1.0.0.p
      */
-    public function countItems()
+    public function countItems(): int
     {
         if ($this->size === null) {
             $this->fileObject->seek(PHP_INT_MAX);

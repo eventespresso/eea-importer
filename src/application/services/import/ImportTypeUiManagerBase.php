@@ -20,7 +20,7 @@ abstract class ImportTypeUiManagerBase implements ImportTypeUiManagerInterface
      * @since 1.0.0.p
      * @return string
      */
-    public function getSlug()
+    public function getSlug(): string
     {
         return $this->getImportType()->getSlug();
     }

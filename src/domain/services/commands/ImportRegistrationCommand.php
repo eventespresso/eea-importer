@@ -15,17 +15,18 @@ use EventEspresso\AttendeeImporter\application\services\import\config\models\Imp
  */
 class ImportRegistrationCommand extends ImportSingleModelBase
 {
-
     /**
      * an existing registration to associate this attendee with
      *
      * @var EE_Transaction $transaction
      */
     protected $transaction;
+
     /**
      * @var EE_Line_Item
      */
     private $line_Item;
+
 
     public function __construct(
         EE_Transaction $transaction,
@@ -38,18 +39,20 @@ class ImportRegistrationCommand extends ImportSingleModelBase
         $this->line_Item = $line_Item;
     }
 
+
     /**
      * @return EE_Transaction
      */
-    public function getTransaction()
+    public function getTransaction(): EE_Transaction
     {
         return $this->transaction;
     }
 
+
     /**
      * @return EE_Line_Item
      */
-    public function getLineItem()
+    public function getLineItem(): EE_Line_Item
     {
         return $this->line_Item;
     }

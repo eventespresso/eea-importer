@@ -1,7 +1,7 @@
 <?php
+
 namespace EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers;
 
-use EE_Request;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidIdentifierException;
 use EventEspresso\core\libraries\form_sections\form_handlers\FormHandler;
@@ -12,30 +12,29 @@ use EventEspresso\core\services\collections\CollectionDetailsException;
 use EventEspresso\core\services\collections\CollectionInterface;
 use EventEspresso\core\services\collections\CollectionLoader;
 use EventEspresso\core\services\collections\CollectionLoaderException;
+use EventEspresso\core\services\request\RequestInterface;
 use InvalidArgumentException;
 
 /**
- * Class StesManager
+ * Class StepsManager
  *
  * Description
  *
  * @package     Event Espresso
  * @author         Mike Nelson
  * @since         1.0.0.p
- *
  */
 class StepsManager extends SequentialStepFormManager
 {
-
     /**
      * StepsManager constructor
      *
-     * @param string      $base_url
-     * @param string      $default_form_step
-     * @param string      $form_action
-     * @param string      $form_config
-     * @param string      $progress_step_style
-     * @param EE_Request $request
+     * @param string                $base_url
+     * @param string                $default_form_step
+     * @param string                $form_action
+     * @param string                $form_config
+     * @param string                $progress_step_style
+     * @param RequestInterface|null $request
      * @throws InvalidDataTypeException
      * @throws InvalidArgumentException
      */
@@ -45,7 +44,7 @@ class StepsManager extends SequentialStepFormManager
         $form_action = '',
         $form_config = FormHandler::ADD_FORM_TAGS_AND_SUBMIT,
         $progress_step_style = 'number_bubbles',
-        EE_Request $request = null
+        RequestInterface $request = null
     ) {
         parent::__construct(
             $base_url,
@@ -88,7 +87,7 @@ class StepsManager extends SequentialStepFormManager
                     ),
                     // filepaths to classes to add
                     array(),
-                    // filemask to use if parsing folder for files to add
+                    // file mask to use if parsing folder for files to add
                     '',
                     // what to use as identifier for collection entities
                     CollectionDetails::ID_CALLBACK_METHOD,
@@ -126,5 +125,3 @@ class StepsManager extends SequentialStepFormManager
         parent::setCurrentStepFromRequest();
     }
 }
-// End of file StesManager.php
-// Location: EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers/StepsManager.php

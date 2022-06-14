@@ -3,8 +3,10 @@
 namespace EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\forms;
 
 use EE_Error;
+use EEM_Ticket;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
 use PHPUnit_Framework_TestCase;
+use ReflectionException;
 
 /**
  * Class MapCsvColumnsFormTest
@@ -87,21 +89,16 @@ class MapCsvColumnsSubformTest extends PHPUnit_Framework_TestCase
 
 
     /**
-     * @since 1.0.0.p
-     * @return MapCsvColumnsForm
+     * @return MapCsvColumnsSubform
      * @throws EE_Error
+     *@throws ReflectionException
+     * @since 1.0.0.p
      */
-    protected function generateForm()
+    protected function generateForm(): MapCsvColumnsSubform
     {
-        $config = new ImportCsvAttendeesConfig();
+        $config = new ImportCsvAttendeesConfig(EEM_Ticket::instance());
         $config->setFile(EE_ATTENDEE_IMPORTER_TEST_CSVS_DIR . 'test.csv');
-        $form = new MapCsvColumnsSubform(
-            [
-                'name' => 'form',
-            ],
-            $config
-        );
-        return $form;
+        return new MapCsvColumnsSubform($config, ['name' => 'form']);
     }
 }
 // End of file MapCsvColumnsFormTest.php

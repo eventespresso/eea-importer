@@ -3,18 +3,13 @@
 namespace EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers;
 
 use DomainException;
-use EE_Admin_Page;
 use EE_Error;
 use EE_Form_Section_HTML;
 use EE_Form_Section_Proper;
 use EE_Registry;
 use EE_Select_Ajax_Model_Rest_Input;
-use EED_Attendee_Importer;
 use EEH_HTML;
-use EEH_URL;
-use EEM_Ticket;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\config\ImportCsvAttendeesConfig;
-use EventEspresso\AttendeeImporter\domain\services\import\managers\ui\ImportCsvAttendeesUiManager;
 use EventEspresso\core\exceptions\InvalidDataTypeException;
 use EventEspresso\core\exceptions\InvalidFormSubmissionException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
@@ -36,7 +31,6 @@ use LogicException;
  */
 class ChooseTicket extends ImportCsvAttendeesStep
 {
-
     /**
      * ChooseTicket constructor
      *
@@ -123,10 +117,10 @@ class ChooseTicket extends ImportCsvAttendeesStep
     public function process($form_data = array())
     {
         try {
-            $valid_data = (array) parent::process($form_data);
+            $valid_data = parent::process($form_data);
         } catch (InvalidFormSubmissionException $e) {
             // Don't die. Admin code knows how to handle invalid forms...
-            return;
+            return false;
         }
 
         $this->config->setTicketId($valid_data['ticket']);

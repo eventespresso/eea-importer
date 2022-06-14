@@ -1,5 +1,7 @@
 <?php
+
 use EventEspresso\core\domain\Domain;
+
 ?>
 <p>
     <strong><?php printf(

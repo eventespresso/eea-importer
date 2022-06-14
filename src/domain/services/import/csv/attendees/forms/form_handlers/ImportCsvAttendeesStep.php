@@ -84,7 +84,7 @@ abstract class ImportCsvAttendeesStep extends SequentialStepForm
      * @since 1.0.0.p
      * @return bool
      */
-    public function hasHelpTab()
+    public function hasHelpTab(): bool
     {
         return $this->has_help_tab;
     }
@@ -93,7 +93,7 @@ abstract class ImportCsvAttendeesStep extends SequentialStepForm
      * @since 1.0.0.p
      * @return string
      */
-    public function getHelpTabLink()
+    public function getHelpTabLink(): string
     {
         return EEH_Template::get_help_tab_link(
             'importer_import_' . $this->slug(),

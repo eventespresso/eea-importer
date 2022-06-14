@@ -22,9 +22,8 @@ use ReflectionException;
  */
 class ImportAttendeeCommandHandler extends CompositeCommandHandler
 {
-
     /**
-     * @param CommandInterface|ImportAttendeeCommand $command
+     * @param ImportAttendeeCommand $command
      * @return EE_Attendee
      * @throws EE_Error
      * @throws InvalidArgumentException
@@ -34,16 +33,16 @@ class ImportAttendeeCommandHandler extends CompositeCommandHandler
      * @throws CollectionDetailsException
      * @throws CollectionLoaderException
      */
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): EE_Attendee
     {
+        $this->verify($command);
         // Create an attendee
-
         $attendee = $this->commandBus()->execute(
             $this->commandFactory()->getNew(
                 'EventEspresso\core\services\commands\attendee\CreateAttendeeCommand',
                 [
                     $command->getFieldsFromMappedData(),
-                    $command->getRegistration()
+                    $command->getRegistration(),
                 ]
             )
         );
@@ -51,7 +50,7 @@ class ImportAttendeeCommandHandler extends CompositeCommandHandler
         // Now that we know who the attendee is for the registration, it can be saved too.
         $command->getRegistration()->save(
             [
-                'ATT_ID' => $attendee->ID()
+                'ATT_ID' => $attendee->ID(),
             ]
         );
         return $attendee;

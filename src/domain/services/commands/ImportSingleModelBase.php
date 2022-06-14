@@ -10,16 +10,15 @@ use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\services\collections\CollectionDetailsException;
 use EventEspresso\core\services\collections\CollectionLoaderException;
 use InvalidArgumentException;
-use ReflectionException;
 
 /**
  * Class ImportSingleModelBase
  *
  * Base configuration for when we're importing a single model object from the input data.
  *
- * @package     Event Espresso
+ * @package        Event Espresso
  * @author         Mike Nelson
- * @since         1.0.0.p
+ * @since          1.0.0.p
  *
  */
 class ImportSingleModelBase extends ImportBaseCommand
@@ -29,6 +28,7 @@ class ImportSingleModelBase extends ImportBaseCommand
      */
     private $config;
 
+
     public function __construct(
         array $input_data,
         ImportModelConfigBase $config
@@ -37,9 +37,10 @@ class ImportSingleModelBase extends ImportBaseCommand
         $this->config = $config;
     }
 
+
     /**
-     * Gets an array where keys are model field names, and values are their coerced values fromthe input data.
-     * @since 1.0.0.p
+     * Gets an array where keys are model field names, and values are their coerced values from the input data.
+     *
      * @return array
      * @throws CollectionDetailsException
      * @throws CollectionLoaderException
@@ -47,12 +48,12 @@ class ImportSingleModelBase extends ImportBaseCommand
      * @throws InvalidDataTypeException
      * @throws InvalidInterfaceException
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     * @since 1.0.0.p
      */
-    public function getFieldsFromMappedData()
+    public function getFieldsFromMappedData(): array
     {
         $fields_mapped = $this->config->mapping();
-        $fields = [];
+        $fields        = [];
         foreach ($fields_mapped as $field_mapped) {
             $input_value = $this->valueFromInput(
                 $field_mapped->sourceProperty()

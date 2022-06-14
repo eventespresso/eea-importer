@@ -19,10 +19,12 @@ class ImportLineItemCommand extends ImportSingleModelBase
      * @var EE_Ticket
      */
     private $ticket;
+
     /**
      * @var EE_Transaction
      */
     private $transaction;
+
 
     public function __construct(
         EE_Transaction $transaction,
@@ -31,22 +33,24 @@ class ImportLineItemCommand extends ImportSingleModelBase
         ImportModelConfigBase $config
     ) {
         parent::__construct($input_data, $config);
-        $this->ticket = $ticket;
+        $this->ticket      = $ticket;
         $this->transaction = $transaction;
     }
+
 
     /**
      * @return EE_Ticket
      */
-    public function getTicket()
+    public function getTicket(): EE_Ticket
     {
         return $this->ticket;
     }
 
+
     /**
      * @return EE_Transaction
      */
-    public function getTransaction()
+    public function getTransaction(): EE_Transaction
     {
         return $this->transaction;
     }

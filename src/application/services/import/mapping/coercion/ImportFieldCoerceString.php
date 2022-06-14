@@ -2,53 +2,55 @@
 
 namespace EventEspresso\AttendeeImporter\application\services\import\mapping\coercion;
 
-use EE_Base_Class;
-
 /**
  * Class ImportFieldString
  *
  * Description
  *
- * @package     Event Espresso
+ * @package        Event Espresso
  * @author         Mike Nelson
- * @since         1.0.0.p
+ * @since          1.0.0.p
  *
  */
 class ImportFieldCoerceString implements ImportFieldCoercionInterface
 {
-
-
     /**
      * Takes the input and converts
+     *
+     * @param mixed $inputProperty
+     * @return string
      * @since 1.0.0.p
-     * @param $inputProperty
-     * @param EE_Base_Class $destinationObject only used when the value of one field affects the value of another.
-     * @return mixed
      */
-    public function coerce($inputProperty)
+    public function coerce($inputProperty): string
     {
         return (string) $inputProperty;
     }
 
+
     /**
      * Creates a simple PHP array or stdClass from this object's properties, which can be easily serialized using
      * wp_json_serialize().
+     *
+     * @return string
      * @since 1.0.0.p
-     * @return mixed
      */
-    public function toJsonSerializableData()
+    public function toJsonSerializableData(): string
     {
         return 'string';
     }
 
+
     /**
      * Initializes this object from data
-     * @since 1.0.0.p
+     *
      * @param mixed $data
-     * @return boolean success
+     * @return bool
+     * @since 1.0.0.p
      */
-    public function fromJsonSerializedData($data)
+    public function fromJsonSerializedData($data): bool
     {
+        // TODO: Implement fromJsonSerializedData() method.
+        return true;
     }
 }
 // End of file ImportFieldString.php

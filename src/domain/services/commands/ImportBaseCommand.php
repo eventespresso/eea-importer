@@ -13,9 +13,9 @@ use EventEspresso\core\services\commands\CommandRequiresCapCheckInterface;
  *
  * Description
  *
- * @package     Event Espresso
+ * @package        Event Espresso
  * @author         Mike Nelson
- * @since         1.0.0.p
+ * @since          1.0.0.p
  *
  */
 class ImportBaseCommand extends Command implements CommandRequiresCapCheckInterface
@@ -29,7 +29,7 @@ class ImportBaseCommand extends Command implements CommandRequiresCapCheckInterf
     /**
      * CreateAttendeeCommand constructor.
      *
-     * @param array           $input_data
+     * @param array $input_data
      */
     public function __construct(array $input_data)
     {
@@ -46,25 +46,29 @@ class ImportBaseCommand extends Command implements CommandRequiresCapCheckInterf
         return new CapCheck('ee_import', 'ee_attendee_import');
     }
 
+
     /**
      * Returns the array from the CSV row, where keys are CSV columns names, values are their values.
-     * @since 1.0.0.p
+     *
      * @return array
+     * @since 1.0.0.p
      */
-    public function inputData()
+    public function inputData(): array
     {
         return $this->input_data;
     }
 
+
     /**
      * Gets the raw value from the CSV file at the given column
-     * @since 1.0.0.p
+     *
      * @param $column_name
      * @return string|null
+     * @since 1.0.0.p
      */
-    public function valueFromInput($column_name)
+    public function valueFromInput($column_name): ?string
     {
-        return isset($this->input_data[ $column_name ]) ? $this->input_data[ $column_name ] : null;
+        return $this->input_data[ $column_name ] ?? null;
     }
 }
 // End of file ModelObjFromCsvRowCommand.php

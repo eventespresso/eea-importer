@@ -3,7 +3,6 @@
 namespace EventEspresso\AttendeeImporter\application\services\import\config;
 
 use EventEspresso\AttendeeImporter\application\services\import\config\models\ImportModelConfigInterface;
-use EventEspresso\core\exceptions\InvalidClassException;
 use EventEspresso\core\exceptions\InvalidEntityException;
 use EventEspresso\core\services\collections\CollectionInterface;
 use stdClass;
@@ -13,9 +12,9 @@ use stdClass;
  *
  * Description
  *
- * @package     Event Espresso
+ * @package        Event Espresso
  * @author         Mike Nelson
- * @since         1.0.0.p
+ * @since          1.0.0.p
  *
  */
 abstract class ImportConfigBase implements ImportConfigInterface
@@ -30,13 +29,10 @@ abstract class ImportConfigBase implements ImportConfigInterface
      */
     protected $model_configs_initialized = false;
 
-    public function __construct()
-    {
-    }
 
     /**
-     * @since 1.0.0.p
      * @return CollectionInterface|ImportModelConfigInterface[]
+     * @since 1.0.0.p
      */
     public function getModelConfigs()
     {
@@ -44,9 +40,10 @@ abstract class ImportConfigBase implements ImportConfigInterface
         return $this->model_configs;
     }
 
+
     /**
-     * @since 1.0.0.p
      * @throws InvalidEntityException
+     * @since 1.0.0.p
      */
     protected function checkModelConfigsInitialized()
     {
@@ -62,10 +59,12 @@ abstract class ImportConfigBase implements ImportConfigInterface
         }
     }
 
+
     /**
      * Gets the collection of model configs for this import configuration.
-     * @since 1.0.0.p
+     *
      * @return CollectionInterface|ImportModelConfigInterface[]
+     * @since 1.0.0.p
      */
     abstract protected function initializeModelConfigCollection();
 
@@ -73,12 +72,13 @@ abstract class ImportConfigBase implements ImportConfigInterface
     /**
      * Creates a simple PHP array or stdClass from this object's properties, which can be easily serialized using
      * wp_json_serialize().
-     * @since 1.0.0.p
+     *
      * @return mixed
+     * @since 1.0.0.p
      */
     public function toJsonSerializableData()
     {
-        $simple_obj = new stdClass();
+        $simple_obj                     = new stdClass();
         $simple_obj->json_model_configs = [];
         foreach ($this->getModelConfigs() as $model_config) {
             $simple_obj->json_model_configs[ $model_config->getModelName() ] = $model_config->toJsonSerializableData();
@@ -86,19 +86,23 @@ abstract class ImportConfigBase implements ImportConfigInterface
         return $simple_obj;
     }
 
+
     /**
      * Initializes this object from data
+     *
+     * @param stdClass|mixed $data
+     * @return bool
      * @since 1.0.0.p
-     * @param mixed $data
-     * @return boolean success
      */
-    public function fromJsonSerializedData($data)
+    public function fromJsonSerializedData($data): bool
     {
-        if ($data instanceof stdClass
+        if (
+            $data instanceof stdClass
             && property_exists($data, 'json_model_configs')
-            && $data->json_model_configs instanceof stdClass) {
+            && $data->json_model_configs instanceof stdClass
+        ) {
             foreach ($data->json_model_configs as $json_key => $json_value) {
-                    $obj = $this->getModelConfigs()->get($json_key);
+                $obj = $this->getModelConfigs()->get($json_key);
                 if ($obj instanceof ImportModelConfigInterface) {
                     $obj->fromJsonSerializedData($json_value);
                 }
