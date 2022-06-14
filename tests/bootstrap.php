@@ -5,7 +5,7 @@
 
 use EETests\bootstrap\AddonLoader;
 
-$core_tests_dir = dirname(dirname(dirname(__FILE__))) . '/event-espresso-core/tests/';
+$core_tests_dir = dirname(__FILE__, 3) . '/event-espresso-core/tests/';
 //if still don't have $core_tests_dir, then let's check tmp folder.
 if (! is_dir($core_tests_dir)) {
     $core_tests_dir = '/tmp/event-espresso-core/tests/';
