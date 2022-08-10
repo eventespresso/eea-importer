@@ -32,7 +32,7 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
     /**
      * @var string
      */
-    protected $file;
+    protected $file = '';
 
     /**
      * @var int
@@ -114,9 +114,9 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
 
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getEventId(): int
+    public function getEventId(): ?int
     {
         return $this->event_id;
     }
