@@ -54,8 +54,9 @@ abstract class ImportModelConfigBase implements ImportModelConfigInterface
      */
     protected function setNewMap()
     {
-        $this->mapping =
-            new Collection('EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFieldMap');
+        $this->mapping = new Collection(
+            'EventEspresso\AttendeeImporter\application\services\import\mapping\ImportFieldMap'
+        );
     }
 
 
