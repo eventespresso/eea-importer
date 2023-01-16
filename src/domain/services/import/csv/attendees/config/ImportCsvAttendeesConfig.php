@@ -13,6 +13,7 @@ use EventEspresso\core\services\collections\CollectionInterface;
 use EventEspresso\core\services\collections\CollectionLoader;
 use EventEspresso\core\services\collections\CollectionLoaderException;
 use LogicException;
+use ReflectionException;
 use RuntimeException;
 use SplFileObject;
 use stdClass;
@@ -132,9 +133,9 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
 
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getTicketId(): int
+    public function getTicketId(): ?int
     {
         return $this->ticket_id;
     }
@@ -143,6 +144,7 @@ class ImportCsvAttendeesConfig extends ImportConfigBase
     /**
      * @return EE_Ticket|null
      * @throws EE_Error
+     * @throws ReflectionException
      * @since 1.0.0.p
      */
     public function getTicket(): ?EE_Ticket

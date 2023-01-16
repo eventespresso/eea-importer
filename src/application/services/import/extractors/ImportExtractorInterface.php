@@ -38,10 +38,10 @@ interface ImportExtractorInterface
     /**
      * Gets the next item after the previously returned item.
      *
-     * @return array
+     * @return array|null if all done.
      * @since 1.0.0.p
      */
-    public function getNextItem(): array;
+    public function getNextItem(): ?array;
 
 
     /**
