@@ -72,7 +72,7 @@ class AttendeeImporterBatchJob extends JobHandler
      * @throws LogicException
      * @throws RuntimeException
      */
-    public function create_job(JobParameters $job_parameters)
+    public function create_job(JobParameters $job_parameters): JobStepResponse 
     {
         $this->manager->getExtractor()->setSource($this->config->getFile());
 
@@ -110,7 +110,7 @@ class AttendeeImporterBatchJob extends JobHandler
      * @throws InvalidInterfaceException
      * @throws InvalidArgumentException
      */
-    public function continue_job(JobParameters $job_parameters, $batch_size = 50)
+    public function continue_job(JobParameters $job_parameters, $batch_size = 50): JobStepResponse
     {
         $this->manager->getExtractor()->setSource($this->config->getFile());
 
@@ -175,7 +175,7 @@ class AttendeeImporterBatchJob extends JobHandler
      * @param JobParameters $job_parameters
      * @return JobStepResponse
      */
-    public function cleanup_job(JobParameters $job_parameters)
+    public function cleanup_job(JobParameters $job_parameters): JobStepResponse
     {
         EEH_File::delete(dirname($this->config->getFile()), true, 'd');
         return new JobStepResponse(

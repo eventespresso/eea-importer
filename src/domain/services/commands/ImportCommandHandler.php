@@ -49,7 +49,7 @@ class ImportCommandHandler extends CompositeCommandHandler
         // WP User Add-on: please don't try to sync imported users to the current user
         if (method_exists('EED_WP_Users_SPCO', 'maybe_sync_existing_attendee')) {
             remove_filter(
-                'FHEE_EE_Single_Page_Checkout__save_registration_items__find_existing_attendee',
+                'FHEE_EventEspresso_core_domain_services_commands_attendee_CreateAttendeeCommandHandler__findExistingAttendee__existing_attendee',
                 ['EED_WP_Users_SPCO', 'maybe_sync_existing_attendee']
             );
         }
