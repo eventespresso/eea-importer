@@ -4,16 +4,15 @@ namespace EventEspresso\AttendeeImporter\application\services\import\mapping\coe
 
 use EE_Error;
 use EEM_Country;
+use ReflectionException;
 
 /**
  * Class ImportFieldString
- *
  * Description
  *
  * @package        Event Espresso
  * @author         Mike Nelson
  * @since          1.0.0.p
- *
  */
 class ImportFieldCoerceCountry implements ImportFieldCoercionInterface
 {
@@ -33,11 +32,12 @@ class ImportFieldCoerceCountry implements ImportFieldCoercionInterface
      * Takes the input and converts
      *
      * @param mixed $inputProperty
-     * @return string
+     * @return string|null
      * @throws EE_Error
+     * @throws ReflectionException
      * @since 1.0.0.p
      */
-    public function coerce($inputProperty): string
+    public function coerce($inputProperty): ?string
     {
         return $this->country_model->get_var(
             [

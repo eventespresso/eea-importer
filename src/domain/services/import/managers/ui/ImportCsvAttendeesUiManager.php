@@ -6,7 +6,7 @@ use EventEspresso\AttendeeImporter\application\services\import\ImportTypeManager
 use EventEspresso\AttendeeImporter\application\services\import\ImportTypeUiManagerBase;
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\StepsManager;
 use EventEspresso\core\services\loaders\LoaderInterface;
-use EventEspressoBatchRequest\JobHandlerBaseClasses\JobHandler;
+use EventEspresso\core\libraries\batch\JobHandlerBaseClasses\JobHandler;
 
 /**
  * Class ImportCsvAttendeesUiManager
@@ -20,15 +20,9 @@ use EventEspressoBatchRequest\JobHandlerBaseClasses\JobHandler;
  */
 class ImportCsvAttendeesUiManager extends ImportTypeUiManagerBase
 {
-    /**
-     * EventEspresso\core\services\loaders\Loader
-     */
-    protected $loader;
+    protected LoaderInterface $loader;
 
-    /**
-     * @var StepsManager
-     */
-    protected $form_steps_manager;
+    protected ?StepsManager $form_steps_manager = null;
 
 
     public function __construct(LoaderInterface $loader)

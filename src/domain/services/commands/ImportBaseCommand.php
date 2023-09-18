@@ -68,7 +68,7 @@ class ImportBaseCommand extends Command implements CommandRequiresCapCheckInterf
      */
     public function valueFromInput($column_name): ?string
     {
-        return $this->input_data[ $column_name ] ?? null;
+        return ! empty($this->input_data[ $column_name ]) ? $this->input_data[ $column_name ] : null;
     }
 }
 // End of file ModelObjFromCsvRowCommand.php

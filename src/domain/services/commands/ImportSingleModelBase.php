@@ -55,15 +55,24 @@ class ImportSingleModelBase extends ImportBaseCommand
         $fields_mapped = $this->config->mapping();
         $fields        = [];
         foreach ($fields_mapped as $field_mapped) {
+            // Grab the value from the CSV
             $input_value = $this->valueFromInput(
                 $field_mapped->sourceProperty()
             );
+            // Skip if we don't have a CSV value to set
             if (is_null($input_value)) {
                 continue;
             }
+            // Apply mappying to the CSV value:
+            // Country -> CNT_ISO
+            // State -> STA_ID
             $input_datum = $field_mapped->applyMap(
                 $input_value
             );
+            // If the CSV value didn't map to anything, skip.
+            if (is_null($input_datum)) {
+                continue;
+            }
             /* @var $field_mapped ImportFieldMap */
             $fields[ $field_mapped->destinationFieldName() ] = $input_datum;
         }

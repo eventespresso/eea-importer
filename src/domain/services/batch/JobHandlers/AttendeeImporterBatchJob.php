@@ -11,9 +11,9 @@ use EventEspresso\core\exceptions\InvalidFilePathException;
 use EventEspresso\core\exceptions\InvalidInterfaceException;
 use EventEspresso\core\services\loaders\LoaderFactory;
 use EventEspresso\core\services\options\JsonWpOptionManager;
-use EventEspressoBatchRequest\Helpers\JobParameters;
-use EventEspressoBatchRequest\Helpers\JobStepResponse;
-use EventEspressoBatchRequest\JobHandlerBaseClasses\JobHandler;
+use EventEspresso\core\libraries\batch\Helpers\JobParameters;
+use EventEspresso\core\libraries\batch\Helpers\JobStepResponse;
+use EventEspresso\core\libraries\batch\JobHandlerBaseClasses\JobHandler;
 use Exception;
 use InvalidArgumentException;
 use LogicException;
@@ -23,31 +23,20 @@ use RuntimeException;
 
 /**
  * Class AttendeeImporterBatchJob
- *
  * Takes care of breaking up the often big job of importing a CSV file into the DB into smaller steps.
  * Offloads the actual work though to command objects.
  *
  * @package        Event Espresso
  * @author         Mike Nelson
  * @since          1.0.0.p
- *
  */
 class AttendeeImporterBatchJob extends JobHandler
 {
-    /**
-     * @var ImportCsvAttendeesConfig
-     */
-    private $config;
+    private ImportCsvAttendeesConfig  $config;
 
-    /**
-     * @var JsonWpOptionManager
-     */
-    private $option_manager;
+    private JsonWpOptionManager       $option_manager;
 
-    /**
-     * @var ImportCsvAttendeesManager
-     */
-    private $manager;
+    private ImportCsvAttendeesManager $manager;
 
 
     public function __construct(
@@ -72,7 +61,7 @@ class AttendeeImporterBatchJob extends JobHandler
      * @throws LogicException
      * @throws RuntimeException
      */
-    public function create_job(JobParameters $job_parameters): JobStepResponse 
+    public function create_job(JobParameters $job_parameters): JobStepResponse
     {
         $this->manager->getExtractor()->setSource($this->config->getFile());
 
@@ -110,7 +99,7 @@ class AttendeeImporterBatchJob extends JobHandler
      * @throws InvalidInterfaceException
      * @throws InvalidArgumentException
      */
-    public function continue_job(JobParameters $job_parameters, $batch_size = 50): JobStepResponse
+    public function continue_job(JobParameters $job_parameters, int $batch_size = 50): JobStepResponse
     {
         $this->manager->getExtractor()->setSource($this->config->getFile());
 

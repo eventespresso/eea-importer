@@ -39,18 +39,19 @@ use EventEspresso\core\domain\Domain;
                 <?php
                 if (is_string($table_row)) {
                     ?>
-                    <td colspan="4">
-                        <h2><?php echo esc_html($table_row); ?></h2>
+                    <td colspan="4" style="border-color: transparent;">
+                        <h2 style="margin: 0; margin-block-start: 0.75rem; margin-block-end: -0.25rem; padding: 0;">
+                            <?php echo esc_html($table_row);?>
+                        </h2>
                     </td>
                     <?php
                 } else {
                     foreach ($table_row as $cell) {
                         ?>
                         <td>
+                        <?php echo esc_html($cell); ?>
+                        </td>
                         <?php
-                        echo esc_html($cell);
-                        ?>
-                        </td><?php
                     }
                 }
                 ?>

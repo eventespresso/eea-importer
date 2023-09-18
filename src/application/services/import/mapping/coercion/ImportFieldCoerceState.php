@@ -32,13 +32,13 @@ class ImportFieldCoerceState implements ImportFieldCoercionInterface
      * Takes the input and converts
      *
      * @param mixed $inputProperty
-     * @return int
+     * @return null|int
      * @throws EE_Error
      * @since 1.0.0.p
      */
-    public function coerce($inputProperty): int
+    public function coerce($inputProperty): ?int
     {
-        return (int) $this->state_model->get_var(
+        return $this->state_model->get_var(
             [
                 [
                     'OR' => [

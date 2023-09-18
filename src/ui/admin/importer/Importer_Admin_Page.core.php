@@ -14,7 +14,6 @@ use EventEspresso\core\services\loaders\LoaderFactory;
 
 /**
  * Attendee_Importer_Admin_Page
- *
  * This contains the logic for setting up the Attendee_Importer Addon Admin related pages.  Any methods without PHP doc
  * comments have inline docs with parent class.
  *
@@ -24,6 +23,9 @@ use EventEspresso\core\services\loaders\LoaderFactory;
  */
 class Importer_Admin_Page extends EE_Admin_Page
 {
+    private string $import_type = '';
+
+
     /**
      * @since 1.0.0.p
      */
@@ -33,6 +35,7 @@ class Importer_Admin_Page extends EE_Admin_Page
         $this->page_label       = ATTENDEE_IMPORTER_LABEL;
         $this->_admin_base_url  = EE_ATTENDEE_IMPORTER_ADMIN_URL;
         $this->_admin_base_path = EE_IMPORTER_ADMIN;
+        $this->import_type      = $this->request->getRequestParam('type', '');
     }
 
 
@@ -59,28 +62,27 @@ class Importer_Admin_Page extends EE_Admin_Page
      */
     protected function _set_page_routes()
     {
-        $import_type        = $this->_req_data['type'] ?? '';
         $this->_page_routes = [
             'default'          => [
-                'func'               => 'main',
+                'func'               => [$this, 'main'],
                 'noheader'           => true,
                 'headers_sent_route' => 'default_later',
                 'capability'         => 'ee_import',
             ],
             'default_later'    => [
-                'func'       => 'main_later',
+                'func'       => [$this, 'main_later'],
                 'capability' => 'ee_import',
             ],
             'import'           => [
-                'func'               => 'import',
+                'func'               => [$this, 'import'],
                 'noheader'           => true,
                 'headers_sent_route' => 'show_import_step',
-                'args'               => ['import_type' => $import_type],
+                'args'               => ['import_type' => $this->import_type],
                 'capability'         => 'ee_import',
             ],
             'show_import_step' => [
-                'func'       => 'show_import_step',
-                'args'       => ['import_type' => $import_type],
+                'func'       => [$this, 'show_import_step'],
+                'args'       => ['import_type' => $this->import_type],
                 'capability' => 'ee_import',
             ],
         ];
@@ -105,8 +107,7 @@ class Importer_Admin_Page extends EE_Admin_Page
             ],
         ];
         try {
-            $import_type  = $this->_req_data['type'] ?? '';
-            $step_manager = $this->getFormStepManager($import_type);
+            $step_manager = $this->getFormStepManager($this->import_type);
             $steps        = $step_manager->getSteps();
             foreach ($steps as $step) {
                 if (! $step->hasHelpTab()) {
@@ -290,14 +291,15 @@ class Importer_Admin_Page extends EE_Admin_Page
      *
      * @param string $import_type
      * @throws Exception
+     * @throws Throwable
      * @since 1.0.0.p
      */
     protected function import(string $import_type)
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($this->request->getServerParam('REQUEST_METHOD') === 'POST') {
             try {
                 $form_steps_manager = $this->getFormStepManager($import_type);
-                $form_steps_manager->processForm($_POST);
+                $form_steps_manager->processForm($this->request->postParams());
             } catch (Exception $e) {
                 new ExceptionStackTraceDisplay($e);
             }
@@ -309,8 +311,9 @@ class Importer_Admin_Page extends EE_Admin_Page
      * Handles GET requests to show an import step.
      *
      * @param string $import_type
-     * @throws DomainException
      * @throws EE_Error
+     * @throws ReflectionException
+     * @throws Throwable
      * @since 1.0.0.p
      */
     protected function show_import_step(string $import_type)
@@ -319,15 +322,14 @@ class Importer_Admin_Page extends EE_Admin_Page
             $manager                                    = $this->getImportManager();
             $ui_manager                                 = $manager->getUiManager($import_type);
             $form_steps_manager                         = $this->getFormStepManager($import_type);
-            $this->_template_args['admin_page_content'] =
-                EEH_HTML::h2($ui_manager->getImportType()->getName()) .
-                $form_steps_manager->displayProgressSteps() .
-                $form_steps_manager->displayCurrentStepForm();
+            $this->_template_args['admin_page_content'] = EEH_HTML::h2($ui_manager->getImportType()->getName()) .
+                                                          $form_steps_manager->displayProgressSteps() .
+                                                          $form_steps_manager->displayCurrentStepForm();
         } catch (Exception $e) {
             new ExceptionStackTraceDisplay($e);
         }
 
-        $this->display_admin_page_with_sidebar();
+        $this->display_admin_page_with_no_sidebar();
     }
 
 

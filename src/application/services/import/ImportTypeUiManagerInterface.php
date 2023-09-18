@@ -3,7 +3,7 @@
 namespace EventEspresso\AttendeeImporter\application\services\import;
 
 use EventEspresso\AttendeeImporter\domain\services\import\csv\attendees\forms\form_handlers\StepsManager;
-use EventEspressoBatchRequest\JobHandlerBaseClasses\JobHandler;
+use EventEspresso\core\libraries\batch\JobHandlerBaseClasses\JobHandler;
 
 /**
  * Class ImportTypeUiInterface
